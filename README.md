@@ -1,22 +1,41 @@
-# Getting Started with [Fastify-CLI](https://www.npmjs.com/package/fastify-cli)
-This project was bootstrapped with Fastify-CLI.
+# USThing Template API
+
+The template repository for USThing backend services, powered by Fastify.
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm run dev`
+### `yarn run dev`
 
-To start the app in dev mode.\
+To start the app in dev mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `npm start`
+### `yarn run start`
 
 For production mode
 
-### `npm run test`
+### `yarn run test`
 
 Run the test cases.
+
+### `yarn run lint`
+
+Run the linter.
+
+Note that the format of the code will also be checked.
+
+### `yarn run lint:fix`
+
+Run the linter and fix the issues.
+
+Note that the format of the code will also be checked and fixed.
+
+## Environment Variables
+
+For Fastify-level environment variables, please refer to the [fastify-cli documentation](https://github.com/fastify/fastify-cli).
+
+For the application-level environment variables, please refer to the `.env.example` file.
 
 ## Learn More
 

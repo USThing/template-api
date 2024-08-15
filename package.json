@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "template-api",
-  "description": "This project was bootstrapped with Fastify-CLI.",
+  "description": "The template repository for USThing backend services, powered by Fastify.",
   "version": "1.0.0",
   "main": "app.ts",
   "directories": {
@@ -18,8 +18,8 @@
     "lint:fix": "eslint --fix"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Flandia",
+  "license": "MIT",
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
     "@fastify/cors": "^9.0.1",
