@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.1](https://github.com/USThing/template-api/compare/v0.2.0...v0.2.1) (2024-08-18)
+
+
+### Bug Fixes
+
+* **auth:** check invalid authorization header ([3e0251d](https://github.com/USThing/template-api/commit/3e0251d28fd7dbfd7eb0a21337c6f638d6022187))
+* **auth:** remove unused decoration ([c4370f0](https://github.com/USThing/template-api/commit/c4370f0a75f0cf3168121fed6c3a1d6123e33949))
+* configure tests to adapt auth plugin ([b8074dd](https://github.com/USThing/template-api/commit/b8074ddcc9143965880845255150c3eb89cff833))
+
 ## [0.2.0](https://github.com/USThing/template-api/compare/v0.1.0...v0.2.0) (2024-08-18)
 
 
