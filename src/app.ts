@@ -38,7 +38,7 @@ function getOption(
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
-  // mongoUri: getOption("MONGO_URI"),
+  // mongoUri: getOption("MONGO_URI")!,
   authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
   authClientID: getOption("AUTH_CLIENT_ID")!,
   authSkip: (() => {
