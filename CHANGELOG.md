@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/USThing/template-api/compare/v0.2.1...v0.2.2) (2024-08-18)
+
+
+### Miscellaneous Chores
+
+* **deps:** update typebox ([df07cf7](https://github.com/USThing/template-api/commit/df07cf77a559c4bb073b63e2ad6ed7e4b8f1603b))
+
 ## [0.2.1](https://github.com/USThing/template-api/compare/v0.2.0...v0.2.1) (2024-08-18)
 
 
