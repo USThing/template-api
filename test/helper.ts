@@ -17,6 +17,7 @@ const AppPath = path.join(__dirname, "..", "src", "app.ts");
 // needed for testing the application
 async function config(): Promise<AppOptions> {
   return {
+    // mongoUri: "mongodb://localhost:27017",
     authDiscoveryURL: "",
     authClientID: "",
     authSkip: true,
