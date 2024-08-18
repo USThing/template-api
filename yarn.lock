@@ -541,10 +541,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinclair/typebox@npm:0.32":
-  version: 0.32.35
-  resolution: "@sinclair/typebox@npm:0.32.35"
-  checksum: 10c0/601b9e7e7bdf67f7b79be95c4eeb97ceace0e1429dd9ce9a78213d61a65b50c14caa46ba0aeed77cd8cfaf61ba13874b69af467ac14d7352844e5cceba1b718d
+"@sinclair/typebox@npm:^0.33.7":
+  version: 0.33.7
+  resolution: "@sinclair/typebox@npm:0.33.7"
+  checksum: 10c0/e3b7a92f60a6d0cc0995106280d9753c829fd9b0711720543e7c4cf0b3386f26633e80de9f517af7d4c5744cfe7abd6fb80da2e2f03098b2c1ac2a3b1779d640
   languageName: node
   linkType: hard
 
@@ -3874,7 +3874,7 @@ __metadata:
     "@fastify/swagger": "npm:^8.15.0"
     "@fastify/swagger-ui": "npm:^4.1.0"
     "@fastify/type-provider-typebox": "npm:^4.0.0"
-    "@sinclair/typebox": "npm:0.32"
+    "@sinclair/typebox": "npm:^0.33.7"
     "@types/node": "npm:^22.3.0"
     c8: "npm:^10.1.2"
     concurrently: "npm:^8.2.2"
