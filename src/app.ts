@@ -17,10 +17,21 @@ const __dirname = path.dirname(__filename);
 
 export type AppOptions = {
   // Place your custom options for app below here.
+  // MongoDB URI (Optional)
+  // mongoUri: string;
 } & Partial<AutoloadPluginOptions>;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const throwIt = (message: string): never => {
+  throw new Error(message);
+};
+
 // Pass --options via CLI arguments in command to enable these options.
-const options: AppOptions = {};
+const options: AppOptions = {
+  // mongoUri:
+  //   process.env.MONGO_URI ??
+  //   throwIt("MONGO_URI is required environment variable"),
+};
 
 // Support Typebox
 export type FastifyTypebox = FastifyInstance<
@@ -75,7 +86,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
 
   // Register MongoDB (Optional)
   // await fastify.register(import("@fastify/mongodb"), {
-  //   url: process.env.MONGO_URI,
+  //   url: opts.mongoUri,
   //   forceClose: true,
   // });
 
