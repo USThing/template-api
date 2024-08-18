@@ -11,6 +11,7 @@ import {
 import { fileURLToPath } from "url";
 import packageJson from "../package.json" with { type: "json" };
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import { AuthPluginOptions } from "./plugins/auth.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,9 +20,9 @@ export type AppOptions = {
   // Place your custom options for app below here.
   // MongoDB URI (Optional)
   // mongoUri: string;
-} & Partial<AutoloadPluginOptions>;
+} & Partial<AutoloadPluginOptions> &
+  AuthPluginOptions;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const throwIt = (message: string): never => {
   throw new Error(message);
 };
@@ -31,6 +32,16 @@ const options: AppOptions = {
   // mongoUri:
   //   process.env.MONGO_URI ??
   //   throwIt("MONGO_URI is required environment variable"),
+  authDiscoveryURL:
+    process.env.AUTH_DISCOVERY_URL ??
+    throwIt("AUTH_DISCOVERY_URL is required environment variable"),
+  authClientID:
+    process.env.AUTH_CLIENT_ID ??
+    throwIt("AUTH_CLIENT_ID is required environment variable"),
+  authSkip:
+    process.env.AUTH_SKIP !== undefined
+      ? Boolean(process.env.AUTH_SKIP)
+      : undefined,
 };
 
 // Support Typebox
@@ -78,8 +89,16 @@ const app: FastifyPluginAsync<AppOptions> = async (
       tags: [
         { name: "Root", description: "The root endpoint" },
         { name: "Example", description: "Example endpoints" },
+        { name: "Auth", description: "Auth endpoints" },
       ],
-      components: {},
+      components: {
+        securitySchemes: {
+          Auth: {
+            type: "http",
+            scheme: "bearer",
+          },
+        },
+      },
     },
   });
   await fastify.register(import("@fastify/swagger-ui"));
