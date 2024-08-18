@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.3](https://github.com/USThing/template-api/compare/v0.2.2...v0.2.3) (2024-08-18)
+
+
+### Bug Fixes
+
+* mongo uri is required ([a3980aa](https://github.com/USThing/template-api/commit/a3980aa6dab73a52c1a8ce06bc575582a7cf82b2))
+
+
+### Tests
+
+* support testing with mongo db ([a62e916](https://github.com/USThing/template-api/commit/a62e91669d127dc8b79e3846c5cf09303098ba9f))
+
 ## [0.2.2](https://github.com/USThing/template-api/compare/v0.2.1...v0.2.2) (2024-08-18)
 
 
