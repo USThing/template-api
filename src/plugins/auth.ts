@@ -55,7 +55,11 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
       }
 
       // Extract the scheme and token from the authorization header
-      const [type, token] = authorization.split(" ");
+      const parts = authorization.split(" ");
+      if (parts.length !== 2) {
+        return reply.status(401).send("Invalid Authorization Header");
+      }
+      const [type, token] = parts;
       if (type !== "Bearer") {
         return reply.status(401).send("Invalid Authorization Scheme");
       }
