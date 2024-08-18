@@ -37,6 +37,15 @@ For Fastify-level environment variables, please refer to the [fastify-cli docume
 
 For the application-level environment variables, please refer to the `.env.example` file.
 
+## CI / CD
+
+This template supports GitHub Actions for CI / CD. The available workflows are:
+
+- Checks / eslint: Run ES Lint to check problems and the format of the code.
+- Checks / commitlint: Run Commitlint to check the format of the commit messages.
+- Docker CI / docker: Build the Docker image and push it to the GitHub Container Registry.
+- Release Please / release-please: Automatic releasing. See also [release-please](https://github.com/googleapis/release-please).
+
 ## Learn More
 
 To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs/latest/).
