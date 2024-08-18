@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/USThing/template-api/compare/v0.1.0...v0.2.0) (2024-08-18)
+
+
+### Features
+
+* create plugin to initialize mongo db ([d1887e0](https://github.com/USThing/template-api/commit/d1887e00977ab2a2cf48a874d7d3423cc1cb7c4c))
+* support auth ([eb60fa3](https://github.com/USThing/template-api/commit/eb60fa31c7bdab9d683a9bb17c61f0de6d417e76))
+
 ## 0.1.0 (2024-08-16)
 
 
