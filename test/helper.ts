@@ -3,6 +3,7 @@ import helper from "fastify-cli/helper.js";
 import * as test from "node:test";
 import * as path from "path";
 import { fileURLToPath } from "url";
+import { AppOptions } from "../src/app.js";
 
 export type TestContext = {
   after: typeof test.after;
@@ -14,8 +15,12 @@ const AppPath = path.join(__dirname, "..", "src", "app.ts");
 
 // Fill in this config with all the configurations
 // needed for testing the application
-async function config() {
-  return {};
+async function config(): Promise<AppOptions> {
+  return {
+    authDiscoveryURL: "",
+    authClientID: "",
+    authSkip: true,
+  };
 }
 
 // Automatically build and tear down our instance

@@ -8,7 +8,12 @@ export interface AuthPluginOptions {
   authDiscoveryURL: string;
   /** The client ID of the OpenID Connect client. */
   authClientID: string;
-  /** Whether to skip the authentication process. This is useful for testing. */
+  /**
+   * Whether to skip the authentication process. This is useful for testing.
+   *
+   * If true, the `authDiscoveryURL` and `authClientID` are not required. Users
+   * may pass empty strings to pass type checking.
+   */
   authSkip?: boolean;
 }
 
@@ -20,18 +25,26 @@ export interface AuthPluginOptions {
  * @see authExample
  */
 export default fp<AuthPluginOptions>(async (fastify, opts) => {
-  if (opts.authSkip ?? false) {
+  const skip = opts.authSkip ?? false;
+
+  if (skip) {
     fastify.log.warn("Skip Auth: ON");
   }
 
-  const issuer = await Issuer.discover(opts.authDiscoveryURL);
-  const client = new issuer.Client({ client_id: opts.authClientID });
+  const client = await (async () => {
+    if (skip) {
+      return null;
+    } else {
+      const issuer = await Issuer.discover(opts.authDiscoveryURL);
+      return new issuer.Client({ client_id: opts.authClientID });
+    }
+  })();
 
   fastify.decorateRequest("user", undefined);
   fastify.decorate(
     "auth",
     async function (request: FastifyRequest, reply: FastifyReply) {
-      if (opts.authSkip ?? false) {
+      if (skip || !client) {
         return;
       }
 

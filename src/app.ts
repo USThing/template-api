@@ -23,25 +23,32 @@ export type AppOptions = {
 } & Partial<AutoloadPluginOptions> &
   AuthPluginOptions;
 
-const throwIt = (message: string): never => {
-  throw new Error(message);
-};
+const missingOptions: string[] = [];
+
+function getOption(
+  envName: string,
+  required: boolean = true,
+): string | undefined {
+  const env = process.env[envName];
+  if (env === undefined && required) {
+    missingOptions.push(envName);
+  }
+  return env;
+}
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
-  // mongoUri:
-  //   process.env.MONGO_URI ??
-  //   throwIt("MONGO_URI is required environment variable"),
-  authDiscoveryURL:
-    process.env.AUTH_DISCOVERY_URL ??
-    throwIt("AUTH_DISCOVERY_URL is required environment variable"),
-  authClientID:
-    process.env.AUTH_CLIENT_ID ??
-    throwIt("AUTH_CLIENT_ID is required environment variable"),
-  authSkip:
-    process.env.AUTH_SKIP !== undefined
-      ? Boolean(process.env.AUTH_SKIP)
-      : undefined,
+  // mongoUri: getOption("MONGO_URI"),
+  authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
+  authClientID: getOption("AUTH_CLIENT_ID")!,
+  authSkip: (() => {
+    const opt = getOption("AUTH_SKIP", false);
+    if (opt !== undefined) {
+      return Boolean(opt);
+    } else {
+      return undefined;
+    }
+  })(),
 };
 
 // Support Typebox
@@ -58,6 +65,10 @@ const app: FastifyPluginAsync<AppOptions> = async (
   opts,
 ): Promise<void> => {
   // Place here your custom code!
+
+  missingOptions.forEach((opt) => {
+    fastify.log.warn(`Missing required option: ${opt}`);
+  });
 
   // Register CORS
   await fastify.register(import("@fastify/cors"), {
