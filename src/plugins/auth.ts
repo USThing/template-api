@@ -1,6 +1,6 @@
 import fp from "fastify-plugin";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { BaseClient, errors, Issuer, TokenSet } from "openid-client";
+import { errors, Issuer, TokenSet } from "openid-client";
 import OPError = errors.OPError;
 
 export interface AuthPluginOptions {
@@ -86,8 +86,6 @@ function getUsernameFromEmail(email: string): string {
 // When using .decorate you have to specify added properties for Typescript
 declare module "fastify" {
   export interface FastifyInstance {
-    authClient: BaseClient;
-
     auth(request: FastifyRequest, reply: FastifyReply): Promise<void>;
   }
 
