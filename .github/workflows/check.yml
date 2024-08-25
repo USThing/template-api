@@ -56,9 +56,9 @@ jobs:
         with:
           node-version: 22
 
-      # - uses: supercharge/mongodb-github-action@1.11.0
-      #   with:
-      #     mongodb-version: 7
+      - uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: 7
 
       - run: |
           corepack enable

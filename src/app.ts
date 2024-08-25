@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename);
 export type AppOptions = {
   // Place your custom options for app below here.
   // MongoDB URI (Optional)
-  // mongoUri: string;
+  mongoUri: string;
 } & FastifyServerOptions &
   Partial<AutoloadPluginOptions> &
   AuthPluginOptions;
@@ -40,7 +40,7 @@ function getOption(
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
-  // mongoUri: getOption("MONGO_URI")!,
+  mongoUri: getOption("MONGO_URI")!,
   authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
   authClientID: getOption("AUTH_CLIENT_ID")!,
   authSkip: (() => {
@@ -117,10 +117,10 @@ const app: FastifyPluginAsync<AppOptions> = async (
   await fastify.register(import("@fastify/swagger-ui"));
 
   // Register MongoDB (Optional)
-  // await fastify.register(import("@fastify/mongodb"), {
-  //   url: opts.mongoUri,
-  //   forceClose: true,
-  // });
+  await fastify.register(import("@fastify/mongodb"), {
+    url: opts.mongoUri,
+    forceClose: true,
+  });
 
   // Do not touch the following lines
 
