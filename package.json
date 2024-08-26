@@ -1,8 +1,8 @@
 {
   "type": "module",
-  "name": "template-api",
-  "description": "The template repository for USThing backend services, powered by Fastify.",
-  "version": "0.2.5",
+  "name": "api-static",
+  "description": "The API service for USThing static resources or static data.",
+  "version": "0.1.0",
   "main": "app.ts",
   "directories": {
     "test": "test"
