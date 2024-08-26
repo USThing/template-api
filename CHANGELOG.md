@@ -1,5 +1,43 @@
 # Changelog
 
+## 0.1.0 (2024-08-26)
+
+
+### Features
+
+* add common fastify plugins ([096d1be](https://github.com/USThing/api-static/commit/096d1be31bce62a217aa3f9ce809a4fa8751b567))
+* **apk:** add apk endpoints ([8730014](https://github.com/USThing/api-static/commit/87300143bbca3ff10030c111f0af89d1097a4481))
+* create plugin to initialize mongo db ([d1887e0](https://github.com/USThing/api-static/commit/d1887e00977ab2a2cf48a874d7d3423cc1cb7c4c))
+* generate a new fastify project ([6dce800](https://github.com/USThing/api-static/commit/6dce8006e78c4a331dd62095c06e056a89907f29))
+* install and upgrade packages ([47283d4](https://github.com/USThing/api-static/commit/47283d48f8f09f2c85659cc6b1b71c4734869f87))
+* support auth ([eb60fa3](https://github.com/USThing/api-static/commit/eb60fa31c7bdab9d683a9bb17c61f0de6d417e76))
+
+
+### Bug Fixes
+
+* add `FastifyServerOptions` to `AppOptions` ([d833b07](https://github.com/USThing/api-static/commit/d833b07d075381cc8e5157fa3743eb83b93259b7))
+* **auth:** check invalid authorization header ([3e0251d](https://github.com/USThing/api-static/commit/3e0251d28fd7dbfd7eb0a21337c6f638d6022187))
+* **auth:** remove unused decoration ([c4370f0](https://github.com/USThing/api-static/commit/c4370f0a75f0cf3168121fed6c3a1d6123e33949))
+* configure tests to adapt auth plugin ([b8074dd](https://github.com/USThing/api-static/commit/b8074ddcc9143965880845255150c3eb89cff833))
+* mongo uri is required ([a3980aa](https://github.com/USThing/api-static/commit/a3980aa6dab73a52c1a8ce06bc575582a7cf82b2))
+* **test:** let test recognize server options ([845b5cc](https://github.com/USThing/api-static/commit/845b5ccf3a4308d78a696a0b28fe6d27757b4b5f))
+
+
+### Miscellaneous Chores
+
+* **deps:** update typebox ([df07cf7](https://github.com/USThing/api-static/commit/df07cf77a559c4bb073b63e2ad6ed7e4b8f1603b))
+* **main:** set version to 0.1.0 ([d9758fd](https://github.com/USThing/api-static/commit/d9758fd15bd1ca02f02e6fb81ba4bcd814839e61))
+
+
+### Tests
+
+* support testing with mongo db ([a62e916](https://github.com/USThing/api-static/commit/a62e91669d127dc8b79e3846c5cf09303098ba9f))
+
+
+### Build System
+
+* modify template fields ([a866dee](https://github.com/USThing/api-static/commit/a866dee0999ca2132b241ea2ab1c180062d0c6da))
+
 ## [0.2.5](https://github.com/USThing/template-api/compare/v0.2.4...v0.2.5) (2024-08-26)
 
 
