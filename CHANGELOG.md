@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/USThing/template-api/compare/v0.2.4...v0.2.5) (2024-08-26)
+
+
+### Bug Fixes
+
+* **test:** let test recognize server options ([845b5cc](https://github.com/USThing/template-api/commit/845b5ccf3a4308d78a696a0b28fe6d27757b4b5f))
+
 ## [0.2.4](https://github.com/USThing/template-api/compare/v0.2.3...v0.2.4) (2024-08-26)
 
 
