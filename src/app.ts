@@ -4,6 +4,7 @@ import {
   FastifyBaseLogger,
   FastifyInstance,
   FastifyPluginAsync,
+  FastifyServerOptions,
   RawReplyDefaultExpression,
   RawRequestDefaultExpression,
   RawServerDefault,
@@ -20,7 +21,8 @@ export type AppOptions = {
   // Place your custom options for app below here.
   // MongoDB URI (Optional)
   // mongoUri: string;
-} & Partial<AutoloadPluginOptions> &
+} & FastifyServerOptions &
+  Partial<AutoloadPluginOptions> &
   AuthPluginOptions;
 
 const missingOptions: string[] = [];
