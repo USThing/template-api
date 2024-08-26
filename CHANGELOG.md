@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/USThing/template-api/compare/v0.2.3...v0.2.4) (2024-08-26)
+
+
+### Bug Fixes
+
+* add `FastifyServerOptions` to `AppOptions` ([d833b07](https://github.com/USThing/template-api/commit/d833b07d075381cc8e5157fa3743eb83b93259b7))
+
 ## [0.2.3](https://github.com/USThing/template-api/compare/v0.2.2...v0.2.3) (2024-08-18)
 
 
