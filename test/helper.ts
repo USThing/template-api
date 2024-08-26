@@ -4,6 +4,7 @@ import * as test from "node:test";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import { AppOptions } from "../src/app.js";
+import fastifyMultipart from "@fastify/multipart";
 
 export type TestContext = {
   after: typeof test.after;
@@ -17,10 +18,15 @@ const AppPath = path.join(__dirname, "..", "src", "app.ts");
 // needed for testing the application
 async function config(): Promise<AppOptions> {
   return {
+    ajv: {
+      plugins: [fastifyMultipart.ajvFilePlugin],
+    },
+
     mongoUri: "mongodb://localhost:27017/test-api-static",
     authDiscoveryURL: "",
     authClientID: "",
     authSkip: true,
+    apkKey: "964a06a7-1fb9-42f3-8d1d-981284a14227",
   };
 }
 

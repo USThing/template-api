@@ -13,6 +13,8 @@ import { fileURLToPath } from "url";
 import packageJson from "../package.json" with { type: "json" };
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import { AuthPluginOptions } from "./plugins/auth.js";
+import { ApkOptions } from "./routes/v1/apk/index.js";
+import fastifyMultipart from "@fastify/multipart";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,7 +25,8 @@ export type AppOptions = {
   mongoUri: string;
 } & FastifyServerOptions &
   Partial<AutoloadPluginOptions> &
-  AuthPluginOptions;
+  AuthPluginOptions &
+  ApkOptions;
 
 const missingOptions: string[] = [];
 
@@ -40,6 +43,10 @@ function getOption(
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
+  ajv: {
+    plugins: [fastifyMultipart.ajvFilePlugin],
+  },
+
   mongoUri: getOption("MONGO_URI")!,
   authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
   authClientID: getOption("AUTH_CLIENT_ID")!,
@@ -51,6 +58,8 @@ const options: AppOptions = {
       return undefined;
     }
   })(),
+
+  apkKey: getOption("APK_KEY")!,
 };
 
 // Support Typebox
@@ -75,6 +84,9 @@ const app: FastifyPluginAsync<AppOptions> = async (
   // Register CORS
   await fastify.register(import("@fastify/cors"), {
     origin: "*",
+    methods: "*",
+    allowedHeaders: "*",
+    exposedHeaders: "*",
   });
 
   // Register Swagger & Swagger UI
@@ -91,11 +103,11 @@ const app: FastifyPluginAsync<AppOptions> = async (
           description: "Local Server",
         },
         {
-          url: "https://template.api.test.usthing.xyz",
+          url: "https://static.api.test.usthing.xyz",
           description: "Test Server",
         },
         {
-          url: "https://template.api.usthing.xyz",
+          url: "https://static.api.usthing.xyz",
           description: "Production Server",
         },
       ],
@@ -103,10 +115,15 @@ const app: FastifyPluginAsync<AppOptions> = async (
         { name: "Root", description: "The root endpoint" },
         { name: "Example", description: "Example endpoints" },
         { name: "Auth", description: "Auth endpoints" },
+        { name: "APK", description: "APK endpoints" },
       ],
       components: {
         securitySchemes: {
           Auth: {
+            type: "http",
+            scheme: "bearer",
+          },
+          ApkAuth: {
             type: "http",
             scheme: "bearer",
           },
