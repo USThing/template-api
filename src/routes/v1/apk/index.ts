@@ -47,7 +47,7 @@ const apk: FastifyPluginAsync<ApkOptions> = async (
     });
     fastify.register(import("@fastify/multipart"), {
       limits: {
-        fileSize: 64 * 1024 * 1024, // 64MB
+        fileSize: 256 * 1024 * 1024, // 256 MiB
       },
       attachFieldsToBody: true,
     });
