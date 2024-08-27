@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/USThing/api-static/compare/v0.1.0...v0.1.1) (2024-08-27)
+
+
+### Bug Fixes
+
+* **apk:** increase file size limit from 64 MiB to 256 MiB ([600ba29](https://github.com/USThing/api-static/commit/600ba29478be0cd4209fd771f5bdace2c6bf4e83))
+
 ## 0.1.0 (2024-08-26)
 
 
