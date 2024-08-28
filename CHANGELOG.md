@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/USThing/api-static/compare/v0.1.1...v0.2.0) (2024-08-28)
+
+
+### Features
+
+* **config:** add config endpoints ([4b66971](https://github.com/USThing/api-static/commit/4b669713345ca813b56f53ca56299fb7c9d5048d))
+
 ## [0.1.1](https://github.com/USThing/api-static/compare/v0.1.0...v0.1.1) (2024-08-27)
 
 
