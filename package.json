@@ -2,7 +2,7 @@
   "type": "module",
   "name": "api-static",
   "description": "The API service for USThing static resources or static data.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "app.ts",
   "directories": {
     "test": "test"

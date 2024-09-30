@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/USThing/api-static/compare/v0.2.0...v0.3.0) (2024-09-30)
+
+
+### Features
+
+* **apk:** add version tracking ([64736b5](https://github.com/USThing/api-static/commit/64736b566bd45b818b3c8ecc7320379bc93fa92e))
+
 ## [0.2.0](https://github.com/USThing/api-static/compare/v0.1.1...v0.2.0) (2024-08-28)
 
 
