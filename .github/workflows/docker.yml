@@ -2,6 +2,7 @@ name: Docker CI
 
 on:
   push:
+  pull_request:
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -43,7 +44,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          # Push if the event is not a pull request
-          push: ${{ github.event_name != 'pull_request' }}
+          # Push the image if the event is "pushing to main" and "not a pull request".
+          push: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
