@@ -27,6 +27,9 @@ async function config(): Promise<AppOptions> {
     authClientID: "",
     authSkip: true,
     apkKey: "964a06a7-1fb9-42f3-8d1d-981284a14227",
+    // The MAGIC TOKEN
+    msApiAccessToken:
+      "ewogICJ0eXAiOiAiSldUIiwKICAiYWxnIjogIlJTMjU2Igp9.ewogICJpYXQiOiAwLAogICJuYmYiOiAwLAogICJleHAiOiAwLAogICJlbWFpbCI6ICJ1c3QtYXJjaGl2ZUBjb25uZWN0LnVzdC5oayIKfQ.",
   };
 }
 
