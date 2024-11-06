@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/USThing/api-static/compare/v0.3.0...v0.4.0) (2024-11-06)
+
+
+### Features
+
+* **course-catalog:** support course catalog ([2c38daf](https://github.com/USThing/api-static/commit/2c38daf99e559d41dcac66c618598717eefce091))
+
 ## [0.3.0](https://github.com/USThing/api-static/compare/v0.2.0...v0.3.0) (2024-09-30)
 
 
