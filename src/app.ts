@@ -15,6 +15,7 @@ import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import { AuthPluginOptions } from "./plugins/auth.js";
 import { ApkOptions } from "./routes/v1/apk/index.js";
 import fastifyMultipart from "@fastify/multipart";
+import { CourseCatalogOptions } from "./plugins/course-catalog/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,7 +27,8 @@ export type AppOptions = {
 } & FastifyServerOptions &
   Partial<AutoloadPluginOptions> &
   AuthPluginOptions &
-  ApkOptions;
+  ApkOptions &
+  CourseCatalogOptions;
 
 const missingOptions: string[] = [];
 
@@ -60,6 +62,8 @@ const options: AppOptions = {
   })(),
 
   apkKey: getOption("APK_KEY")!,
+
+  msApiAccessToken: getOption("MS_API_ACCESS_TOKEN")!,
 };
 
 // Support Typebox
