@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/USThing/api-static/compare/v0.4.0...v0.5.0) (2024-11-08)
+
+
+### Features
+
+* **course-catalog:** search support ([ca15e6d](https://github.com/USThing/api-static/commit/ca15e6d20b72c3f7ac1ed8194b44f1aaa70d96c2))
+
 ## [0.4.0](https://github.com/USThing/api-static/compare/v0.3.0...v0.4.0) (2024-11-06)
 
 
