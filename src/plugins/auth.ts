@@ -1,7 +1,8 @@
 import fp from "fastify-plugin";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { errors, Issuer, TokenSet } from "openid-client";
-import OPError = errors.OPError;
+import * as client from "openid-client";
+import { WWWAuthenticateChallengeError } from "openid-client";
+import { skipSubjectCheck } from "oauth4webapi";
 
 export interface AuthPluginOptions {
   /** The discovery URL of the OpenID Connect provider. */
@@ -31,20 +32,25 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
     fastify.log.warn("Skip Auth: ON");
   }
 
-  const client = await (async () => {
+  const config = await (async () => {
     if (skip) {
       return null;
     } else {
-      const issuer = await Issuer.discover(opts.authDiscoveryURL);
-      return new issuer.Client({ client_id: opts.authClientID });
+      return await client.discovery(
+        new URL(opts.authDiscoveryURL),
+        opts.authClientID,
+      );
     }
   })();
+
+  fastify.log.info("Successfully discovered OpenID Connect provider.");
+  fastify.log.info(`Server Metadata: ${config?.serverMetadata()}`);
 
   fastify.decorateRequest("user", undefined);
   fastify.decorate(
     "auth",
     async function (request: FastifyRequest, reply: FastifyReply) {
-      if (skip || !client) {
+      if (skip || !config) {
         return;
       }
 
@@ -66,12 +72,17 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
 
       // Verify the token with the client
       try {
-        const info = await client.userinfo(
-          new TokenSet({ access_token: token }),
+        const info = await client.fetchUserInfo(
+          config,
+          token,
+          skipSubjectCheck,
         );
         request.user = info.email && getUsernameFromEmail(info.email);
       } catch (e) {
-        if (e instanceof OPError && e.response?.statusCode === 401) {
+        if (
+          e instanceof WWWAuthenticateChallengeError &&
+          e.response?.status === 401
+        ) {
           return reply
             .status(401)
             .type("application/json")
