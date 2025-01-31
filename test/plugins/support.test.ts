@@ -1,7 +1,7 @@
-import { test } from "node:test";
-import * as assert from "node:assert";
-import Fastify from "fastify";
 import Support from "../../src/plugins/support.js";
+import Fastify from "fastify";
+import * as assert from "node:assert";
+import { test } from "node:test";
 
 test("support works standalone", async (_t) => {
   const fastify = Fastify();

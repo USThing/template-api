@@ -1,8 +1,8 @@
-import { afterEach, beforeEach, suite, test } from "node:test";
-import * as assert from "node:assert";
-import Fastify, { FastifyInstance } from "fastify";
-import * as process from "node:process";
 import Auth from "../../src/plugins/auth.js";
+import Fastify, { FastifyInstance } from "fastify";
+import * as assert from "node:assert";
+import * as process from "node:process";
+import { afterEach, beforeEach, suite, test } from "node:test";
 
 await suite("auth plugin", async () => {
   let fastify: FastifyInstance;

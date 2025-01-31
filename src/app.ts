@@ -1,5 +1,7 @@
-import * as path from "path";
+import packageJson from "../package.json" with { type: "json" };
+import { AuthPluginOptions } from "./plugins/auth.js";
 import AutoLoad, { AutoloadPluginOptions } from "@fastify/autoload";
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import {
   FastifyBaseLogger,
   FastifyInstance,
@@ -9,10 +11,8 @@ import {
   RawRequestDefaultExpression,
   RawServerDefault,
 } from "fastify";
+import * as path from "path";
 import { fileURLToPath } from "url";
-import packageJson from "../package.json" with { type: "json" };
-import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
-import { AuthPluginOptions } from "./plugins/auth.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

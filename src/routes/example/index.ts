@@ -1,7 +1,7 @@
-import { FastifyPluginAsync } from "fastify";
 import { FastifyTypebox } from "../../app.js";
-import { Type } from "@sinclair/typebox";
 import { HttpError } from "../../plugins/sensible.js";
+import { Type } from "@sinclair/typebox";
+import { FastifyPluginAsync } from "fastify";
 
 const example: FastifyPluginAsync = async (
   fastify: FastifyTypebox,

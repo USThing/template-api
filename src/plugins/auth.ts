@@ -1,8 +1,8 @@
-import fp from "fastify-plugin";
 import { FastifyReply, FastifyRequest } from "fastify";
+import fp from "fastify-plugin";
+import { skipSubjectCheck } from "oauth4webapi";
 import * as client from "openid-client";
 import { WWWAuthenticateChallengeError } from "openid-client";
-import { skipSubjectCheck } from "oauth4webapi";
 
 export interface AuthPluginOptions {
   /** The discovery URL of the OpenID Connect provider. */
