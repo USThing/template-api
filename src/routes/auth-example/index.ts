@@ -1,4 +1,6 @@
 import { FastifyTypebox } from "../../app.js";
+import { AuthResponseSchema } from "../../plugins/auth.js";
+import { mergeResponse } from "../../utils/schema.js";
 import { Type } from "@sinclair/typebox";
 import { FastifyPluginAsync } from "fastify";
 
@@ -14,10 +16,12 @@ const authExample: FastifyPluginAsync = async (
         summary: "Auth Example",
         tags: ["Auth"],
         security: [{ Auth: [] }],
-        response: {
-          200: Type.String(),
-          401: Type.String(),
-        },
+        response: mergeResponse([
+          {
+            200: Type.String(),
+          },
+          AuthResponseSchema,
+        ]),
       },
       preHandler: fastify.auth,
     },
@@ -37,14 +41,17 @@ const authExample: FastifyPluginAsync = async (
             summary: "Sub Auth Example 1",
             tags: ["Auth"],
             security: [{ Auth: [] }],
-            response: {
-              200: Type.String(),
-              401: Type.String(),
-            },
+            response: mergeResponse([
+              {
+                200: Type.String(),
+                400: Type.String(),
+              },
+              AuthResponseSchema,
+            ]),
           },
         },
         async function (request, reply) {
-          return "this is a sub auth example 1";
+          return reply.status(400).send("this is a sub auth example 1");
         },
       );
       fastify.get(
@@ -54,14 +61,17 @@ const authExample: FastifyPluginAsync = async (
             summary: "Sub Auth Example 2",
             tags: ["Auth"],
             security: [{ Auth: [] }],
-            response: {
-              200: Type.String(),
-              401: Type.String(),
-            },
+            response: mergeResponse([
+              {
+                200: Type.String(),
+                401: Type.String(),
+              },
+              AuthResponseSchema,
+            ]),
           },
         },
         async function (request, reply) {
-          return "this is a sub auth example 2";
+          return reply.status(401).send("this is a sub auth example 2");
         },
       );
     },
