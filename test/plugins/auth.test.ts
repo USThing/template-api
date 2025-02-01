@@ -41,8 +41,8 @@ await suite("auth plugin", async () => {
         Authorization: "[invalid authorization header]",
       },
     });
-    // Unauthorized
-    assert.equal(response.statusCode, 401);
+    // Bad Request
+    assert.equal(response.statusCode, 400);
   });
   await test("invalid authorization scheme", async () => {
     const response = await fastify.inject({
@@ -52,8 +52,8 @@ await suite("auth plugin", async () => {
         Authorization: "Basic INVALID",
       },
     });
-    // Unauthorized
-    assert.equal(response.statusCode, 401);
+    // Bad Request
+    assert.equal(response.statusCode, 400);
   });
   await test("invalid token", async () => {
     const response = await fastify.inject({
