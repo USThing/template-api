@@ -77,7 +77,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
     origin: "*",
   });
 
-  // Register Swagger & Swagger UI
+  // Register Swagger & Swagger UI & Scalar
   await fastify.register(import("@fastify/swagger"), {
     openapi: {
       info: {
@@ -115,6 +115,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
     },
   });
   await fastify.register(import("@fastify/swagger-ui"));
+  await fastify.register(import("@scalar/fastify-api-reference"));
 
   // Register MongoDB (Optional)
   // await fastify.register(import("@fastify/mongodb"), {

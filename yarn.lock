@@ -702,6 +702,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@scalar/fastify-api-reference@npm:^1.25.113":
+  version: 1.25.113
+  resolution: "@scalar/fastify-api-reference@npm:1.25.113"
+  dependencies:
+    "@scalar/types": "npm:0.0.29"
+    fastify-plugin: "npm:^4.5.1"
+  checksum: 10c0/0102c7bdd648b5217e872297dabf92c2219259e64a8094266f5d8656f70173b777943b78564a88b11f49e70911d5e838144b966ff89da6f954c649705541f32d
+  languageName: node
+  linkType: hard
+
+"@scalar/openapi-types@npm:0.1.6":
+  version: 0.1.6
+  resolution: "@scalar/openapi-types@npm:0.1.6"
+  checksum: 10c0/f8fc61ceb45b08d7651da189de9461362cf635b67fe999fd0758318b6a751bb25cff0b64d023e6e1fa04e196f8458738e99401e09f169b446dbec99373de911c
+  languageName: node
+  linkType: hard
+
+"@scalar/types@npm:0.0.29":
+  version: 0.0.29
+  resolution: "@scalar/types@npm:0.0.29"
+  dependencies:
+    "@scalar/openapi-types": "npm:0.1.6"
+    "@unhead/schema": "npm:^1.11.11"
+  checksum: 10c0/94f1bc829e441aa82f41986ea991d7edfac2dccfd460b50173a269cbf32401923735cc04890e75a60341d2cfb1c7c004a8a269a2768adee1bdad8b43bf93ce8c
+  languageName: node
+  linkType: hard
+
 "@sinclair/typebox@npm:^0.34.15":
   version: 0.34.15
   resolution: "@sinclair/typebox@npm:0.34.15"
@@ -922,6 +949,16 @@ __metadata:
     "@typescript-eslint/types": "npm:8.22.0"
     eslint-visitor-keys: "npm:^4.2.0"
   checksum: 10c0/fd83d2feadaf79950427fbbc3d23ca01cf4646ce7e0dd515a9c881d31ec1cc768e7b8898d3af065e31df39452501a3345092581cbfccac89e89d293519540557
+  languageName: node
+  linkType: hard
+
+"@unhead/schema@npm:^1.11.11":
+  version: 1.11.18
+  resolution: "@unhead/schema@npm:1.11.18"
+  dependencies:
+    hookable: "npm:^5.5.3"
+    zhead: "npm:^2.2.4"
+  checksum: 10c0/8135bf31bdfcf37ff7f984dc39201c68f3b80dba4e310241c6aed94248136d61149e1de2752f532652b10727af67b6dc53271e9402f63353446fb98e0f5322d6
   languageName: node
   linkType: hard
 
@@ -1914,6 +1951,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastify-plugin@npm:^4.5.1":
+  version: 4.5.1
+  resolution: "fastify-plugin@npm:4.5.1"
+  checksum: 10c0/f58f79cd9d3c88fd7f79a3270276c6339fc57bbe72ef14d20b73779193c404e317ac18e8eae2c5071b3909ebee45d7eb6871da4e65464ac64ed0d9746b4e9b9f
+  languageName: node
+  linkType: hard
+
 "fastify-plugin@npm:^5.0.0, fastify-plugin@npm:^5.0.1":
   version: 5.0.1
   resolution: "fastify-plugin@npm:5.0.1"
@@ -2258,6 +2302,13 @@ __metadata:
   version: 5.0.0
   resolution: "help-me@npm:5.0.0"
   checksum: 10c0/054c0e2e9ae2231c85ab5e04f75109b9d068ffcc54e58fb22079822a5ace8ff3d02c66fd45379c902ad5ab825e5d2e1451fcc2f7eab1eb49e7d488133ba4cacb
+  languageName: node
+  linkType: hard
+
+"hookable@npm:^5.5.3":
+  version: 5.5.3
+  resolution: "hookable@npm:5.5.3"
+  checksum: 10c0/275f4cc84d27f8d48c5a5cd5685b6c0fea9291be9deea5bff0cfa72856ed566abde1dcd8cb1da0f9a70b4da3d7ec0d60dc3554c4edbba647058cc38816eced3d
   languageName: node
   linkType: hard
 
@@ -4069,6 +4120,7 @@ __metadata:
     "@fastify/swagger": "npm:^9.4.2"
     "@fastify/swagger-ui": "npm:^5.2.1"
     "@fastify/type-provider-typebox": "npm:^5.1.0"
+    "@scalar/fastify-api-reference": "npm:^1.25.113"
     "@sinclair/typebox": "npm:^0.34.15"
     "@trivago/prettier-plugin-sort-imports": "npm:^5.2.2"
     "@types/node": "npm:^22.12.0"
@@ -4445,5 +4497,12 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: 10c0/dceb44c28578b31641e13695d200d34ec4ab3966a5729814d5445b194933c096b7ced71494ce53a0e8820685d1d010df8b2422e5bf2cdea7e469d97ffbea306f
+  languageName: node
+  linkType: hard
+
+"zhead@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "zhead@npm:2.2.4"
+  checksum: 10c0/3d166fb661f1b7fdf8a0ef2222d9e574ab241e72141f2f1fda62a9250ca73aabf2eaf0d66046a3984cd24d1dd9bac231338c6271684d6b8caa6b66af7c45f275
   languageName: node
   linkType: hard
