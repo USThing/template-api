@@ -43,8 +43,10 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
     }
   })();
 
-  fastify.log.info("Successfully discovered OpenID Connect provider.");
-  fastify.log.info(`Server Metadata: ${config?.serverMetadata()}`);
+  fastify.log.info(
+    { opts, metadata: config?.serverMetadata() },
+    "Successfully discovered the OpenID Connect provider.",
+  );
 
   fastify.decorateRequest("user", undefined);
   fastify.decorate(
