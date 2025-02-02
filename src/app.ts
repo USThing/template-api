@@ -113,6 +113,11 @@ const app: FastifyPluginAsync<AppOptions> = async (
         },
       },
     },
+    refResolver: {
+      buildLocalReference(json, baseUri, fragment, i) {
+        return (json.$id as string) || `def-${i}`;
+      },
+    },
   });
   await fastify.register(import("@fastify/swagger-ui"));
   await fastify.register(import("@scalar/fastify-api-reference"));
