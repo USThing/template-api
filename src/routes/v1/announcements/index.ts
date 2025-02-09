@@ -15,6 +15,11 @@ type Announcement = Static<typeof Announcement>;
 const announcement: FastifyPluginAsync = async (
   fastify: FastifyTypebox,
 ): Promise<void> => {
+  fastify.addSchema({
+    $id: "Announcement",
+    ...Announcement,
+  });
+
   const collection =
     fastify.mongo.db!.collection<Announcement>("announcements");
   fastify.get(
