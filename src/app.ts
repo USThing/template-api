@@ -116,11 +116,12 @@ const app: FastifyPluginAsync<AppOptions> = async (
         },
       ],
       tags: [
+        { name: "APK", description: "APK endpoints" },
+        { name: "Announcements", description: "Announcements endpoints" },
+        { name: "Configuration", description: "Configuration endpoints" },
         { name: "Root", description: "The root endpoint" },
         { name: "Example", description: "Example endpoints" },
         { name: "Auth", description: "Auth endpoints" },
-        { name: "APK", description: "APK endpoints" },
-        { name: "Configuration", description: "Configuration endpoints" },
       ],
       components: {
         securitySchemes: {
