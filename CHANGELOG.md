@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.0](https://github.com/USThing/api-static/compare/v0.5.0...v0.6.0) (2025-02-09)
+
+
+### Features
+
+* **announcements:** support announcements ([c5baec5](https://github.com/USThing/api-static/commit/c5baec5b5e823801425e67e7014c61f2466ba768))
+* **auth:** add schema for auth pre-handler ([4cd7932](https://github.com/USThing/api-static/commit/4cd7932fca9d455faa19c41736d3170a1877df89))
+* **format:** sort imports ([4ced54e](https://github.com/USThing/api-static/commit/4ced54ec09d250e9322c813b58284a9ef0f4410a))
+* **openapi:** add scalar reference ([3722a8e](https://github.com/USThing/api-static/commit/3722a8e7ee3700e6ec213639a37f1156b4f1e5de))
+* **sensible:** add http error examples with sensible ([60cf5c1](https://github.com/USThing/api-static/commit/60cf5c1223255a56b52028fe445bc1f6d98be27e))
+
 ## [0.5.0](https://github.com/USThing/api-static/compare/v0.4.0...v0.5.0) (2024-11-08)
 
 
