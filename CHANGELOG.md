@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/USThing/api-static/compare/v0.6.0...v0.6.1) (2025-02-09)
+
+
+### Bug Fixes
+
+* **announcements:** add schema ([60c945a](https://github.com/USThing/api-static/commit/60c945a7cb465add951926da5fc44975f5da66ac))
+
 ## [0.6.0](https://github.com/USThing/api-static/compare/v0.5.0...v0.6.0) (2025-02-09)
 
 
