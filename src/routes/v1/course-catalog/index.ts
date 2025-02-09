@@ -1,7 +1,7 @@
-import { FastifyPluginAsync } from "fastify";
 import { FastifyTypebox } from "../../../app.js";
-import { Type } from "@sinclair/typebox";
 import { Course } from "../../../plugins/course-catalog/types.js";
+import { Type } from "@sinclair/typebox";
+import { FastifyPluginAsync } from "fastify";
 
 const courseCatalog: FastifyPluginAsync = async (
   fastify: FastifyTypebox,

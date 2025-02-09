@@ -1,5 +1,10 @@
-import * as path from "path";
+import packageJson from "../package.json" with { type: "json" };
+import { AuthPluginOptions } from "./plugins/auth.js";
+import { CourseCatalogOptions } from "./plugins/course-catalog/index.js";
+import { ApkOptions } from "./routes/v1/apk/index.js";
 import AutoLoad, { AutoloadPluginOptions } from "@fastify/autoload";
+import fastifyMultipart from "@fastify/multipart";
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import {
   FastifyBaseLogger,
   FastifyInstance,
@@ -9,13 +14,8 @@ import {
   RawRequestDefaultExpression,
   RawServerDefault,
 } from "fastify";
+import * as path from "path";
 import { fileURLToPath } from "url";
-import packageJson from "../package.json" with { type: "json" };
-import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
-import { AuthPluginOptions } from "./plugins/auth.js";
-import { ApkOptions } from "./routes/v1/apk/index.js";
-import fastifyMultipart from "@fastify/multipart";
-import { CourseCatalogOptions } from "./plugins/course-catalog/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -93,7 +93,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
     exposedHeaders: "*",
   });
 
-  // Register Swagger & Swagger UI
+  // Register Swagger & Swagger UI & Scalar
   await fastify.register(import("@fastify/swagger"), {
     openapi: {
       info: {
@@ -135,8 +135,14 @@ const app: FastifyPluginAsync<AppOptions> = async (
         },
       },
     },
+    refResolver: {
+      buildLocalReference(json, baseUri, fragment, i) {
+        return (json.$id as string) || `def-${i}`;
+      },
+    },
   });
   await fastify.register(import("@fastify/swagger-ui"));
+  await fastify.register(import("@scalar/fastify-api-reference"));
 
   // Register MongoDB (Optional)
   await fastify.register(import("@fastify/mongodb"), {

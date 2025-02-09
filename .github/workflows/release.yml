@@ -17,20 +17,25 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+
   release-please:
+
     runs-on: ubuntu-latest
+
     steps:
-      - uses: googleapis/release-please-action@v4
+
+      - name: Release Please
+        uses: googleapis/release-please-action@v4
         id: release
         with:
-          # this is a built-in strategy in release-please, see "Action Inputs"
-          # for more options
           release-type: node
 
-      - uses: actions/checkout@v4
+      # From:
+      # https://github.com/googleapis/release-please-action?tab=readme-ov-file#creating-majorminor-tags
+      - name: Checkout
+        uses: actions/checkout@v4
         if: ${{ steps.release.outputs.release_created }}
-
-      - name: tag major and minor versions
+      - name: Tag Major and Minor Versions
         if: ${{ steps.release.outputs.release_created }}
         run: |
           git config user.name github-actions[bot]
@@ -45,11 +50,11 @@ jobs:
           git push origin v${{ steps.release.outputs.major }}
           git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
 
-      - name: Set up QEMU
+      - name: Setup QEMU
         if: ${{ steps.release.outputs.release_created }}
         uses: docker/setup-qemu-action@v3
 
-      - name: Set up Docker Buildx
+      - name: Setup Docker Buildx
         if: ${{ steps.release.outputs.release_created }}
         uses: docker/setup-buildx-action@v3
 
@@ -68,23 +73,22 @@ jobs:
         with:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          # generate Docker tags based on the following events/attributes
+          # Commit SHA Tag
+          # The Tag based on the branch (main)
+          # The "prod" Tag, indicating a production-ready image
+          # The Major, Major.Minor, and Major.Minor.Patch tags
           tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
             type=sha
+            type=ref,event=branch
+            prod
             ${{ steps.release.outputs.major }}
             ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
             ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
 
-      - name: Build and push
+      - name: Build and Push
         if: ${{ steps.release.outputs.release_created }}
         uses: docker/build-push-action@v6
         with:
-          # Push if the event is not a pull request
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: | 
-            ${{ steps.meta.outputs.tags }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

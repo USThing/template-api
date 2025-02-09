@@ -1,7 +1,7 @@
-import { CCourse, convert, Course, CRawCourse, RawCourse } from "./types.js";
-import { hoursToMilliseconds } from "date-fns";
 import { FastifyTypebox } from "../../app.js";
 import { CourseCatalogOptions } from "./index.js";
+import { CCourse, convert, Course, CRawCourse, RawCourse } from "./types.js";
+import { hoursToMilliseconds } from "date-fns";
 
 const BASE = "https://w5.ab.ust.hk/msapi/sis/catg_course";
 

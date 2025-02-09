@@ -1,10 +1,10 @@
-import { FastifyPluginAsync } from "fastify";
 import { FastifyTypebox } from "../../../app.js";
-import { Type } from "@sinclair/typebox";
 import { mongodb } from "@fastify/mongodb";
-import { pipeline } from "stream/promises";
 import fastifyMultipart from "@fastify/multipart";
+import { Type } from "@sinclair/typebox";
+import { FastifyPluginAsync } from "fastify";
 import { Readable } from "node:stream";
+import { pipeline } from "stream/promises";
 
 export type ApkOptions = {
   apkKey: string;

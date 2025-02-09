@@ -1,12 +1,15 @@
+import sensible from "@fastify/sensible";
+import { Type } from "@sinclair/typebox";
 import fp from "fastify-plugin";
-import sensible, { SensibleOptions } from "@fastify/sensible";
+
+export const HttpError = Type.Ref("HttpError");
 
 /**
- * This plugins adds some utilities to handle http errors
+ * This plugin adds some utilities to handle http errors.
  *
  * @see https://github.com/fastify/fastify-sensible
  */
-export default fp<SensibleOptions>(async (fastify) => {
+export default fp(async (fastify) => {
   fastify.register(sensible, {
     sharedSchemaId: "HttpError",
   });

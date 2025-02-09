@@ -1,6 +1,6 @@
-import { FastifyPluginAsync } from "fastify";
 import { FastifyTypebox } from "../../../app.js";
 import { Type } from "@sinclair/typebox";
+import { FastifyPluginAsync } from "fastify";
 
 const config: FastifyPluginAsync = async (
   fastify: FastifyTypebox,

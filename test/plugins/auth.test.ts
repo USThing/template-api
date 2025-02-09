@@ -1,8 +1,8 @@
-import { afterEach, beforeEach, suite, test } from "node:test";
-import * as assert from "node:assert";
-import Fastify, { FastifyInstance } from "fastify";
-import * as process from "node:process";
 import Auth from "../../src/plugins/auth.js";
+import Fastify, { FastifyInstance } from "fastify";
+import * as assert from "node:assert";
+import * as process from "node:process";
+import { afterEach, beforeEach, suite, test } from "node:test";
 
 await suite("auth plugin", async () => {
   let fastify: FastifyInstance;
@@ -41,8 +41,8 @@ await suite("auth plugin", async () => {
         Authorization: "[invalid authorization header]",
       },
     });
-    // Unauthorized
-    assert.equal(response.statusCode, 401);
+    // Bad Request
+    assert.equal(response.statusCode, 400);
   });
   await test("invalid authorization scheme", async () => {
     const response = await fastify.inject({
@@ -52,8 +52,8 @@ await suite("auth plugin", async () => {
         Authorization: "Basic INVALID",
       },
     });
-    // Unauthorized
-    assert.equal(response.statusCode, 401);
+    // Bad Request
+    assert.equal(response.statusCode, 400);
   });
   await test("invalid token", async () => {
     const response = await fastify.inject({

@@ -1,7 +1,11 @@
-import fp from "fastify-plugin";
+import { ResponseSchema } from "../utils/schema.js";
+import { UnionOneOf } from "../utils/typebox/union-oneof.js";
+import { Type } from "@sinclair/typebox";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { errors, Issuer, TokenSet } from "openid-client";
-import OPError = errors.OPError;
+import fp from "fastify-plugin";
+import { skipSubjectCheck } from "oauth4webapi";
+import * as client from "openid-client";
+import { WWWAuthenticateChallengeError } from "openid-client";
 
 export interface AuthPluginOptions {
   /** The discovery URL of the OpenID Connect provider. */
@@ -17,6 +21,37 @@ export interface AuthPluginOptions {
   authSkip?: boolean;
 }
 
+export const AuthResponseSchema: ResponseSchema = {
+  400: UnionOneOf(
+    [
+      Type.Literal("Invalid Authorization Header", {
+        description: "The Authorization header is invalid.",
+      }),
+      Type.Literal("Invalid Authorization Scheme", {
+        description: "The Authorization scheme is invalid.",
+      }),
+    ],
+    {
+      description: "The errors from the authentication middleware.",
+    },
+  ),
+  401: UnionOneOf(
+    [
+      Type.Literal("Missing Authorization Header", {
+        description: "The Authorization header is missing.",
+      }),
+      Type.Any({
+        description:
+          "The error message from the OpenID Connect provider. " +
+          "Usually indicates an invalid token. ",
+      }),
+    ],
+    {
+      description: "The errors from the authentication middleware.",
+    },
+  ),
+};
+
 /**
  * The Auth plugin adds authentication ability to the Fastify instance.
  *
@@ -31,20 +66,27 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
     fastify.log.warn("Skip Auth: ON");
   }
 
-  const client = await (async () => {
+  const config = await (async () => {
     if (skip) {
       return null;
     } else {
-      const issuer = await Issuer.discover(opts.authDiscoveryURL);
-      return new issuer.Client({ client_id: opts.authClientID });
+      return await client.discovery(
+        new URL(opts.authDiscoveryURL),
+        opts.authClientID,
+      );
     }
   })();
+
+  fastify.log.info(
+    { opts, metadata: config?.serverMetadata() },
+    "Successfully discovered the OpenID Connect provider.",
+  );
 
   fastify.decorateRequest("user", undefined);
   fastify.decorate(
     "auth",
     async function (request: FastifyRequest, reply: FastifyReply) {
-      if (skip || !client) {
+      if (skip || !config) {
         return;
       }
 
@@ -57,21 +99,26 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
       // Extract the scheme and token from the authorization header
       const parts = authorization.split(" ");
       if (parts.length !== 2) {
-        return reply.status(401).send("Invalid Authorization Header");
+        return reply.status(400).send("Invalid Authorization Header");
       }
       const [type, token] = parts;
       if (type !== "Bearer") {
-        return reply.status(401).send("Invalid Authorization Scheme");
+        return reply.status(400).send("Invalid Authorization Scheme");
       }
 
       // Verify the token with the client
       try {
-        const info = await client.userinfo(
-          new TokenSet({ access_token: token }),
+        const info = await client.fetchUserInfo(
+          config,
+          token,
+          skipSubjectCheck,
         );
         request.user = info.email && getUsernameFromEmail(info.email);
       } catch (e) {
-        if (e instanceof OPError && e.response?.statusCode === 401) {
+        if (
+          e instanceof WWWAuthenticateChallengeError &&
+          e.response?.status === 401
+        ) {
           return reply
             .status(401)
             .type("application/json")
@@ -87,7 +134,6 @@ function getUsernameFromEmail(email: string): string {
   return email.split("@")[0];
 }
 
-// When using .decorate you have to specify added properties for Typescript
 declare module "fastify" {
   export interface FastifyInstance {
     auth(request: FastifyRequest, reply: FastifyReply): Promise<void>;

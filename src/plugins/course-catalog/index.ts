@@ -1,5 +1,5 @@
-import fp from "fastify-plugin";
 import { Updater } from "./updater.js";
+import fp from "fastify-plugin";
 
 export interface CourseCatalogOptions {
   msApiAccessToken: string;
