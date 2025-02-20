@@ -122,7 +122,7 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
           return reply
             .status(401)
             .type("application/json")
-            .send(e.response.body?.toString());
+            .send(await e.response.json());
         }
         throw e;
       }
