@@ -26,7 +26,7 @@ const authExample: FastifyPluginAsync = async (
       preHandler: fastify.auth,
     },
     async function (request, reply) {
-      return "this is an auth example";
+      return `${request.user} is authenticated`;
     },
   );
 

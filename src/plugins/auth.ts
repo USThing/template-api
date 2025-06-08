@@ -3,9 +3,9 @@ import { UnionOneOf } from "../utils/typebox/union-oneof.js";
 import { Type } from "@sinclair/typebox";
 import { FastifyReply, FastifyRequest } from "fastify";
 import fp from "fastify-plugin";
-import { skipSubjectCheck } from "oauth4webapi";
+import jwt, { JwtHeader, SigningKeyCallback } from "jsonwebtoken";
+import { JwksClient } from "jwks-rsa";
 import * as client from "openid-client";
-import { WWWAuthenticateChallengeError } from "openid-client";
 
 export interface AuthPluginOptions {
   /** The discovery URL of the OpenID Connect provider. */
@@ -66,29 +66,37 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
     fastify.log.warn("Skip Auth: ON");
   }
 
-  const config = await (async () => {
+  const key = await (async () => {
     if (skip) {
       return null;
     } else {
-      return await client.discovery(
+      const config = await client.discovery(
         new URL(opts.authDiscoveryURL),
         opts.authClientID,
       );
+      fastify.log.info(
+        { opts, metadata: config?.serverMetadata() },
+        "Successfully discovered the OpenID Connect provider.",
+      );
+
+      const jwksClient = new JwksClient({
+        jwksUri: config.serverMetadata().jwks_uri ?? "",
+      });
+      return async (header: JwtHeader, callback: SigningKeyCallback) => {
+        jwksClient.getSigningKey(header.kid, (err, key) => {
+          const signingKey = key?.getPublicKey();
+          callback(err, signingKey);
+        });
+      };
     }
   })();
-
-  fastify.log.info(
-    { opts, metadata: config?.serverMetadata() },
-    "Successfully discovered the OpenID Connect provider.",
-  );
 
   fastify.decorateRequest("user", undefined);
   fastify.decorate(
     "auth",
     async function (request: FastifyRequest, reply: FastifyReply) {
-      if (skip || !config) {
-        return;
-      }
+      if (skip) return;
+      if (!key) return;
 
       // Extract the authorization header from the request
       const { authorization } = request.headers;
@@ -106,23 +114,24 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
         return reply.status(400).send("Invalid Authorization Scheme");
       }
 
-      // Verify the token with the client
       try {
-        const info = await client.fetchUserInfo(
-          config,
-          token,
-          skipSubjectCheck,
-        );
+        const info = await new Promise<jwt.JwtPayload>((resolve, reject) => {
+          jwt.verify(token, key, (err, info) => {
+            if (err) {
+              return reject(err);
+            }
+            resolve(info as jwt.JwtPayload);
+          });
+        });
         request.user = info.email && getUsernameFromEmail(info.email);
       } catch (e) {
+        console.log(e);
         if (
-          e instanceof WWWAuthenticateChallengeError &&
-          e.response?.status === 401
+          e instanceof jwt.JsonWebTokenError ||
+          e instanceof jwt.TokenExpiredError ||
+          e instanceof jwt.NotBeforeError
         ) {
-          return reply
-            .status(401)
-            .type("application/json")
-            .send(await e.response.json());
+          return reply.status(401).send(`${e.name}: ${e.message}`);
         }
         throw e;
       }
