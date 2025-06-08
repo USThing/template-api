@@ -43,6 +43,7 @@ This template supports GitHub Actions for CI / CD. The available workflows are:
 
 - Checks / eslint: Run ES Lint to check problems and the format of the code.
 - Checks / commitlint: Run Commitlint to check the format of the commit messages.
+- Checks / tests: Run unit tests of the project.
 - Docker CI / docker: Build the Docker image and push it to the GitHub Container Registry.
 - Release Please / release-please: Automatic releasing. See also [release-please](https://github.com/googleapis/release-please).
 
