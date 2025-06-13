@@ -4,6 +4,12 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
+
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
