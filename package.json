@@ -13,7 +13,7 @@
     "watch": "tsc -w",
     "start": "fastify start -l info dist/src/app.js --options",
     "dev": "yarn run build && concurrently -k -p '[{name}]' -n TypeScript,App -c yellow.bold,cyan.bold yarn:watch yarn:dev:start",
-    "dev:start": "fastify start --ignore-watch='.ts$' -w -l info -P dist/src/app.js --options",
+    "dev:start": "fastify start --ignore-watch='.ts$' -w -l debug -P dist/src/app.js --options",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
