@@ -8,7 +8,7 @@ const authExample: FastifyPluginAsync = async (
   fastify: FastifyTypebox,
   opts,
 ): Promise<void> => {
-  // Applying auth to this route
+  // Applying authPlugin to this route
   fastify.get(
     "/",
     {
@@ -23,17 +23,17 @@ const authExample: FastifyPluginAsync = async (
           AuthResponseSchema,
         ]),
       },
-      preHandler: fastify.auth,
+      preHandler: fastify.authPlugin,
     },
     async function (request, reply) {
-      return "this is an auth example";
+      return `${request.user} is authenticated`;
     },
   );
 
-  // Applying auth to the prefix /sub-auth
+  // Applying authPlugin to the prefix /sub-auth
   fastify.register(
     async function (fastify) {
-      fastify.addHook("preHandler", fastify.auth);
+      fastify.addHook("preHandler", fastify.authPlugin);
       fastify.get(
         "/",
         {

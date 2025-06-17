@@ -16,7 +16,7 @@ await suite("auth plugin", async () => {
     });
     fastify.get(
       "/secret",
-      { preHandler: fastify.auth },
+      { preHandler: fastify.authPlugin },
       async (request) => request.user,
     );
     await fastify.ready();
@@ -98,7 +98,11 @@ await suite("auth plugin with skipping", async () => {
       authClientID: "",
       authSkip: true,
     });
-    fastify.get("/secret", { preHandler: fastify.auth }, async () => "ok");
+    fastify.get(
+      "/secret",
+      { preHandler: fastify.authPlugin },
+      async () => "ok",
+    );
     await fastify.ready();
   });
   afterEach(async () => {

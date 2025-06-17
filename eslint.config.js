@@ -5,6 +5,7 @@ import pluginTs from "typescript-eslint";
 
 export default [
   { files: ["**/*.{js,mjs,cjs,ts}"] },
+  { ignores: ["dist/"] },
   { languageOptions: { globals: globals.node } },
   pluginJs.configs.recommended,
   ...pluginTs.configs.recommended,

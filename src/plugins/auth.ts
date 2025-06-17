@@ -3,9 +3,10 @@ import { UnionOneOf } from "../utils/typebox/union-oneof.js";
 import { Type } from "@sinclair/typebox";
 import { FastifyReply, FastifyRequest } from "fastify";
 import fp from "fastify-plugin";
-import { skipSubjectCheck } from "oauth4webapi";
+import jwt, { JwtHeader, SigningKeyCallback } from "jsonwebtoken";
+import { JwksClient } from "jwks-rsa";
 import * as client from "openid-client";
-import { WWWAuthenticateChallengeError } from "openid-client";
+import { skipSubjectCheck, WWWAuthenticateChallengeError } from "openid-client";
 
 export interface AuthPluginOptions {
   /** The discovery URL of the OpenID Connect provider. */
@@ -52,6 +53,15 @@ export const AuthResponseSchema: ResponseSchema = {
   ),
 };
 
+class UnauthorizedError extends Error {
+  cause: Error;
+  constructor(cause: Error) {
+    super();
+    this.cause = cause;
+    this.name = "UnauthorizedError";
+  }
+}
+
 /**
  * The Auth plugin adds authentication ability to the Fastify instance.
  *
@@ -77,18 +87,71 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
     }
   })();
 
-  fastify.log.info(
-    { opts, metadata: config?.serverMetadata() },
-    "Successfully discovered the OpenID Connect provider.",
-  );
+  const key = await (async () => {
+    if (skip) {
+      return null;
+    } else {
+      fastify.log.info(
+        { opts, metadata: config!.serverMetadata() },
+        "Successfully discovered the OpenID Connect provider.",
+      );
+
+      const jwksClient = new JwksClient({
+        jwksUri: config!.serverMetadata().jwks_uri ?? "",
+      });
+      return async (header: JwtHeader, callback: SigningKeyCallback) => {
+        jwksClient.getSigningKey(header.kid, (err, key) => {
+          const signingKey = key?.getPublicKey();
+          callback(err, signingKey);
+        });
+      };
+    }
+  })();
+
+  async function verify(token: string) {
+    try {
+      const info = await new Promise<jwt.JwtPayload>((resolve, reject) => {
+        jwt.verify(token, key!, (err, info) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(info as jwt.JwtPayload);
+        });
+      });
+      return info.email && getUsernameFromEmail(info.email);
+    } catch (e) {
+      if (
+        e instanceof jwt.JsonWebTokenError ||
+        e instanceof jwt.TokenExpiredError ||
+        e instanceof jwt.NotBeforeError
+      ) {
+        throw new UnauthorizedError(e);
+      }
+      throw e;
+    }
+  }
+
+  async function verifyLegacy(token: string) {
+    try {
+      const info = await client.fetchUserInfo(config!, token, skipSubjectCheck);
+      return info.email && getUsernameFromEmail(info.email);
+    } catch (e) {
+      if (
+        e instanceof WWWAuthenticateChallengeError &&
+        e.response?.status === 401
+      ) {
+        throw new UnauthorizedError(new Error(await e.response.text()));
+      }
+      throw e;
+    }
+  }
 
   fastify.decorateRequest("user", undefined);
   fastify.decorate(
-    "auth",
+    "authPlugin",
     async function (request: FastifyRequest, reply: FastifyReply) {
-      if (skip || !config) {
-        return;
-      }
+      if (skip) return;
+      if (!key) return;
 
       // Extract the authorization header from the request
       const { authorization } = request.headers;
@@ -106,23 +169,25 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
         return reply.status(400).send("Invalid Authorization Scheme");
       }
 
-      // Verify the token with the client
       try {
-        const info = await client.fetchUserInfo(
-          config,
-          token,
-          skipSubjectCheck,
-        );
-        request.user = info.email && getUsernameFromEmail(info.email);
+        // Verify the token and set the user in the request.
+        // If the token cannot be verified by the modern method,
+        // fall back to the legacy method.
+        request.user = await verify(token).catch(async (e) => {
+          if (e instanceof UnauthorizedError) {
+            fastify.log.debug(
+              "Modern verification failed, falling back to legacy method.",
+            );
+            return await verifyLegacy(token).catch(() => {
+              throw e;
+            });
+          }
+          throw e;
+        });
       } catch (e) {
-        if (
-          e instanceof WWWAuthenticateChallengeError &&
-          e.response?.status === 401
-        ) {
-          return reply
-            .status(401)
-            .type("application/json")
-            .send(e.response.body?.toString());
+        if (e instanceof UnauthorizedError) {
+          const cause = e.cause;
+          return reply.status(401).send(`${cause.name}: ${cause.message}`);
         }
         throw e;
       }
@@ -131,12 +196,13 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
 });
 
 function getUsernameFromEmail(email: string): string {
-  return email.split("@")[0];
+  const [username] = email.split("@");
+  return username;
 }
 
 declare module "fastify" {
   export interface FastifyInstance {
-    auth(request: FastifyRequest, reply: FastifyReply): Promise<void>;
+    authPlugin(request: FastifyRequest, reply: FastifyReply): Promise<void>;
   }
 
   export interface FastifyRequest {
