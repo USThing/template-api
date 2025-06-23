@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.0](https://github.com/USThing/api-static/compare/v0.6.1...v0.1.0) (2025-06-17)
+
+
+### Features
+
+* **auth:** introduce new verification mechanism ([9bcb72f](https://github.com/USThing/api-static/commit/9bcb72f48634084159c8fa53d5a7ed9bfecdf252))
+* **auth:** support legacy authentication ([47a8e4a](https://github.com/USThing/api-static/commit/47a8e4a77ca299924fb53038427859c7984a1324))
+
+
+### Bug Fixes
+
+* **auth:** respond meaningful message on failure ([ed59059](https://github.com/USThing/api-static/commit/ed59059e183b1e9c0fa4403325794bea3fe76093))
+
+
+### Miscellaneous Chores
+
+* **release-please:** reset versioning ([430218a](https://github.com/USThing/api-static/commit/430218aa5b91ba2c0f567d0139db2321a76250fb))
+
 ## [0.6.1](https://github.com/USThing/api-static/compare/v0.6.0...v0.6.1) (2025-02-09)
 
 
