@@ -1,5 +1,7 @@
 import fp from "fastify-plugin";
 
+// import { Collection } from "mongodb";
+
 export type InitMongoPluginOptions = Record<never, unknown>;
 
 // The use of fastify-plugin is required to be able
@@ -12,3 +14,11 @@ export default fp<InitMongoPluginOptions>(async (fastify, opts) => {
     //   .createIndex({ example: 1 });
   });
 });
+
+// declare module "fastify" {
+//   export interface FastifyInstance {
+//     collections: {
+//       example: Collection<unknown>;
+//     };
+//   }
+// }
