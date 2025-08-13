@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.7.0](https://github.com/USThing/api-static/compare/v0.1.0...v0.7.0) (2025-08-13)
+
+
+### Features
+
+* **announcements:** support announcements ([c5baec5](https://github.com/USThing/api-static/commit/c5baec5b5e823801425e67e7014c61f2466ba768))
+* **apk:** add version tracking ([64736b5](https://github.com/USThing/api-static/commit/64736b566bd45b818b3c8ecc7320379bc93fa92e))
+* **auth:** add schema for auth pre-handler ([4cd7932](https://github.com/USThing/api-static/commit/4cd7932fca9d455faa19c41736d3170a1877df89))
+* **auth:** introduce new verification mechanism ([9bcb72f](https://github.com/USThing/api-static/commit/9bcb72f48634084159c8fa53d5a7ed9bfecdf252))
+* **auth:** support legacy authentication ([47a8e4a](https://github.com/USThing/api-static/commit/47a8e4a77ca299924fb53038427859c7984a1324))
+* **config:** add config endpoints ([4b66971](https://github.com/USThing/api-static/commit/4b669713345ca813b56f53ca56299fb7c9d5048d))
+* **course-catalog:** search support ([ca15e6d](https://github.com/USThing/api-static/commit/ca15e6d20b72c3f7ac1ed8194b44f1aaa70d96c2))
+* **course-catalog:** support course catalog ([2c38daf](https://github.com/USThing/api-static/commit/2c38daf99e559d41dcac66c618598717eefce091))
+* **format:** sort imports ([4ced54e](https://github.com/USThing/api-static/commit/4ced54ec09d250e9322c813b58284a9ef0f4410a))
+* **openapi:** add scalar reference ([3722a8e](https://github.com/USThing/api-static/commit/3722a8e7ee3700e6ec213639a37f1156b4f1e5de))
+* **sensible:** add http error examples with sensible ([60cf5c1](https://github.com/USThing/api-static/commit/60cf5c1223255a56b52028fe445bc1f6d98be27e))
+
+
+### Bug Fixes
+
+* **announcements:** add schema ([60c945a](https://github.com/USThing/api-static/commit/60c945a7cb465add951926da5fc44975f5da66ac))
+* **apk:** increase file size limit from 64 MiB to 256 MiB ([600ba29](https://github.com/USThing/api-static/commit/600ba29478be0cd4209fd771f5bdace2c6bf4e83))
+* **auth:** respond meaningful message on failure ([ed59059](https://github.com/USThing/api-static/commit/ed59059e183b1e9c0fa4403325794bea3fe76093))
+
+
+### Miscellaneous Chores
+
+* **release-please:** reset versioning ([430218a](https://github.com/USThing/api-static/commit/430218aa5b91ba2c0f567d0139db2321a76250fb))
+* reset release-please version ([29a351c](https://github.com/USThing/api-static/commit/29a351c2aa28cf5ded093576a2b9ab7db4ccff5d))
+
 ## [0.1.0](https://github.com/USThing/api-static/compare/v0.6.1...v0.1.0) (2025-06-17)
 
 
