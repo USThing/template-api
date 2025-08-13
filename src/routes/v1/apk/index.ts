@@ -17,6 +17,9 @@ const apk: FastifyPluginAsync<ApkOptions> = async (
   const apkBucket = new mongodb.GridFSBucket(fastify.mongo.db!, {
     bucketName: "apk",
   });
+  const apkVersion = fastify.mongo.db!.collection<{
+    version: string;
+  }>("apk.version");
 
   fastify.get(
     "/latest",
@@ -34,9 +37,15 @@ const apk: FastifyPluginAsync<ApkOptions> = async (
       },
     },
     async function (request, reply) {
-      reply.type("application/vnd.android.package-archive");
-      reply.header("content-disposition", 'attachment; filename="latest.apk"');
-      return apkBucket.openDownloadStreamByName("latest.apk");
+      const latestFile = apkBucket.openDownloadStreamByName("usthing.apk");
+      const latestVersion = await apkVersion.findOne();
+      return reply
+        .type("application/vnd.android.package-archive")
+        .header(
+          "content-disposition",
+          `attachment; filename="usthing-${latestVersion?.version}.apk"`,
+        )
+        .send(latestFile);
     },
   );
 
@@ -51,15 +60,15 @@ const apk: FastifyPluginAsync<ApkOptions> = async (
         },
       },
     },
-    async function () {
-      const latest = await fastify.mongo
-        .db!.collection("apk.version")
-        .findOne();
-      if (latest) {
-        return latest.version;
-      } else {
-        return "0.0.0";
-      }
+    async function (request, reply) {
+      const latestVersion = await apkVersion.findOne();
+      return (
+        reply
+          .type("application/json; charset=utf-8")
+          // https://github.com/fastify/fastify/issues/6291
+          // We cannot serialize string directly.
+          .send(JSON.stringify(latestVersion?.version ?? "0.0.0"))
+      );
     },
   );
 
@@ -79,14 +88,17 @@ const apk: FastifyPluginAsync<ApkOptions> = async (
       "/latest",
       {
         schema: {
-          summary: "Upload the Latest USThing APK",
+          summary: "Upload the Latest USThing APK with Version",
           tags: ["APK"],
           consumes: ["multipart/form-data"],
           body: {
             type: "object",
-            required: ["apk"],
+            required: ["apkFile", "apkVersion"],
             properties: {
-              apk: { isFile: true },
+              apkFile: {
+                isFile: true,
+              },
+              apkVersion: {},
             },
           },
           response: {
@@ -97,42 +109,29 @@ const apk: FastifyPluginAsync<ApkOptions> = async (
       },
       async function (request, reply) {
         const body = request.body as {
-          apk: fastifyMultipart.MultipartFile;
+          apkFile: fastifyMultipart.MultipartFile;
+          apkVersion: fastifyMultipart.MultipartValue;
         };
+        const istream = await body.apkFile.toBuffer();
+        const ostream = apkBucket.openUploadStream("usthing.apk");
 
-        const inputStream = await body.apk.toBuffer();
-        const outputStream = apkBucket.openUploadStream("latest.apk");
+        // Upload the APK file to GridFS
+        await pipeline(Readable.from(istream), ostream);
+        // Update the APK version in the database
+        await apkVersion.updateOne(
+          {},
+          { $set: { version: body.apkVersion.value as string } },
+          { upsert: true },
+        );
 
-        await pipeline(Readable.from(inputStream), outputStream);
-
+        // Clean up outdated APK files
         const outdatedFiles = apkBucket.find({
-          filename: "latest.apk",
-          _id: { $ne: outputStream.id },
+          filename: "usthing.apk",
+          _id: { $ne: ostream.id },
         });
-
         for await (const file of outdatedFiles) {
           await apkBucket.delete(file._id);
         }
-      },
-    );
-
-    fastify.post(
-      "/latest/version",
-      {
-        schema: {
-          summary: "Update the Latest USThing APK Version",
-          tags: ["APK"],
-          body: Type.String(),
-          response: {
-            200: Type.String(),
-          },
-          security: [{ ApkAuth: [] }],
-        },
-      },
-      async function (request) {
-        await fastify.mongo
-          .db!.collection("apk.version")
-          .updateOne({}, { $set: { version: request.body } }, { upsert: true });
       },
     );
   });
