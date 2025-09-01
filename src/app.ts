@@ -2,6 +2,7 @@ import packageJson from "../package.json" with { type: "json" };
 import { AuthPluginOptions } from "./plugins/auth.js";
 import { CourseCatalogOptions } from "./plugins/course-catalog/index.js";
 import { ApkOptions } from "./routes/v1/apk/index.js";
+import { HallOptions } from "./routes/v1/hall/index.js";
 import AutoLoad, { AutoloadPluginOptions } from "@fastify/autoload";
 import fastifyMultipart from "@fastify/multipart";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
@@ -28,7 +29,8 @@ export type AppOptions = {
   Partial<AutoloadPluginOptions> &
   AuthPluginOptions &
   ApkOptions &
-  CourseCatalogOptions;
+  CourseCatalogOptions &
+  HallOptions;
 
 const missingOptions: string[] = [];
 
@@ -64,6 +66,9 @@ const options: AppOptions = {
   apkKey: getOption("APK_KEY")!,
 
   msApiAccessToken: getOption("MS_API_ACCESS_TOKEN")!,
+
+  hallWLUsr: getOption("HALL_WL_USR")!,
+  hallWLPwd: getOption("HALL_WL_PWD")!,
 };
 
 // Support Typebox
@@ -122,6 +127,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
         { name: "Root", description: "The root endpoint" },
         { name: "Example", description: "Example endpoints" },
         { name: "Auth", description: "Auth endpoints" },
+        { name: "Hall", description: "Hall endpoints" },
       ],
       components: {
         securitySchemes: {
