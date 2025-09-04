@@ -26,7 +26,7 @@ def main():
     data["sid"] = data["sid"].astype(str)
     data["rank"] = data["rank"].astype(int)
     
-    print(data.to_json(orient='records'))
+    print(data.to_json(orient='records'), flush=True)
 
 if __name__ == "__main__":
     main()

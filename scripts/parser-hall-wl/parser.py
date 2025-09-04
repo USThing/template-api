@@ -18,11 +18,15 @@ def parse(pdf: bytes) -> pd.DataFrame:
 
             for tidx, table in enumerate(raw_tables):
                 try:
-                    data.extend(table[1:])
+                    match True:
+                        case _ if any('Male' in cell for cell in table[0] if cell):
+                            data.extend(row + ['M'] for row in table[1:])
+                        case _ if any('Female' in cell for cell in table[0] if cell):
+                            data.extend(row + ['F'] for row in table[1:])
                 except Exception as e:
                     log.debug("failed to convert table on page %s idx %s: %s", i, tidx, e)
 
-    df = pd.DataFrame(data, columns=["sid", "rank"])
+    df = pd.DataFrame(data, columns=["sid", "rank", 'sex'])
     df["sid"] = pd.to_numeric(df["sid"].str.replace(r"\D", "", regex=True), errors="raise")
     df["rank"] = pd.to_numeric(df["rank"].str.replace(r"\D", "", regex=True), errors="raise")
     df = df.sort_values(by=["rank"], ascending=[True], na_position="last").reset_index(drop=True)
