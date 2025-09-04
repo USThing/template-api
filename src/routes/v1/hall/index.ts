@@ -15,6 +15,8 @@ export const HallWL = Type.Array(
   Type.Object({
     sid: Type.String(),
     rank: Type.Number(),
+    sex: Type.Union([Type.Literal("M"), Type.Literal("F")]),
+    type: Type.Union([Type.Literal("L"), Type.Literal("NL")]),
   }),
 );
 export type HallWL = Static<typeof HallWL>;
@@ -41,7 +43,7 @@ const hall: FastifyPluginAsync<HallOptions> = async (
     void update(opts.hallWLUsr, opts.hallWLPwd);
     handle = setInterval(
       update,
-      1 * 60 * 60 * 1000, // = 1 hour
+      15 * 60 * 1000, // = 1 minute
       opts.hallWLUsr,
       opts.hallWLPwd,
     );
