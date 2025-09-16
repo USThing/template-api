@@ -161,7 +161,7 @@ async function deleteClubs(names: string[], db: any) {
   );
 
   fastify.post(
-    "/uploadClub", 
+    "/uploadClubs", 
     {
         schema: {
           summary: "Upload or update club information",
