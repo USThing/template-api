@@ -15,7 +15,8 @@
     "dev": "yarn run build && concurrently -k -p '[{name}]' -n TypeScript,App -c yellow.bold,cyan.bold yarn:watch yarn:dev:start",
     "dev:start": "fastify start --ignore-watch='.ts$' -w -l debug -P dist/src/app.js --options",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "commitlint": "commitlint --from-last-tag --strict --verbose"
   },
   "keywords": [],
   "author": "Flandia",
@@ -38,6 +39,8 @@
     "openid-client": "^6.6.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@eslint/js": "^9.31.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/jsonwebtoken": "^9",
