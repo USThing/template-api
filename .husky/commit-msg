@@ -1,1 +1,1 @@
-corepack yarn commitlint
+corepack yarn run --binaries-only commitlint --edit "$1"
