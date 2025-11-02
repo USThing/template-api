@@ -16,7 +16,7 @@
     "dev:start": "fastify start --ignore-watch='.ts$' -w -l debug -P dist/src/app.js --options",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "commitlint": "commitlint --from-last-tag --strict --verbose"
+    "commitlint": "commitlint --last --strict --verbose"
   },
   "keywords": [],
   "author": "Flandia",
