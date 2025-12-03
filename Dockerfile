@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # https://docs.docker.com/go/dockerfile-reference/
 
-ARG NODE_VERSION=25
+ARG NODE_VERSION=24
 
 FROM node:${NODE_VERSION}-alpine AS builder
 
