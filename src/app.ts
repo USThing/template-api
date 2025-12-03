@@ -40,6 +40,12 @@ function getOption(
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
+  // Launching lots of services on the server,
+  // especially at the same time by something such as docker compose up,
+  // leads to slow startups.
+  // This increases the timeout for plugins to 5 minutes.
+  pluginTimeout: 5 * 60 * 1000,
+
   // mongoUri: getOption("MONGO_URI")!,
   authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
   authClientID: getOption("AUTH_CLIENT_ID")!,
