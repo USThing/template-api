@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "yarn build && tsc -p test/tsconfig.json && FASTIFY_AUTOLOAD_TYPESCRIPT=1 tsx --test --experimental-test-coverage test/**/*.ts",
+    "test": "yarn build && tsc -p test/tsconfig.json && FASTIFY_AUTOLOAD_TYPESCRIPT=1 node --test --experimental-test-coverage 'dist/test/**/*.js'",
     "build": "tsc",
     "watch": "tsc -w",
     "start": "fastify start -l info dist/src/app.js --options",
@@ -19,46 +19,47 @@
     "commitlint": "commitlint --last --strict --verbose",
     "prepare": "husky"
   },
+  "engines": {
+    "node": ">= 24"
+  },
   "keywords": [],
   "author": "Flandia",
   "license": "MIT",
   "dependencies": {
     "@fastify/autoload": "^6.3.1",
-    "@fastify/cors": "^11.0.1",
+    "@fastify/cors": "^11.1.0",
     "@fastify/mongodb": "^9.0.2",
-    "@fastify/sensible": "^6.0.3",
-    "@fastify/swagger": "^9.5.1",
+    "@fastify/sensible": "^6.0.4",
+    "@fastify/swagger": "^9.6.1",
     "@fastify/swagger-ui": "^5.2.3",
     "@fastify/type-provider-typebox": "^5.2.0",
-    "@scalar/fastify-api-reference": "^1.32.9",
-    "@sinclair/typebox": "^0.34.38",
-    "fastify": "^5.4.0",
-    "fastify-cli": "^7.4.0",
-    "fastify-plugin": "^5.0.1",
+    "@scalar/fastify-api-reference": "^1.40.0",
+    "@sinclair/typebox": "^0.34.41",
+    "fastify": "^5.6.2",
+    "fastify-cli": "7.4.1",
+    "fastify-plugin": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.2.0",
-    "openid-client": "^6.6.2"
+    "openid-client": "^6.8.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
-    "@eslint/js": "^9.31.0",
+    "@eslint/js": "^9.39.1",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
-    "@types/jsonwebtoken": "^9",
-    "@types/node": "^22.12.0",
-    "c8": "^10.1.3",
-    "concurrently": "^9.2.0",
-    "eslint": "^9.31.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.10.1",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-prettier": "^5.5.4",
     "fastify-tsconfig": "^3.0.0",
-    "globals": "^16.3.0",
+    "globals": "^16.5.0",
     "husky": "^9.1.7",
-    "prettier": "3.6.2",
-    "prettier-plugin-jsdoc": "^1.3.3",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.37.0"
+    "prettier": "3.7.4",
+    "prettier-plugin-jsdoc": "^1.7.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.48.1"
   },
-  "packageManager": "yarn@4.9.2+sha512.1fc009bc09d13cfd0e19efa44cbfc2b9cf6ca61482725eb35bbc5e257e093ebf4130db6dfe15d604ff4b79efd8e1e8e99b25fa7d0a6197c9f9826358d4d65c3c"
+  "packageManager": "yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8"
 }
