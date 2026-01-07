@@ -11,8 +11,12 @@ import {
   RawRequestDefaultExpression,
   RawServerDefault,
 } from "fastify";
+import { createRequire } from "module";
 import * as path from "path";
 import { fileURLToPath } from "url";
+
+const require = createRequire(import.meta.url);
+const fastifyMetrics = require("fastify-metrics");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +25,7 @@ export type AppOptions = {
   // Place your custom options for app below here.
   // MongoDB URI (Optional)
   // mongoUri: string;
+  lokiHost?: string;
 } & FastifyServerOptions &
   Partial<AutoloadPluginOptions> &
   AuthPluginOptions;
@@ -49,6 +54,7 @@ const options: AppOptions = {
   // mongoUri: getOption("MONGO_URI")!,
   authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
   authClientID: getOption("AUTH_CLIENT_ID")!,
+  lokiHost: getOption("LOKI_HOST", false),
   authSkip: (() => {
     const opt = getOption("AUTH_SKIP", false);
     if (opt !== undefined) {
@@ -58,6 +64,21 @@ const options: AppOptions = {
     }
   })(),
 };
+
+if (options.lokiHost) {
+  options.logger = {
+    level: "info",
+    transport: {
+      target: "pino-loki",
+      options: {
+        batching: true,
+        interval: 5,
+        host: options.lokiHost,
+        labels: { application: "template-service" },
+      },
+    },
+  };
+}
 
 // Support Typebox
 export type FastifyTypebox = FastifyInstance<
@@ -81,6 +102,12 @@ const app: FastifyPluginAsync<AppOptions> = async (
   // Register CORS
   await fastify.register(import("@fastify/cors"), {
     origin: "*",
+  });
+
+  // Register Metrics
+  await fastify.register(fastifyMetrics, {
+    endpoint: "/metrics",
+    defaultMetrics: { enabled: true },
   });
 
   // Register Swagger & Swagger UI & Scalar
