@@ -11,12 +11,9 @@ import {
   RawRequestDefaultExpression,
   RawServerDefault,
 } from "fastify";
-import { createRequire } from "module";
+import fastifyMetrics from "fastify-metrics";
 import * as path from "path";
 import { fileURLToPath } from "url";
-
-const require = createRequire(import.meta.url);
-const fastifyMetrics = require("fastify-metrics");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -74,7 +71,7 @@ if (options.lokiHost) {
         batching: true,
         interval: 5,
         host: options.lokiHost,
-        labels: { application: "template-service" },
+        labels: { application: packageJson.name },
       },
     },
   };
@@ -105,7 +102,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
   });
 
   // Register Metrics
-  await fastify.register(fastifyMetrics, {
+  await fastify.register(fastifyMetrics.default, {
     endpoint: "/metrics",
     defaultMetrics: { enabled: true },
   });
