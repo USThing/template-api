@@ -39,6 +39,7 @@
     "fastify-cli": "7.4.1",
     "fastify-metrics": "^12.1.0",
     "fastify-plugin": "^5.1.0",
+    "ipaddr.js": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.2.0",
     "openid-client": "^6.8.1",
