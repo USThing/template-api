@@ -68,18 +68,40 @@ const options: AppOptions = {
 };
 
 if (options.lokiHost) {
-  options.logger = {
-    level: "info",
-    transport: {
-      target: "pino-loki",
-      options: {
-        batching: true,
-        interval: 5, // Logs are sent every 5 seconds, default.
-        host: options.lokiHost,
-        labels: { application: packageJson.name },
-      },
+  const lokiTransport = {
+    target: "pino-loki",
+    options: {
+      batching: true,
+      interval: 5, // Logs are sent every 5 seconds, default.
+      host: options.lokiHost,
+      labels: { application: packageJson.name },
     },
   };
+
+  const existingLogger = options.logger;
+
+  if (existingLogger && typeof existingLogger === "object") {
+    const existingTransport = (existingLogger as any).transport;
+
+    let mergedTransport: any;
+    if (Array.isArray(existingTransport)) {
+      mergedTransport = [...existingTransport, lokiTransport];
+    } else if (existingTransport) {
+      mergedTransport = [existingTransport, lokiTransport];
+    } else {
+      mergedTransport = lokiTransport;
+    }
+
+    options.logger = {
+      ...(existingLogger as any),
+      transport: mergedTransport,
+    } as any;
+  } else {
+    options.logger = {
+      level: "info",
+      transport: lokiTransport,
+    };
+  }
 }
 
 // Support Typebox
@@ -116,8 +138,8 @@ const app: FastifyPluginAsync<AppOptions> = async (
           if (
             request.headers.authorization !== `Bearer ${opts.prometheusKey}`
           ) {
-            reply.code(401).send("Unauthorized");
-            return reply;
+            reply.code(401).send({ status: "error", message: "Unauthorized" });
+            return;
           }
         },
       }
