@@ -10,6 +10,9 @@ import {
   RawReplyDefaultExpression,
   RawRequestDefaultExpression,
   RawServerDefault,
+  FastifyReply,
+  FastifyRequest,
+  RouteOptions,
 } from "fastify";
 import fastifyMetrics from "fastify-metrics";
 import * as path from "path";
@@ -23,6 +26,7 @@ export type AppOptions = {
   // MongoDB URI (Optional)
   // mongoUri: string;
   lokiHost?: string;
+  prometheusKey?: string;
 } & FastifyServerOptions &
   Partial<AutoloadPluginOptions> &
   AuthPluginOptions;
@@ -52,6 +56,7 @@ const options: AppOptions = {
   authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
   authClientID: getOption("AUTH_CLIENT_ID")!,
   lokiHost: getOption("LOKI_HOST", false),
+  prometheusKey: getOption("PROMETHEUS_KEY", false),
   authSkip: (() => {
     const opt = getOption("AUTH_SKIP", false);
     if (opt !== undefined) {
@@ -69,7 +74,7 @@ if (options.lokiHost) {
       target: "pino-loki",
       options: {
         batching: true,
-        interval: 5,
+        interval: 5, // Logs are sent every 5 seconds, default.
         host: options.lokiHost,
         labels: { application: packageJson.name },
       },
@@ -102,9 +107,26 @@ const app: FastifyPluginAsync<AppOptions> = async (
   });
 
   // Register Metrics
+  const metricsEndpoint: RouteOptions | string | null = opts.prometheusKey
+    ? {
+        url: "/metrics",
+        method: "GET",
+        handler: async () => {}, // Overridden by fastify-metrics
+        onRequest: async (request: FastifyRequest, reply: FastifyReply) => {
+          if (
+            request.headers.authorization !== `Bearer ${opts.prometheusKey}`
+          ) {
+            reply.code(401).send("Unauthorized");
+            return reply;
+          }
+        },
+      }
+    : "/metrics";
+
   await fastify.register(fastifyMetrics.default, {
-    endpoint: "/metrics",
+    endpoint: metricsEndpoint,
     defaultMetrics: { enabled: true },
+    clearRegisterOnInit: true,
   });
 
   // Register Swagger & Swagger UI & Scalar

@@ -25,14 +25,16 @@ async function config(): Promise<AppOptions> {
 }
 
 // Automatically build and tear down our instance
-async function build(t: TestContext) {
+async function build(t: TestContext, options?: Partial<AppOptions>) {
   // you can set all the options supported by the fastify CLI command
   const argv = [AppPath];
+
+  const appOptions = { ...(await config()), ...options };
 
   // fastify-plugin ensures that all decorators
   // are exposed for testing purposes, this is
   // different from the production setup
-  const app = await helper.build(argv, await config(), await config());
+  const app = await helper.build(argv, appOptions, appOptions);
 
   // Tear down our app after we are done
   t.after(() => void app.close());
