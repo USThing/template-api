@@ -11,6 +11,7 @@ import {
   RawRequestDefaultExpression,
   RawServerDefault,
 } from "fastify";
+import fastifyMetrics from "fastify-metrics";
 import * as path from "path";
 import { fileURLToPath } from "url";
 
@@ -68,7 +69,7 @@ if (options.lokiHost) {
       target: "pino-loki",
       options: {
         batching: true,
-        interval: 5, // Every 5 seconds, default.
+        interval: 5,
         host: options.lokiHost,
         labels: { application: packageJson.name },
       },
@@ -98,6 +99,12 @@ const app: FastifyPluginAsync<AppOptions> = async (
   // Register CORS
   await fastify.register(import("@fastify/cors"), {
     origin: "*",
+  });
+
+  // Register Metrics
+  await fastify.register(fastifyMetrics.default, {
+    endpoint: "/metrics",
+    defaultMetrics: { enabled: true },
   });
 
   // Register Swagger & Swagger UI & Scalar
