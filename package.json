@@ -3,6 +3,7 @@
   "name": "template-api",
   "description": "The template repository for USThing backend services, powered by Fastify.",
   "version": "0.1.0",
+  "private": true,
   "main": "app.ts",
   "directories": {
     "test": "test"
