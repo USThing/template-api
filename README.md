@@ -10,6 +10,9 @@ Run the following to get started (single command block; brief comments explain e
 # Install dependencies
 yarn install
 
+# Prepare Husky git hooks (if present)
+yarn run prepare
+
 # Run in development (watch + fastify)
 yarn run dev
 
@@ -21,6 +24,13 @@ yarn run start
 
 # Run tests
 yarn run test
+```
+
+Note: this repository expects Yarn managed via Corepack. If Corepack is not enabled on your machine, enable it first:
+
+```bash
+corepack enable
+# after enabling, use `yarn ...` as usual (no need for `corepack` prefix)
 ```
 
 ## Key scripts
