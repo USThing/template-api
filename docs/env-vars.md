@@ -27,3 +27,4 @@ cp .env.example .env
 Notes
 
 - Never commit real secrets. Use your cloud provider's secret manager or CI secrets for production deployments.
+- Git: the repository ignores any file starting with `.env` (for example `.env`, `.env.local`, `.env.development`) — only the `.env.example` file is tracked. This keeps local or sensitive environment files out of version control while providing an example to copy from.
