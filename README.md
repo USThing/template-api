@@ -1,52 +1,67 @@
 # USThing Template API
 
-The template repository for USThing backend services, powered by Fastify.
+A concise Fastify + TypeScript starter used by USThing backend services. This repository provides a minimal, well-tested scaffold with recommended scripts, linting, and CI configuration.
 
-## Available Scripts
+## Quickstart
 
-In the project directory, you can run:
+Run the following to get started (single command block; brief comments explain each step):
 
-### `yarn run dev`
+```bash
+# Install dependencies
+yarn install
 
-To start the app in dev mode.
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Run in development (watch + fastify)
+yarn run dev
 
-### `yarn run start`
+# Build TypeScript to `dist`
+yarn run build
 
-For production mode
+# Start production server (uses `dist`)
+yarn run start
 
-### `yarn run test`
+# Run tests
+yarn run test
+```
 
-Run the test cases.
+## Key scripts
 
-### `yarn run lint`
+- `dev` — start in development (watch + fastify)
+- `build` — compile TypeScript
+- `start` — run production server (from `dist`)
+- `test` — build and run tests
+- `lint`, `lint:fix` — ESLint checks and fixes
+- `commitlint` — validate commit messages
 
-Run the linter.
+## Project layout
 
-Note that the format of the code will also be checked.
+- `src/` — application code (routes, plugins, utils)
+- `src/app.ts` — Fastify app and plugin registration
+- `routes/` — route modules
+- `test/` — tests and helpers
+- `docs/` — human-authored docs (Quickstart, guides, migration)
+- `.env.example` — example env variables
 
-### `yarn run lint:fix`
+## Docs and API reference
 
-Run the linter and fix the issues.
+Human-facing guides belong in `docs/`. API specs (generated from code via Fastify+Swagger or TypeDoc) should be produced by CI and published to your docs site rather than frequently committing generated files.
 
-Note that the format of the code will also be checked and fixed.
+## Environment
 
-## Environment Variables
+See `.env.example` for application-level variables. Fastify CLI options are documented at the `fastify-cli` project.
 
-For Fastify-level environment variables, please refer to the [fastify-cli documentation](https://github.com/fastify/fastify-cli).
+## Contributing
 
-For the application-level environment variables, please refer to the `.env.example` file.
+Please follow `CONTRIBUTING.md`. Use the configured commitlint rules and run lint/tests before opening a PR.
 
-## CI / CD
+## Support
 
-This template supports GitHub Actions for CI / CD. The available workflows are:
+Open an issue on GitHub using the provided templates for bugs or feature requests.
 
-- Checks / eslint: Run ES Lint to check problems and the format of the code.
-- Checks / commitlint: Run Commitlint to check the format of the commit messages.
-- Checks / tests: Run unit tests of the project.
-- Docker CI / docker: Build the Docker image and push it to the GitHub Container Registry.
-- Release Please / release-please: Automatic releasing. See also [release-please](https://github.com/googleapis/release-please).
+## License
 
-## Learn More
+MIT
 
-To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs/latest/).
+## Learn more
+
+- Fastify: <https://www.fastify.dev/>
+- Docs folder: `docs/` (detailed guides and examples)
