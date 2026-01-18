@@ -2,36 +2,14 @@
 
 A concise Fastify + TypeScript starter used by USThing backend services. This repository provides a minimal, well-tested scaffold with recommended scripts, linting, and CI configuration.
 
-## Quickstart
+## Quickstart & developer setup
 
-Run the following to get started (single command block; brief comments explain each step):
+See the detailed guides in `docs/`:
 
-```bash
-# Install dependencies
-yarn install
+- `docs/quickstart.md` — quick start commands and example requests
+- `docs/dev-setup.md` — Corepack, Node setup, and developer tips
 
-# Prepare Husky git hooks (if present)
-yarn run prepare
-
-# Run in development (watch + fastify)
-yarn run dev
-
-# Build TypeScript to `dist`
-yarn run build
-
-# Start production server (uses `dist`)
-yarn run start
-
-# Run tests
-yarn run test
-```
-
-Note: this repository expects Yarn managed via Corepack. If Corepack is not enabled on your machine, enable it first:
-
-```bash
-corepack enable
-# after enabling, use `yarn ...` as usual (no need for `corepack` prefix)
-```
+Note: this repository expects Yarn managed via Corepack. If Corepack is not enabled on your machine, enable it with `corepack enable`.
 
 ## Key scripts
 

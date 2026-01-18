@@ -7,11 +7,7 @@ This page expands the brief Quickstart in the project README. Keep this short an
 - Node.js >= 24
 - Yarn 3+ (the repository uses Yarn; `npm` may also work but commands below use `yarn`)
 
-This project expects Yarn managed via Corepack. On modern Node.js releases Corepack is included — enable it with:
-
-```bash
-corepack enable
-```
+Corepack / Node setup: see `docs/dev-setup.md` for enabling Corepack and node version manager tips.
 
 ## Install
 

@@ -38,4 +38,4 @@ See also:
 
 - Add a new plugin under `src/plugins/` and export it as a Fastify plugin (use `fastify-plugin` to expose decorators).
 - Keep plugin responsibilities narrow and reusable (auth, DB setup, metrics, tracing, etc.).
-- Document plugin options and side effects in `docs/plugins.md` or inline plugin README comments.
+- Document plugin options and side effects inline in the plugin and in `docs/plugins.md` when needed.
