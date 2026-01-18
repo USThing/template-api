@@ -64,16 +64,12 @@ During the PR review process, we make use of GitHub comments to track suggestion
 The general principles are the following:
 
 - If the comment is a change suggestion...
-
-    - If it's clear and uncontroversial how to apply the suggestion, you should resolve the comment after you have made
+  - If it's clear and uncontroversial how to apply the suggestion, you should resolve the comment after you have made
       the corresponding changes to the PR.
-
-    - If you are not 100% sure that you have applied the suggestion correctly, leave a comment asking it. Do not resolve
+  - If you are not 100% sure that you have applied the suggestion correctly, leave a comment asking it. Do not resolve
       the comment in this case.
-
-    - If you don't fully understand or agree with the suggestion, reply to the comment with your questions and
+  - If you don't fully understand or agree with the suggestion, reply to the comment with your questions and
       rebuttals. Do not resolve the comment in this case.
-
 - If the comment is a clarification request, answer it. Do not resolve the comment in this case. We will either come
   back with further questions or suggestions, or close the comment ourselves if we find your answer satisfactory.
 
@@ -89,5 +85,3 @@ tests is a waste of time for everyone involved.
 During code review, it is not supposed to happen that we have to keep coming back to your PR, continually finding more
 problems more unpolished changes, and having to go through lots of back-and-forth interactions this way. This will only
 lead to growing frustration on both ends.
-
-
