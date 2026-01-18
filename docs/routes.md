@@ -1,4 +1,4 @@
-# Routes and plugins (overview)
+# Routes (overview)
 
 This file gives a short, human-oriented map of the routes and plugins in this template. Keep it brief — full API specs are generated from code (use CI to publish generated docs).
 
