@@ -15,7 +15,7 @@ Build the image locally (from repo root):
 docker build -t template-api:local .
 
 # run (expose port 3000)
-docker run --rm -p 3000:3000 --env-file .env example template-api:local
+docker run --rm -p 3000:3000 --env-file .env.example template-api:local
 ```
 
 Replace `--env-file .env.example` with your `.env` file or explicit `-e` flags for required environment variables.
