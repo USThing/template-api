@@ -13,7 +13,7 @@ jobs:
 
   fallback_checks:
     needs: [try_checks]
-    if: needs.try_checks.result == 'failure'
+    if: ${{ failure() }}
     uses: ./.github/workflows/check-reusable.yml
     with:
       runs_on: '[ "self-hosted", "linux" ]'

@@ -20,7 +20,7 @@ jobs:
 
   fallback_release_please:
     needs: [try_release_please]
-    if: needs.try_release_please.result == 'failure'
+    if: ${{ failure() }}
     uses: ./.github/workflows/release-reusable.yml
     with:
       runs_on: '[ "self-hosted", "linux" ]'

@@ -23,7 +23,7 @@ jobs:
 
   fallback_docker:
     needs: [try_docker]
-    if: needs.try_docker.result == 'failure'
+    if: ${{ failure() }}
     uses: ./.github/workflows/docker-reusable.yml
     with:
       runs_on: '[ "self-hosted", "linux" ]'
