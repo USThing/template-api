@@ -12,6 +12,14 @@ jobs:
       continue_on_error: true
 
   fallback_checks:
+    # NOTE: This fallback job runs only when the `try_checks` job fails.
+    #
+    # Because both the try and fallback invoke the same reusable workflow, the
+    # GitHub PR UI may display duplicated or expanded workflow sections. In
+    # addition, using `continue-on-error` inside the reusable jobs can make
+    # checks appear as failed in the PR interface even though the fallback
+    # subsequently handled the failure. This is a cosmetic artifact of the
+    # try→fallback pattern and does not indicate a functional regression.
     needs: [try_checks]
     if: ${{ failure() }}
     uses: ./.github/workflows/check-reusable.yml
