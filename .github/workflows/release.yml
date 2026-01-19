@@ -14,9 +14,9 @@ permissions:
 jobs:
   try_release_please:
     uses: ./.github/workflows/release-reusable.yml
-    continue-on-error: true
     with:
       runs_on: "ubuntu-latest"
+      continue_on_error: true
 
   fallback_release_please:
     needs: [try_release_please]

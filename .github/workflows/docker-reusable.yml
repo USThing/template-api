@@ -4,6 +4,10 @@ on:
       runs_on:
         required: true
         type: string
+      continue_on_error:
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -18,6 +22,7 @@ env:
 jobs:
   docker:
     runs-on: ${{ inputs.runs_on }}
+    continue-on-error: ${{ inputs.continue_on_error }}
     steps:
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v3

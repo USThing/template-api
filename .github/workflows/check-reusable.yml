@@ -4,10 +4,15 @@ on:
       runs_on:
         required: true
         type: string
+      continue_on_error:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   eslint:
     runs-on: ${{ inputs.runs_on }}
+    continue-on-error: ${{ inputs.continue_on_error }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,6 +38,7 @@ jobs:
 
   commitlint:
     runs-on: ${{ inputs.runs_on }}
+    continue-on-error: ${{ inputs.continue_on_error }}
     steps:
       - uses: actions/checkout@v4
 
@@ -40,6 +46,7 @@ jobs:
 
   tests:
     runs-on: ${{ inputs.runs_on }}
+    continue-on-error: ${{ inputs.continue_on_error }}
     steps:
       - uses: actions/checkout@v4
 

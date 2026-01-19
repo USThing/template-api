@@ -4,6 +4,10 @@ on:
       runs_on:
         required: true
         type: string
+      continue_on_error:
+        required: false
+        type: boolean
+        default: false
 
 env:
   REGISTRY: ghcr.io
@@ -12,6 +16,7 @@ env:
 jobs:
   release:
     runs-on: ${{ inputs.runs_on }}
+    continue-on-error: ${{ inputs.continue_on_error }}
     steps:
       - name: Release Please
         uses: googleapis/release-please-action@v4
