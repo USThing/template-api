@@ -7,9 +7,9 @@ on:
 jobs:
   try_checks:
     uses: ./.github/workflows/check-reusable.yml
+    continue-on-error: true
     with:
       runs_on: "ubuntu-22.04"
-      continue-on-error: true
 
   fallback_checks:
     needs: [try_checks]

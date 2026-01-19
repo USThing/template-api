@@ -17,9 +17,9 @@ env:
 jobs:
   try_docker:
     uses: ./.github/workflows/docker-reusable.yml
+    continue-on-error: true
     with:
       runs_on: "ubuntu-latest"
-      continue-on-error: true
 
   fallback_docker:
     needs: [try_docker]
