@@ -1,10 +1,11 @@
 # Docker & Deployment
 
+
 This guide explains how to build and run the project's Docker image and where CI builds/publishes images.
 
 ## Provided Dockerfile
 
-A `Dockerfile` exists at the repository root. It is used by the CI workflow `.github/workflows/docker.yml` to build multi-tag images and push them to the configured registry (default: `ghcr.io`).
+A `Dockerfile` exists at the repository root. CI image build/publish logic has been extracted into a reusable workflow (`.github/workflows/docker-reusable.yml`) and is invoked by a small top-level caller (`.github/workflows/docker.yml`) that prefers hosted runners and falls back to `self-hosted` when the hosted job fails.
 
 ## Local build & run
 
@@ -22,14 +23,15 @@ Replace `--env-file .env.example` with your `.env` file or explicit `-e` flags f
 
 ## CI image publishing
 
-The repository's `docker.yml` workflow builds and pushes images to the registry. The workflow:
+
+The repository's `docker.yml` top-level caller invokes the reusable workflow to build and push images to the registry. The reusable workflow:
 
 - sets up QEMU and Buildx
 - logs into the registry using the workflow token
 - generates metadata tags (sha, branch/ref, test)
 - builds and pushes the image(s)
 
-If you need to change the target registry or image name, update the `REGISTRY` and `IMAGE_NAME` environment variables in the workflow.
+If you need to change the target registry or image name, update the `REGISTRY` and `IMAGE_NAME` environment variables in the reusable workflow or the top-level caller as appropriate.
 
 ## Deployment notes
 
