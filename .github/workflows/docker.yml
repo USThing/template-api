@@ -34,4 +34,4 @@ jobs:
     if: ${{ failure() }}
     uses: ./.github/workflows/docker-reusable.yml
     with:
-      runs_on: '[ "self-hosted", "linux" ]'
+      runs_on: "self-hosted"

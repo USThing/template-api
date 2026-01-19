@@ -31,4 +31,4 @@ jobs:
     if: ${{ failure() }}
     uses: ./.github/workflows/release-reusable.yml
     with:
-      runs_on: '[ "self-hosted", "linux" ]'
+      runs_on: "self-hosted"
