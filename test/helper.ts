@@ -20,9 +20,14 @@ async function config(mongoUri: string): Promise<AppOptions> {
 }
 
 // Automatically build and tear down our instance
-async function build(t: TestContext) {
+async function build(t: TestContext, options?: Partial<AppOptions>) {
+  const appOptions = { ...await config(), ...options };
+
   const mongod = await MongoMemoryServer.create();
-  const fastify = Fastify({ pluginTimeout: options.pluginTimeout });
+
+  const fastify = Fastify(appOptions);
+  await fastify.register(app, appOptions);
+  await fastify.ready();
 
   const cleanup = async () => {
     await fastify.close();
