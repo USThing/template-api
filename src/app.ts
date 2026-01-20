@@ -81,9 +81,10 @@ if (options.lokiHost) {
   const existingLogger = options.logger;
 
   if (existingLogger && typeof existingLogger === "object") {
-    const existingTransport = (existingLogger as any).transport;
+    const loggerOptions = existingLogger as { transport?: unknown };
+    const existingTransport = loggerOptions.transport;
 
-    let mergedTransport: any;
+    let mergedTransport: unknown;
     if (Array.isArray(existingTransport)) {
       mergedTransport = [...existingTransport, lokiTransport];
     } else if (existingTransport) {
@@ -93,9 +94,9 @@ if (options.lokiHost) {
     }
 
     options.logger = {
-      ...(existingLogger as any),
+      ...(existingLogger as object),
       transport: mergedTransport,
-    } as any;
+    } as Exclude<FastifyServerOptions["logger"], boolean | undefined>;
   } else {
     options.logger = {
       level: "info",
