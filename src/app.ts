@@ -44,6 +44,23 @@ function getOption(
   return env;
 }
 
+/**
+ * Parse a boolean-like environment variable.
+ * Returns `true` for 1/true/yes/y, `false` for 0/false/no/n, and
+ * `undefined` if the variable is not set or unrecognized.
+ */
+function getBooleanOption(
+  envName: string,
+  required: boolean = true,
+): boolean | undefined {
+  const val = getOption(envName, required);
+  if (val === undefined) return undefined;
+  const v = val.trim().toLowerCase();
+  if (["1", "true", "yes", "y"].includes(v)) return true;
+  if (["0", "false", "no", "n"].includes(v)) return false;
+  return undefined;
+}
+
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
   // Launching lots of services on the server,
@@ -57,14 +74,7 @@ const options: AppOptions = {
   authClientID: getOption("AUTH_CLIENT_ID")!,
   lokiHost: getOption("LOKI_HOST", false),
   prometheusKey: getOption("PROMETHEUS_KEY", false),
-  authSkip: (() => {
-    const opt = getOption("AUTH_SKIP", false);
-    if (opt !== undefined) {
-      return Boolean(opt);
-    } else {
-      return undefined;
-    }
-  })(),
+  authSkip: getBooleanOption("AUTH_SKIP", false),
 };
 
 if (options.lokiHost) {
