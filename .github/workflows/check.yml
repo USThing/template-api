@@ -16,6 +16,14 @@ jobs:
         run: |
           echo "probe"
 
+  # NOTE: Do not set `continue-on-error: true` on the `detect-quota` job.
+  # If `continue-on-error` is enabled the job result will always be
+  # 'success', which defeats detection (we rely on `needs.detect-quota.result`).
+  # Unfortunately this means the workflow may be reported as failed if the
+  # hosted runner is unavailable. We cannot work around this until GitHub
+  # provides a job-level "allow-failure"/neutral-conclusion feature
+  # (see: https://github.com/actions/runner/issues/2347 for discussion).
+
   eslint:
     # ESLint job inlined from check-shared-steps.yml
     needs: detect-quota
