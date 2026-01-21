@@ -1,11 +1,10 @@
 # Release automation (summary)
 
+Releases are produced by `googleapis/release-please-action`. The release workflow has been refactored so release steps are defined in `.github/workflows/release-shared-steps.yml` and invoked by a small top-level caller (`.github/workflows/release.yml`) which prefers hosted runners and falls back to `self-hosted` when the top-level try job fails.
 
-Releases are produced by `googleapis/release-please-action`. The release workflow now uses a reusable workflow (`.github/workflows/release-reusable.yml`) and a small top-level caller (`.github/workflows/release.yml`) that prefers GitHub-hosted runners and falls back to a `self-hosted` runner when necessary.
-
-- Trigger: push to `main` (via `release-please` outputs).
+- Trigger: push to `main`.
 - Behavior: `googleapis/release-please-action` parses Conventional Commits and will open/update Release PRs or create a release when appropriate; it also generates/updates the changelog (`CHANGELOG.md`) and exposes outputs such as `release_created`, `major`, `minor`, `patch`, `tag_name`, and `body`.
-- CI integration: the reusable workflow consumes those outputs to tag versions and to build/push container images (see the repository workflows for exact steps). The hosted-first / self-hosted fallback may cause duplicate PR checks to appear when the fallback runs — this is cosmetic.
+- CI integration: the shared-step workflow consumes those outputs to tag versions and to build/push container images (see the repository workflows for exact steps). The hosted-first / self-hosted fallback may cause duplicate PR checks to appear when the fallback runs — this is cosmetic.
 
 ## Notes for maintainers
 

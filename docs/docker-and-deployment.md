@@ -1,11 +1,10 @@
 # Docker & Deployment
 
-
 This guide explains how to build and run the project's Docker image and where CI builds/publishes images.
 
 ## Provided Dockerfile
 
-A `Dockerfile` exists at the repository root. CI image build/publish logic has been extracted into a reusable workflow (`.github/workflows/docker-reusable.yml`) and is invoked by a small top-level caller (`.github/workflows/docker.yml`) that prefers hosted runners and falls back to `self-hosted` when the hosted job fails.
+A `Dockerfile` exists at the repository root. CI image build/publish logic has been extracted into an internal shared-step workflow (`.github/workflows/docker-shared-steps.yml`) and is invoked by a small top-level caller (`.github/workflows/docker.yml`) that prefers hosted runners and falls back to `self-hosted` when the hosted job fails.
 
 ## Local build & run
 
@@ -23,15 +22,16 @@ Replace `--env-file .env.example` with your `.env` file or explicit `-e` flags f
 
 ## CI image publishing
 
-
-The repository's `docker.yml` top-level caller invokes the reusable workflow to build and push images to the registry. The reusable workflow:
+The repository's `docker.yml` top-level caller invokes the internal shared-step workflow to build and push images to the registry. The shared-step workflow:
 
 - sets up QEMU and Buildx
 - logs into the registry using the workflow token
 - generates metadata tags (sha, branch/ref, test)
 - builds and pushes the image(s)
 
-If you need to change the target registry or image name, update the `REGISTRY` and `IMAGE_NAME` environment variables in the reusable workflow or the top-level caller as appropriate.
+If you need to change the target registry or image name, update the `REGISTRY` and `IMAGE_NAME` environment variables in the shared-step workflow or the top-level caller as appropriate.
+
+Note: the top-level caller uses `ubuntu-latest` for the primary try job; when that job fails the fallback runs on `self-hosted`. This is intended to improve reliability while keeping hosted runner usage first.
 
 ## Deployment notes
 
