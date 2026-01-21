@@ -1,17 +1,16 @@
-# CI workflows (overview)
+# CI workflows
 
-The repository uses GitHub Actions. The active workflows live in `.github/workflows/` — check those files for exact steps. CI logic has been refactored into local shared-step workflows (named `*-shared-steps.yml`) that are invoked via `workflow_call` by small top-level callers. This implements a hosted-first → self-hosted fallback pattern.
+The repository uses three primary GitHub Actions workflows in `.github/workflows/`:
 
-- `check.yml` — top-level caller that invokes `.github/workflows/check-shared-steps.yml` and runs lint, commitlint, and the test suite on pushes and PRs. The caller uses `ubuntu-22.04` for the primary try job and falls back to `self-hosted` only when the try job fails.
-- `docker.yml` — caller that invokes `.github/workflows/docker-shared-steps.yml` to build and push container images (primary: `ubuntu-latest`, fallback: `self-hosted`).
-- `release.yml` — caller that invokes `.github/workflows/release-shared-steps.yml` (primary: `ubuntu-latest`, fallback: `self-hosted`).
+- `check.yml` — runs on push and pull_request. It probes runner availability (a small `detect-quota` job) and then runs ESLint, commitlint, and tests. Each job uses a hosted-first → self-hosted fallback by selecting `runs-on` based on the probe result.
+- `docker.yml` — builds and pushes container images (Buildx). It also probes runner availability and uses a hosted-first fallback. The workflow prepares Docker metadata (tags include sha, branch/ref, and PR tags) and pushes images to `REGISTRY`/`IMAGE_NAME`.
+- `release.yml` — runs `googleapis/release-please-action@v4` on pushes to `main`. When a release is created the workflow tags versions and (optionally) builds/pushes images. See `release.yml` for the exact tagging and build steps.
 
-Notes about the shared-step / fallback pattern:
+## Key notes
 
-- The shared-step files are internal to this repository (named `*-shared-steps.yml`) and are not intended as cross-repo reusable workflows; they expose inputs such as `runs_on` and `continue_on_error` to the caller.
-- Each top-level caller runs a primary job on a hosted runner and conditionally runs a fallback job on `self-hosted` using `if: ${{ failure() }}`. This makes CI more resilient but can cause duplicated or expanded sections in the GitHub PR UI when the fallback executes — this is cosmetic and documented in the workflow comments.
-- `continue_on_error` is passed from the caller into the shared-step workflow and applied at the job level inside the shared workflow.
+- Hosted-first fallback: jobs use a small probe job (`detect-quota`) and set `runs-on` dynamically so CI prefers `ubuntu-latest` but can fall back to `self-hosted` when needed.
+- Docker workflow permissions: the docker workflow requests permissions to push packages and to request an `id-token` for registry login; it logs into the registry using the workflow token by default.
+- Release workflow: `release-please` creates release PRs or releases and exposes outputs such as `release_created`, `major`, `minor`, `patch`, `tag_name`, and `body` that downstream steps use.
+- Tokens: the action uses the default `GITHUB_TOKEN` unless configured to use a PAT; if you need CI checks to run on Release PRs, configure a PAT as described in the action docs.
 
-When a check fails, open the corresponding workflow run in GitHub (Actions tab) to see job logs. Prefer inspecting the primary (hosted) job logs first.
-
-Avoid committing generated artifacts — have CI produce and publish them instead.
+If a run fails, open the workflow run in GitHub Actions and inspect the primary (hosted) job logs first. Avoid committing generated artifacts; let CI produce and publish them.
