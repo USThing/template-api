@@ -1,3 +1,8 @@
+## NOTE: This workflow contains shared steps used by an internal try→fallback
+## pattern inside this repository. It's named `*-shared-steps.yml` to make it
+## clear these are shared step definitions for local use (not a broadly
+## reusable/cross-repo workflow). Keep the file paired with the callers that
+## run it twice (try + fallback).
 on:
   workflow_call:
     inputs:

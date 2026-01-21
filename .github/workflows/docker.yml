@@ -16,7 +16,7 @@ env:
 
 jobs:
   try_docker:
-    uses: ./.github/workflows/docker-reusable.yml
+    uses: ./.github/workflows/docker-shared-steps.yml
     with:
       runs_on: "ubuntu-latest"
       continue_on_error: true
@@ -32,6 +32,6 @@ jobs:
     # try→fallback pattern and does not indicate a functional regression.
     needs: [try_docker]
     if: ${{ failure() }}
-    uses: ./.github/workflows/docker-reusable.yml
+    uses: ./.github/workflows/docker-shared-steps.yml
     with:
       runs_on: "self-hosted"

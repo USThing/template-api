@@ -6,7 +6,7 @@ on:
 
 jobs:
   try_checks:
-    uses: ./.github/workflows/check-reusable.yml
+    uses: ./.github/workflows/check-shared-steps.yml
     with:
       runs_on: "ubuntu-22.04"
       continue_on_error: true
@@ -22,6 +22,6 @@ jobs:
     # try→fallback pattern and does not indicate a functional regression.
     needs: [try_checks]
     if: ${{ failure() }}
-    uses: ./.github/workflows/check-reusable.yml
+    uses: ./.github/workflows/check-shared-steps.yml
     with:
       runs_on: "self-hosted"

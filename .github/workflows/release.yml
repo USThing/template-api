@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   try_release_please:
-    uses: ./.github/workflows/release-reusable.yml
+    uses: ./.github/workflows/release-shared-steps.yml
     with:
       runs_on: "ubuntu-latest"
       continue_on_error: true
@@ -29,6 +29,6 @@ jobs:
     # try→fallback pattern and does not indicate a functional regression.
     needs: [try_release_please]
     if: ${{ failure() }}
-    uses: ./.github/workflows/release-reusable.yml
+    uses: ./.github/workflows/release-shared-steps.yml
     with:
       runs_on: "self-hosted"
