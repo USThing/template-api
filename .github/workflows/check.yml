@@ -4,11 +4,16 @@ on:
   - push
   - pull_request
 
+# Minimal file-level permissions for checks: read repository contents for linting/tests
+permissions:
+  contents: read
+
 jobs:
   detect-quota:
     # Probe the hosted runner (same flavor as the original try job) so we
     # can decide whether to use a hosted runner or fall back to
     # self-hosted. The job should fail if quota is exhausted.
+    permissions: {}
     runs-on: ubuntu-slim
     steps:
       - name: Quota probe

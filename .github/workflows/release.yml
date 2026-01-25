@@ -5,6 +5,8 @@ on:
     branches:
       - main
 
+# Minimize default permissions; grant elevated permissions only to the
+# `release_please` job below.
 permissions:
   contents: write
   issues: write
@@ -19,6 +21,7 @@ jobs:
   detect-quota:
     # Probe the hosted runner flavor used by release steps so we can fall
     # back if necessary.
+    permissions: {}
     runs-on: ubuntu-slim
     steps:
       - name: Quota probe

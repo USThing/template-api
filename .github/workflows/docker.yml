@@ -4,11 +4,11 @@ on:
   push:
   pull_request:
 
+# Minimize permissions for Docker CI; only allow read access to repo contents
+# and package write for pushing images to GHCR.
 permissions:
   contents: read
   packages: write
-  attestations: write
-  id-token: write
 
 env:
   REGISTRY: ghcr.io
@@ -19,6 +19,7 @@ jobs:
     # Probe the hosted runner to decide whether to use hosted runners or
     # fall back to self-hosted. Use the same runner flavor as the original
     # try job.
+    permissions: {}
     runs-on: ubuntu-slim
     steps:
       - name: Quota probe
