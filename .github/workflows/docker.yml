@@ -3,6 +3,7 @@ name: Docker CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 # Minimize permissions for Docker CI; only allow read access to repo contents
 # and package write for pushing images to GHCR.

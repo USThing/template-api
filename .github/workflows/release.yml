@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 # Minimize default permissions; grant elevated permissions only to the
 # `release_please` job below.
