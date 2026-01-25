@@ -23,7 +23,7 @@ jobs:
 
   build-and-publish:
     needs: detect-quota
-    # NOTE: do not set continue-on-error on detect-quota (see docs)
+    # NOTE: do not set `continue-on-error` on detect-quota (see docs)
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-slim' || 'self-hosted' }}
     steps:
       - uses: actions/checkout@v4
@@ -31,12 +31,20 @@ jobs:
       - name: Use Node
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
-          cache: "yarn"
+          node-version: 24
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack install
+
+      - name: Enable Node cache
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
 
       - name: Install dependencies (Corepack + Yarn)
         run: |
-          corepack enable
           corepack prepare yarn@stable --activate
           corepack yarn install --frozen-lockfile
 

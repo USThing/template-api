@@ -27,17 +27,34 @@ jobs:
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-slim' || 'self-hosted' }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Use Node
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
-          cache: "yarn"
+          node-version: 24
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack install
+
+      - name: Enable Node cache
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
+
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: |
+          yarn install --frozen-lockfile
+
       - name: Build project
-        run: yarn build
+        run: |
+          yarn build
+
       - name: Generate TypeDoc
-        run: yarn docs:typedoc
+        run: |
+          yarn docs:typedoc
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
