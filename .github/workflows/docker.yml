@@ -19,7 +19,7 @@ jobs:
     # Probe the hosted runner to decide whether to use hosted runners or
     # fall back to self-hosted. Use the same runner flavor as the original
     # try job.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Quota probe
         id: quota_probe

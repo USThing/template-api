@@ -19,7 +19,7 @@ jobs:
   detect-quota:
     # Probe the hosted runner flavor used by release steps so we can fall
     # back if necessary.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Quota probe
         id: quota_probe

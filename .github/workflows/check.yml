@@ -9,7 +9,7 @@ jobs:
     # Probe the hosted runner (same flavor as the original try job) so we
     # can decide whether to use a hosted runner or fall back to
     # self-hosted. The job should fail if quota is exhausted.
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Quota probe
         id: quota_probe
@@ -28,7 +28,7 @@ jobs:
     # ESLint job inlined from check-shared-steps.yml
     needs: detect-quota
     if: ${{ always() }}
-    runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
+    runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-slim' || 'self-hosted' }}
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
