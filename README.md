@@ -1,52 +1,69 @@
-# USThing Template API
+# template-api
 
-The template repository for USThing backend services, powered by Fastify.
+<!-- NOTE: If you use this repository as a template, replace `USThing/template-api` with your own GitHub owner/repo in the badge URLs. -->
+[![CI](https://github.com/USThing/template-api/actions/workflows/check.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/check.yml) [![Docs](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml) [![Release](https://github.com/USThing/template-api/actions/workflows/release.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/release.yml) [![Docs site](https://img.shields.io/badge/docs-site-blue)](./docs/api/index.html)
 
-## Available Scripts
+A concise Fastify + TypeScript starter used by USThing backend services. This repository provides a minimal, well-tested scaffold with recommended scripts, linting, and CI configuration.
 
-In the project directory, you can run:
+## Prerequisites
 
-### `yarn run dev`
+- Node.js (see `engines` in `package.json`)
+- Yarn via Corepack
 
-To start the app in dev mode.
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Enable Corepack (recommended) and the Yarn version used by this repo:
 
-### `yarn run start`
+```bash
+corepack enable
+corepack prepare yarn@stable --activate
+```
 
-For production mode
+## Quickstart (local)
 
-### `yarn run test`
+```bash
+corepack enable
+yarn install
+yarn build
+yarn start
+```
 
-Run the test cases.
+## Developer workflow
 
-### `yarn run lint`
+- Start dev mode (watch + Fastify): `yarn dev`
+- Run tests: `yarn test`
+- Lint: `yarn lint` (fix: `yarn lint:fix`)
 
-Run the linter.
+## Automatic API docs
 
-Note that the format of the code will also be checked.
+API docs are generated from source by TypeDoc and published by CI. To generate locally:
 
-### `yarn run lint:fix`
+```bash
+yarn docs:typedoc
+```
 
-Run the linter and fix the issues.
+Generated docs are placed under `docs/api` (CI publishes these artifacts — do not commit generated files).
 
-Note that the format of the code will also be checked and fixed.
+## Project layout
 
-## Environment Variables
+- `src/` — application code (routes, plugins, utils)
+- `src/app.ts` — Fastify app and plugin registration
+- `routes/` — route modules
+- `test/` — tests and helpers
+- `docs/` — human-authored guides and docs
+- `.env.example` — example environment variables
 
-For Fastify-level environment variables, please refer to the [fastify-cli documentation](https://github.com/fastify/fastify-cli).
+## Environment
 
-For the application-level environment variables, please refer to the `.env.example` file.
+Tests and some dev helpers reference `TEST_AUTH_TOKEN` / `TEST_AUTH_USER`. See `docs/env-vars.md` for recommended env variables and CI secret usage. Keep secrets out of the repo and use your CI's secret manager.
 
-## CI / CD
+## Contributing
 
-This template supports GitHub Actions for CI / CD. The available workflows are:
+Follow `CONTRIBUTING.md` (commitlint, lint, tests). The project uses Conventional Commits for releases.
 
-- Checks / eslint: Run ES Lint to check problems and the format of the code.
-- Checks / commitlint: Run Commitlint to check the format of the commit messages.
-- Checks / tests: Run unit tests of the project.
-- Docker CI / docker: Build the Docker image and push it to the GitHub Container Registry.
-- Release Please / release-please: Automatic releasing. See also [release-please](https://github.com/googleapis/release-please).
+## Support
 
-## Learn More
+Open an issue on GitHub using the provided templates for bugs or feature requests.
 
-To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs/latest/).
+## Learn more
+
+- Fastify: <https://www.fastify.dev/>
+- Docs folder: `docs/` (detailed guides and examples)
