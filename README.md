@@ -1,24 +1,46 @@
-# USThing Template API
+# template-api
+
+<!-- NOTE: If you use this repository as a template, replace `USThing/template-api` with your own GitHub owner/repo in the badge URLs. -->
+[![CI](https://github.com/USThing/template-api/actions/workflows/check.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/check.yml) [![Docs](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml) [![Release](https://github.com/USThing/template-api/actions/workflows/release.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/release.yml) [![Docs site](https://img.shields.io/badge/docs-site-blue)](./docs/api/index.html)
 
 A concise Fastify + TypeScript starter used by USThing backend services. This repository provides a minimal, well-tested scaffold with recommended scripts, linting, and CI configuration.
 
-## Quickstart & developer setup
+## Prerequisites
 
-See the detailed guides in `docs/`:
+- Node.js (see `engines` in `package.json`)
+- Yarn via Corepack
 
-- `docs/quickstart.md` — quick start commands and example requests
-- `docs/dev-setup.md` — Corepack, Node setup, and developer tips
+Enable Corepack (recommended) and the Yarn version used by this repo:
 
-Note: this repository expects Yarn managed via Corepack. If Corepack is not enabled on your machine, enable it with `corepack enable`.
+```bash
+corepack enable
+corepack prepare yarn@stable --activate
+```
 
-## Key scripts
+## Quickstart (local)
 
-- `dev` — start in development (watch + fastify)
-- `build` — compile TypeScript
-- `start` — run production server (from `dist`)
-- `test` — build and run tests
-- `lint`, `lint:fix` — ESLint checks and fixes
-- `commitlint` — validate commit messages
+```bash
+corepack enable
+yarn install
+yarn build
+yarn start
+```
+
+## Developer workflow
+
+- Start dev mode (watch + Fastify): `yarn dev`
+- Run tests: `yarn test`
+- Lint: `yarn lint` (fix: `yarn lint:fix`)
+
+## Automatic API docs
+
+API docs are generated from source by TypeDoc and published by CI. To generate locally:
+
+```bash
+yarn docs:typedoc
+```
+
+Generated docs are placed under `docs/api` (CI publishes these artifacts — do not commit generated files).
 
 ## Project layout
 
@@ -26,20 +48,16 @@ Note: this repository expects Yarn managed via Corepack. If Corepack is not enab
 - `src/app.ts` — Fastify app and plugin registration
 - `routes/` — route modules
 - `test/` — tests and helpers
-- `docs/` — human-authored docs (Quickstart, guides, migration)
-- `.env.example` — example env variables
-
-## Docs and API reference
-
-Human-facing guides belong in `docs/`. API specs (generated from code via Fastify+Swagger or TypeDoc) should be produced by CI and published to your docs site rather than frequently committing generated files.
+- `docs/` — human-authored guides and docs
+- `.env.example` — example environment variables
 
 ## Environment
 
-See `.env.example` for application-level variables. Fastify CLI options are documented at the `fastify-cli` project.
+Tests and some dev helpers reference `TEST_AUTH_TOKEN` / `TEST_AUTH_USER`. See `docs/env-vars.md` for recommended env variables and CI secret usage. Keep secrets out of the repo and use your CI's secret manager.
 
 ## Contributing
 
-Please follow `CONTRIBUTING.md`. Use the configured commitlint rules and run lint/tests before opening a PR.
+Follow `CONTRIBUTING.md` (commitlint, lint, tests). The project uses Conventional Commits for releases.
 
 ## Support
 
