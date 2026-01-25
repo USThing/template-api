@@ -2,18 +2,29 @@ name: docs
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch: {}
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
-  build-and-publish:
+  detect-quota:
+    # Probe the hosted runner so we can decide whether to use a hosted
+    # runner or fall back to self-hosted. The job should fail if quota is exhausted.
     runs-on: ubuntu-slim
+    steps:
+      - name: Quota probe
+        id: quota_probe
+        run: |
+          echo "probe"
+
+  build:
+    needs: detect-quota
+    # NOTE: Do not set `continue-on-error: true` on the `detect-quota` job.
+    # If `continue-on-error` is enabled the job result will always be
+    # 'success', which defeats detection (we rely on `needs.detect-quota.result`).
+    runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-slim' || 'self-hosted' }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node
@@ -32,8 +43,3 @@ jobs:
         with:
           name: api-docs
           path: docs/api
-      - name: Publish to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/api
