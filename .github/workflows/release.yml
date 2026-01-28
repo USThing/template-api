@@ -19,6 +19,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+
   detect-quota:
     # Probe the hosted runner flavor used by release steps so we can fall
     # back if necessary.
@@ -43,13 +44,17 @@ jobs:
     if: ${{ always() }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
     continue-on-error: true
+
     steps:
+
       - name: Release Please
         uses: googleapis/release-please-action@v4
         id: release
         with:
           release-type: node
 
+      # From:
+      # https://github.com/googleapis/release-please-action?tab=readme-ov-file#creating-majorminor-tags
       - name: Checkout
         uses: actions/checkout@v4
         if: ${{ steps.release.outputs.release_created }}
@@ -63,8 +68,11 @@ jobs:
           git tag -d v${{ steps.release.outputs.major }} || true
           git tag -d v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
           git push origin :v${{ steps.release.outputs.major }} || true
+          git push origin :v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
+          git tag -a v${{ steps.release.outputs.major }} -m "Release v${{ steps.release.outputs.major }}"
+          git tag -a v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} -m "Release v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}"
           git push origin v${{ steps.release.outputs.major }}
-          git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
+          git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
 
       - name: Setup QEMU
         if: ${{ steps.release.outputs.release_created }}
@@ -89,6 +97,10 @@ jobs:
         with:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          # Commit SHA Tag
+          # The Tag based on the branch (main)
+          # The "prod" Tag, indicating a production-ready image
+          # The Major, Major.Minor, and Major.Minor.Patch tags
           tags: |
             type=sha
             type=ref,event=branch
