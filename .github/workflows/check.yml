@@ -8,6 +8,7 @@ on:
 # Minimal file-level permissions for checks: read repository contents for linting/tests
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   detect-quota:
