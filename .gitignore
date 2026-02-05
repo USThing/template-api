@@ -76,3 +76,7 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Generated TypeDoc output (do not commit generated API docs)
+docs/api/
+docs/api/**
