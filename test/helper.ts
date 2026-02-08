@@ -21,7 +21,8 @@ async function config(): Promise<AppOptions> {
 // Automatically build and tear down our instance
 async function build(t: TestContext) {
   const fastify = Fastify();
-  await fastify.register(app, await config());
+  const appConfig = await config();
+  await fastify.register(app, appConfig);
   await fastify.ready();
 
   // Tear down our app after we are done
