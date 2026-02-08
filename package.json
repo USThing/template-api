@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "FASTIFY_AUTOLOAD_TYPESCRIPT=1 tsx --test --test-timeout=5000 --experimental-test-coverage test/**/*.test.ts",
-    "build": "esbuild src/**/*.ts --platform=node --format=esm --outdir=dist/src --outbase=src --sourcemap",
+    "build": "node scripts/build.js",
     "build:test": "yarn build && node scripts/copy-test-assets.js",
     "watch": "tsc -w",
     "start": "fastify start -l info dist/src/app.js --options",
