@@ -1,5 +1,5 @@
 // This file contains code that we reuse between our tests.
-import app, { AppOptions } from "../src/app.js";
+import app, { AppOptions, options } from "../src/app.js";
 import Fastify from "fastify";
 import * as test from "node:test";
 
@@ -20,13 +20,15 @@ async function config(): Promise<AppOptions> {
 
 // Automatically build and tear down our instance
 async function build(t: TestContext) {
-  const fastify = Fastify();
+  const fastify = Fastify({ pluginTimeout: options.pluginTimeout });
   const appConfig = await config();
   await fastify.register(app, appConfig);
   await fastify.ready();
 
   // Tear down our app after we are done
-  t.after(() => void fastify.close());
+  t.after(async () => {
+    await fastify.close();
+  });
 
   return fastify;
 }
