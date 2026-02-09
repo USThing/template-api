@@ -789,13 +789,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinclair/typebox@npm:^0.34.48":
-  version: 0.34.48
-  resolution: "@sinclair/typebox@npm:0.34.48"
-  checksum: 10c0/e09f26d8ad471a07ee64004eea7c4ec185349a1f61c03e87e71ea33cbe98e97959940076c2e52968a955ffd4c215bf5ba7035e77079511aac7935f25e989e29d
-  languageName: node
-  linkType: hard
-
 "@trivago/prettier-plugin-sort-imports@npm:^6.0.2":
   version: 6.0.2
   resolution: "@trivago/prettier-plugin-sort-imports@npm:6.0.2"
@@ -3830,7 +3823,6 @@ __metadata:
     "@fastify/swagger-ui": "npm:^5.2.5"
     "@fastify/type-provider-typebox": "npm:^6.1.0"
     "@scalar/fastify-api-reference": "npm:^1.44.15"
-    "@sinclair/typebox": "npm:^0.34.48"
     "@trivago/prettier-plugin-sort-imports": "npm:^6.0.2"
     "@types/jsonwebtoken": "npm:^9.0.10"
     "@types/node": "npm:^25.2.2"
@@ -3849,6 +3841,7 @@ __metadata:
     openid-client: "npm:^6.8.2"
     prettier: "npm:^3.8.1"
     prettier-plugin-jsdoc: "npm:^1.8.0"
+    typebox: "npm:^1.0.81"
     typescript: "npm:^5.9.3"
     typescript-eslint: "npm:^8.54.0"
   languageName: unknown
@@ -3961,6 +3954,13 @@ __metadata:
     media-typer: "npm:^1.1.0"
     mime-types: "npm:^3.0.0"
   checksum: 10c0/7f7ec0a060b16880bdad36824ab37c26019454b67d73e8a465ed5a3587440fbe158bc765f0da68344498235c877e7dbbb1600beccc94628ed05599d667951b99
+  languageName: node
+  linkType: hard
+
+"typebox@npm:^1.0.81":
+  version: 1.0.81
+  resolution: "typebox@npm:1.0.81"
+  checksum: 10c0/0944c5a5214a8c218d345dbba30de8384fd00fc6ab6c948e67661e8647c42f04530401f8e6238a556860bb1dbcdf1b300407219c66aac237c6ccaeed22d2460c
   languageName: node
   linkType: hard
 

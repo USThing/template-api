@@ -1,6 +1,6 @@
 import sensible from "@fastify/sensible";
-import { Type } from "@sinclair/typebox";
 import fp from "fastify-plugin";
+import { Type } from "typebox";
 
 export const HttpError = Type.Ref("HttpError");
 

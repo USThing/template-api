@@ -2,7 +2,7 @@
 
 /*--------------------------------------------------------------------------
 
-@sinclair/typebox/prototypes
+typebox/prototypes
 
 The MIT License (MIT)
 
@@ -28,14 +28,13 @@ THE SOFTWARE.
 
 ---------------------------------------------------------------------------*/
 
-import { TypeRegistry, Kind, Static, TSchema, SchemaOptions } from '@sinclair/typebox'
-import { Value } from '@sinclair/typebox/value'
+import { TSchema, TSchemaOptions, Static } from 'typebox'
 
 // -------------------------------------------------------------------------------------
 // TUnionOneOf
 // -------------------------------------------------------------------------------------
 export interface TUnionOneOf<T extends TSchema[]> extends TSchema {
-  [Kind]: 'UnionOneOf'
+  '~kind': 'UnionOneOf'
   static: { [K in keyof T]: Static<T[K]> }[number]
   oneOf: T
 }
@@ -43,10 +42,6 @@ export interface TUnionOneOf<T extends TSchema[]> extends TSchema {
 // UnionOneOf
 // -------------------------------------------------------------------------------------
 /** `[Experimental]` Creates a Union type with a `oneOf` schema representation */
-export function UnionOneOf<T extends TSchema[]>(oneOf: [...T], options: SchemaOptions = {}) {
-  function UnionOneOfCheck(schema: TUnionOneOf<TSchema[]>, value: unknown) {
-    return 1 === schema.oneOf.reduce((acc: number, schema: any) => (Value.Check(schema, value) ? acc + 1 : acc), 0)
-  }
-  if (!TypeRegistry.Has('UnionOneOf')) TypeRegistry.Set('UnionOneOf', UnionOneOfCheck)
-  return { ...options, [Kind]: 'UnionOneOf', oneOf } as TUnionOneOf<T>
+export function UnionOneOf<T extends TSchema[]>(oneOf: [...T], options: TSchemaOptions = {}) {
+  return { ...options, '~kind': 'UnionOneOf', oneOf } as TUnionOneOf<T>
 }

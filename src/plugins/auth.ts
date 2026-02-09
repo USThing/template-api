@@ -1,12 +1,12 @@
 import { ResponseSchema } from "../utils/schema.js";
 import { UnionOneOf } from "../utils/typebox/union-oneof.js";
-import { Type } from "@sinclair/typebox";
 import { FastifyReply, FastifyRequest } from "fastify";
 import fp from "fastify-plugin";
 import jwt, { JwtHeader, SigningKeyCallback } from "jsonwebtoken";
 import { JwksClient } from "jwks-rsa";
 import * as client from "openid-client";
 import { skipSubjectCheck, WWWAuthenticateChallengeError } from "openid-client";
+import { Type } from "typebox";
 
 export interface AuthPluginOptions {
   /** The discovery URL of the OpenID Connect provider. */
