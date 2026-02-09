@@ -36,13 +36,13 @@
     "@fastify/swagger-ui": "^5.2.5",
     "@fastify/type-provider-typebox": "^6.1.0",
     "@scalar/fastify-api-reference": "^1.44.15",
-    "@sinclair/typebox": "^0.34.48",
     "fastify": "^5.7.4",
     "fastify-cli": "^7.4.1",
     "fastify-plugin": "^5.1.0",
     "jsonwebtoken": "^9.0.3",
     "jwks-rsa": "^3.2.2",
-    "openid-client": "^6.8.2"
+    "openid-client": "^6.8.2",
+    "typebox": "^1.0.81"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.1",
