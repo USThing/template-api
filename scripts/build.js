@@ -1,20 +1,21 @@
 import { build } from "esbuild";
-import { copyFile, glob, mkdir, rm } from "node:fs/promises";
+import { copyFile, glob, rm } from "node:fs/promises";
 import path from "node:path";
 
 const distDir = path.resolve("dist");
-const distSrcDir = path.join(distDir, "src");
 
 try {
-  await rm(distSrcDir, { recursive: true, force: true });
-  await mkdir(distSrcDir, { recursive: true });
+  await rm(distDir, { recursive: true, force: true });
 
-  const entryPoints = await glob("src/**/*.ts");
+  const entryPoints = [];
+  for await (const file of glob("src/**/*.ts")) {
+    entryPoints.push(file);
+  }
 
   await build({
     entryPoints,
-    outdir: distSrcDir,
-    outbase: "src",
+    outdir: distDir,
+    outbase: ".",
     platform: "node",
     format: "esm",
     sourcemap: true,
