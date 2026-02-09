@@ -9,7 +9,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "yarn build:test && FASTIFY_AUTOLOAD_TYPESCRIPT=1 node --test --experimental-test-coverage 'dist/test/**/*.js'",
+    "test": "yarn build:test && FASTIFY_AUTOLOAD_TYPESCRIPT=1 node --test --test-timeout=5000 --experimental-test-coverage 'dist/test/**/*.js'",
     "build": "tsc",
     "build:test": "yarn build && node scripts/copy-test-assets.js && tsc -p test/tsconfig.json",
     "watch": "tsc -w",
