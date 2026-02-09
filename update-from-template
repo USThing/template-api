@@ -4,4 +4,4 @@ git remote add upstream https://github.com/USThing/template-api.git
 git fetch upstream main
 git merge upstream/main -m "chore(template): update from upstream"
 
-echo Note: Merge conflicts of yarn.lock can be automatically resolved by running "yarn" after resolving the conflicts in package.json. 
+echo "Note: Merge conflicts of yarn.lock can be automatically resolved by running \"yarn\" after resolving the conflicts in package.json."
