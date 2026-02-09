@@ -41,7 +41,14 @@ export interface TUnionOneOf<T extends TSchema[]> extends TSchema {
 // -------------------------------------------------------------------------------------
 // UnionOneOf
 // -------------------------------------------------------------------------------------
-/** `[Experimental]` Creates a Union type with a `oneOf` schema representation */
+/** 
+ * `[Experimental]` Creates a Union type with a `oneOf` schema representation 
+ * 
+ * Note: Runtime validation of oneOf is handled by the JSON Schema validator (e.g., Ajv)
+ * which is used by Fastify. The oneOf keyword is a standard JSON Schema keyword that
+ * ensures exactly one of the schemas matches. This implementation doesn't need custom
+ * validation logic as the standard validator handles it.
+ */
 export function UnionOneOf<T extends TSchema[]>(oneOf: [...T], options: TSchemaOptions = {}) {
   return { ...options, '~kind': 'UnionOneOf', oneOf } as TUnionOneOf<T>
 }
