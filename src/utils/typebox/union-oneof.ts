@@ -2,7 +2,7 @@
 
 /*--------------------------------------------------------------------------
 
-typebox/prototypes
+@sinclair/typebox/prototypes
 
 The MIT License (MIT)
 
