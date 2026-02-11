@@ -1,7 +1,6 @@
 #!/bin/bash
 
-git remote add upstream https://github.com/USThing/template-api.git
-git fetch upstream main
-git merge upstream/main -m "chore(template): update from upstream"
+git fetch https://github.com/USThing/template-api.git main # fetches to `FETCH_HEAD`
+git merge FETCH_HEAD -m "chore(template): update from upstream"
 
 echo "Note: Merge conflicts of yarn.lock can be automatically resolved by running \"yarn\" after resolving the conflicts in package.json."
