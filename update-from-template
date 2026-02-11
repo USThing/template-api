@@ -1,0 +1,6 @@
+#!/bin/bash
+
+git fetch https://github.com/USThing/template-api.git main # fetches to `FETCH_HEAD`
+git merge FETCH_HEAD -m "chore(template): update from upstream"
+
+echo "Note: Merge conflicts of yarn.lock can be automatically resolved by running \"yarn\" after resolving the conflicts in package.json."
