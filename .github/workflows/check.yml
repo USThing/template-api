@@ -12,8 +12,9 @@ on:
 #   cancel previous runs and only the latest is kept.
 # - For direct pushes: fall back to deduplicating by commit SHA so identical
 #   commits don't trigger multiple concurrent workflows.
+# - Include the `github.workflow` name in the group to avoid cross-workflow collisions.
 concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.sha }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.sha }}
   cancel-in-progress: true
 
 # Minimal file-level permissions for checks: read repository contents for linting/tests
