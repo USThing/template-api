@@ -17,16 +17,16 @@ updates:
         patterns:
           - "*"
 
-  # NPM & pnpm (package.json, pnpm-lock.yaml, etc.)
-  - package-ecosystem: "npm"
+  # Yarn (package.json, yarn.lock, etc.)
+  - package-ecosystem: "yarn"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     commit-message:
       prefix: "build"
       prefix-development: "chore"
       include: "scope"
     groups:
-      npm:
+      yarn:
         patterns:
           - "*"
