@@ -29,6 +29,7 @@ jobs:
     # self-hosted. The job should fail if quota is exhausted.
     permissions: {}
     runs-on: ubuntu-slim
+    timeout-minutes: 1
     steps:
       - name: Quota probe
         id: quota_probe
@@ -48,6 +49,7 @@ jobs:
     needs: detect-quota
     if: ${{ always() }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-slim' || 'self-hosted' }}
+    timeout-minutes: 5
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -77,6 +79,7 @@ jobs:
     needs: detect-quota
     if: ${{ always() }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
+    timeout-minutes: 2
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -88,6 +91,7 @@ jobs:
     needs: detect-quota
     if: ${{ always() }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
+    timeout-minutes: 5
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
