@@ -18,7 +18,7 @@ updates:
           - "*"
 
   # Yarn (package.json, yarn.lock, etc.)
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
