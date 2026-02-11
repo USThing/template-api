@@ -25,6 +25,7 @@ jobs:
     # back if necessary.
     permissions: {}
     runs-on: ubuntu-slim
+    timeout-minutes: 1
     steps:
       - name: Quota probe
         id: quota_probe
@@ -43,6 +44,7 @@ jobs:
     needs: detect-quota
     if: ${{ always() }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
+    timeout-minutes: 5
     continue-on-error: true
 
     steps:
