@@ -21,7 +21,7 @@ updates:
   - package-ecosystem: "yarn"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     commit-message:
       prefix: "build"
       prefix-development: "chore"
