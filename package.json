@@ -5,15 +5,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "fastify start --import=tsx --watch --log-level=debug --pretty-logs --options src/app.ts",
-    "test": "tsx --test --test-timeout=5000 --experimental-test-coverage test/**/*.test.ts",
-    "compile": "tsgo --noEmit && tsgo -p test/tsconfig.json --noEmit",
+    "dev": 
+    "fastify start --import=tsx --watch --log-level=debug --pretty-logs --options src/app.ts",
+    "test": 
+    "tsx --test --test-timeout=5000 --experimental-test-coverage test/**/*.test.ts",
+    "compile": 
+    "tsgo --noEmit && tsgo -p test/tsconfig.json --noEmit",
     "lint": "eslint --fix .",
     "lint:check": "eslint .",
     "fmt": "prettier --write --list-different .",
     "fmt:check": "prettier --check .",
-    "build": 
-    "yarn clean && tsgo",
+    "build": "yarn clean && tsgo",
     "start": "fastify start --log-level=info --options dist/src/app.js",
     "clean": "rimraf dist",
     "commitlint": "commitlint --last --strict --verbose",
