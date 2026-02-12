@@ -19,7 +19,6 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-
   detect-quota:
     # Probe the hosted runner flavor used by release steps so we can fall
     # back if necessary.
@@ -46,7 +45,6 @@ jobs:
     continue-on-error: true
 
     steps:
-
       - name: Release Please
         uses: googleapis/release-please-action@v4
         id: release

@@ -1,30 +1,26 @@
 {
   "type": "module",
   "name": "template-api",
-  "description": "The template repository for USThing backend services, powered by Fastify.",
-  "version": "0.1.0",
+  "description": "The template for USThing backend services.",
+  "version": "0.0.0",
   "private": true,
-  "main": "app.ts",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
-    "test": "FASTIFY_AUTOLOAD_TYPESCRIPT=1 tsx --test --test-timeout=5000 --experimental-test-coverage test/**/*.test.ts",
-    "build": "node scripts/clean-dist.js && tsc",
-    "typecheck": "tsc --noEmit && tsc -p test/tsconfig.json --noEmit",
-    "watch": "tsc --noEmit --watch",
-    "start": "fastify start -l info dist/src/app.js --options",
-    "dev": "node scripts/clean-dist.js && FASTIFY_AUTOLOAD_TYPESCRIPT=1 tsx watch scripts/dev.ts",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
+    "dev": "fastify start --import=tsx --watch --log-level=debug --pretty-logs --options src/app.ts",
+    "test": "tsx --test --test-timeout=5000 --experimental-test-coverage test/**/*.test.ts",
+    "compile": "tsc --noEmit && tsc -p test/tsconfig.json --noEmit",
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
+    "build": "rimraf dist && tsc",
+    "start": "fastify start --log-level=info --options dist/src/app.js",
     "commitlint": "commitlint --last --strict --verbose",
     "prepare": "husky"
   },
   "engines": {
     "node": ">= 24"
   },
-  "keywords": [],
-  "author": "Flandia",
+  "author": "USThing Team",
   "license": "MIT",
   "dependencies": {
     "@fastify/autoload": "^6.3.1",
@@ -52,12 +48,11 @@
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
     "fastify-tsconfig": "^3.0.0",
-    "globals": "^16.5.0",
     "husky": "^9.1.7",
     "prettier": "^3.7.4",
     "prettier-plugin-jsdoc": "^1.7.0",
+    "rimraf": "^6.1.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.48.1"
