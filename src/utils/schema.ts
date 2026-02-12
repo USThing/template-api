@@ -1,5 +1,5 @@
 import { UnionOneOf } from "./typebox/union-oneof.js";
-import { TSchema } from "@sinclair/typebox";
+import { TSchema } from "typebox";
 
 export type ResponseSchema = Record<number, TSchema>;
 

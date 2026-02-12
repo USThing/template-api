@@ -1,8 +1,8 @@
 import { FastifyTypebox } from "../../app.js";
 import { AuthResponseSchema } from "../../plugins/auth.js";
 import { mergeResponse } from "../../utils/schema.js";
-import { Type } from "@sinclair/typebox";
 import { FastifyPluginAsync } from "fastify";
+import { Type } from "typebox";
 
 const authExample: FastifyPluginAsync = async (
   fastify: FastifyTypebox,

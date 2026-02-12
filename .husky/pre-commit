@@ -1,1 +1,4 @@
-# corepack yarn test
+#!/usr/bin/env sh
+
+yarn dlx lint-staged
+yarn compile

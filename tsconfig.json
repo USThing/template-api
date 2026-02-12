@@ -1,7 +1,12 @@
 {
-  "extends": "fastify-tsconfig",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "module": "nodenext",
+    "target": "esnext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "nodenext"
   },
   "include": ["src/**/*.ts"]
 }

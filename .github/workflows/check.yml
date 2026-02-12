@@ -44,7 +44,7 @@ jobs:
   # provides a job-level "allow-failure"/neutral-conclusion feature
   # (see: https://github.com/actions/runner/issues/2347 for discussion).
 
-  eslint:
+  lint-fmt:
     # ESLint job inlined from check-shared-steps.yml
     needs: detect-quota
     if: ${{ always() }}
@@ -78,7 +78,7 @@ jobs:
   commitlint:
     # Commitlint job inlined from check-shared-steps.yml
     needs: detect-quota
-    if: ${{ always() }}
+    if: ${{ always() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
     timeout-minutes: 2
     continue-on-error: true

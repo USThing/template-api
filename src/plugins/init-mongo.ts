@@ -1,6 +1,6 @@
 import fp from "fastify-plugin";
 
-// import { Collection } from "mongodb";
+// import { Collection, Document } from "mongodb";
 
 export type InitMongoPluginOptions = Record<never, unknown>;
 
@@ -18,7 +18,7 @@ export default fp<InitMongoPluginOptions>(async (fastify, opts) => {
 // declare module "fastify" {
 //   export interface FastifyInstance {
 //     collections: {
-//       example: Collection<unknown>;
+//       example: Collection<Document>;
 //     };
 //   }
 // }
