@@ -1,7 +1,4 @@
-#!bin/bash
+#!/usr/bin/env sh
 
-corepack yarn lint
-corepack yarn fmt
-corepack yarn compile
-
-git add
+yarn dlx lint-staged
+yarn compile

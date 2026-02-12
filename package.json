@@ -5,22 +5,29 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": 
-    "fastify start --import=tsx --watch --log-level=debug --pretty-logs --options src/app.ts",
-    "test": 
-    "tsx --test --test-timeout=5000 --experimental-test-coverage test/**/*.test.ts",
-    "compile": 
-    "tsgo --noEmit && tsgo -p test/tsconfig.json --noEmit",
+    "dev": "fastify start --import=tsx --watch --log-level=debug --pretty-logs --options src/app.ts",
+    "test": "tsx --test --test-timeout=5000 --experimental-test-coverage test/**/*.test.ts",
+    "compile": "tsgo --noEmit && tsgo -p test/tsconfig.json --noEmit",
     "lint": "eslint --fix .",
     "lint:check": "eslint .",
     "fmt": "prettier --write --list-different .",
-    "fmt:check":
-     "prettier --check .",
+    "fmt:check": "prettier --check .",
     "build": "yarn clean && tsgo",
     "start": "fastify start --log-level=info --options dist/src/app.js",
     "clean": "rimraf dist",
     "commitlint": "commitlint --last --strict --verbose",
     "prepare": "husky"
+  },
+  "lint-staged": {
+    "!(*.{js,ts})": [
+      "yarn fmt",
+      "git add"
+    ],
+    "*.{js,ts}": [
+      "yarn lint",
+      "yarn fmt",
+      "git add"
+    ]
   },
   "engines": {
     "node": ">= 24"
@@ -55,6 +62,7 @@
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "prettier-plugin-jsdoc": "^1.8.0",
     "rimraf": "^6.1.2",
