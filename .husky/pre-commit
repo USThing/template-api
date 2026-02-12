@@ -1,1 +1,5 @@
-# corepack yarn test
+#!bin/bash
+
+corepack yarn lint
+corepack yarn fmt
+corepack yarn compile
