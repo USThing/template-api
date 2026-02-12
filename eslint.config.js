@@ -1,7 +1,9 @@
-import pluginJs from "@eslint/js";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+// sort-imports-ignore
 import globals from "globals";
+
+import pluginJs from "@eslint/js";
 import pluginTs from "typescript-eslint";
+import pluginPrettier from "eslint-config-prettier/flat";
 
 export default [
   { files: ["**/*.{js,mjs,cjs,ts}"] },
@@ -19,5 +21,5 @@ export default [
       ],
     },
   },
-  eslintPluginPrettierRecommended,
+  pluginPrettier,
 ];

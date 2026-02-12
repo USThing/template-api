@@ -8,34 +8,41 @@ In the project directory, you can run:
 
 ### `yarn run dev`
 
-To start the app in dev mode.
+Run the app in development mode; watch the source for changes.
+
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `yarn run start`
+### `yarn run compile`
 
-For production mode
+Run the TypeScript compiler to check for type errors.
+
+### `yarn run build`, `yarn run start`
+
+- Build the app for production to the `dist` folder.
+- Start the built app in production mode.
 
 ### `yarn run test`
 
-Run the test cases.
+Run the tests.
 
 ### `yarn run lint`
 
-Run the linter.
+Run the linter and fix any issues.
 
-Note that the format of the code will also be checked.
+`lint:check` does not fix the issues.
 
-### `yarn run lint:fix`
+### `yarn run fmt`
 
-Run the linter and fix the issues.
+Run the formatter and fix any issues.
 
-Note that the format of the code will also be checked and fixed.
+`fmt:check` does not fix the issues.
 
 ## Environment Variables
 
 For Fastify-level environment variables, please refer to the [fastify-cli documentation](https://github.com/fastify/fastify-cli).
 
-For the application-level environment variables, please refer to the `.env.example` file.
+For the application-level environment variables, please refer to the
+`.env.example` file. `yarn run dev` automatically loads a `.env` file if it exists.
 
 ## CI / CD
 
