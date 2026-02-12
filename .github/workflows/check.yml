@@ -58,8 +58,8 @@ jobs:
           yarn install
 
       - run: |
-          run yarn lint:check
-          run yarn fmt:check
+          yarn lint:check
+          yarn fmt:check
 
   commitlint:
     # Commitlint job inlined from check-shared-steps.yml
