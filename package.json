@@ -15,7 +15,6 @@
     "build": "yarn clean && tsgo",
     "start": "fastify start --log-level=info --options dist/src/app.js",
     "clean": "rimraf dist",
-    "commitlint": "commitlint --last --strict --verbose",
     "prepare": "husky"
   },
   "lint-staged": {
