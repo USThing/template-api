@@ -44,7 +44,7 @@ jobs:
   # provides a job-level "allow-failure"/neutral-conclusion feature
   # (see: https://github.com/actions/runner/issues/2347 for discussion).
 
-  eslint:
+  lint-fmt:
     # ESLint job inlined from check-shared-steps.yml
     needs: detect-quota
     if: ${{ always() }}
