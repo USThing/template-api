@@ -41,7 +41,7 @@
     "@fastify/swagger": "^9.7.0",
     "@fastify/swagger-ui": "^5.2.5",
     "@fastify/type-provider-typebox": "^6.1.0",
-    "@scalar/fastify-api-reference": "^1.44.15",
+    "@scalar/fastify-api-reference": "^1.44.17",
     "fastify": "^5.7.4",
     "fastify-cli": "^7.4.1",
     "fastify-plugin": "^5.1.0",
@@ -53,10 +53,10 @@
   "devDependencies": {
     "@commitlint/cli": "^20.4.1",
     "@commitlint/config-conventional": "^20.4.1",
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^25.2.2",
+    "@types/node": "^25.2.3",
     "@typescript/native-preview": "^7.0.0-dev.20260212.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
@@ -67,7 +67,7 @@
     "rimraf": "^6.1.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0"
+    "typescript-eslint": "^8.55.0"
   },
   "packageManager": "yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8"
 }
