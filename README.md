@@ -19,6 +19,10 @@ For production mode
 
 Run the test cases.
 
+### `yarn run typecheck`
+
+Run TypeScript type checking without emitting build output.
+
 ### `yarn run lint`
 
 Run the linter.
