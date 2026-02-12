@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /*--------------------------------------------------------------------------
 
 @sinclair/typebox/prototypes
@@ -27,28 +25,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ---------------------------------------------------------------------------*/
-
-import { TSchema, TSchemaOptions, Static } from 'typebox'
+import { TSchema, TSchemaOptions, Static } from "typebox";
 
 // -------------------------------------------------------------------------------------
 // TUnionOneOf
 // -------------------------------------------------------------------------------------
 export interface TUnionOneOf<T extends TSchema[]> extends TSchema {
-  '~kind': 'UnionOneOf'
-  static: { [K in keyof T]: Static<T[K]> }[number]
-  oneOf: T
+  "~kind": "UnionOneOf";
+  static: { [K in keyof T]: Static<T[K]> }[number];
+  oneOf: T;
 }
 // -------------------------------------------------------------------------------------
 // UnionOneOf
 // -------------------------------------------------------------------------------------
-/** 
- * `[Experimental]` Creates a Union type with a `oneOf` schema representation 
- * 
+/**
+ * `[Experimental]` Creates a Union type with a `oneOf` schema representation
+ *
  * Note: Runtime validation of oneOf is handled by the JSON Schema validator (e.g., Ajv)
  * which is used by Fastify. The oneOf keyword is a standard JSON Schema keyword that
  * ensures exactly one of the schemas matches. This implementation doesn't need custom
  * validation logic as the standard validator handles it.
  */
-export function UnionOneOf<T extends TSchema[]>(oneOf: [...T], options: TSchemaOptions = {}) {
-  return { ...options, '~kind': 'UnionOneOf', oneOf } as TUnionOneOf<T>
+export function UnionOneOf<T extends TSchema[]>(
+  oneOf: [...T],
+  options: TSchemaOptions = {},
+) {
+  return { ...options, "~kind": "UnionOneOf", oneOf } as TUnionOneOf<T>;
 }

@@ -2,8 +2,20 @@ name: Checks
 
 on:
   push:
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
+
+# Use concurrency to deduplicate runs.
+# - For pull requests: group by `pr-<number>` so multiple commits to the same PR
+#   cancel previous runs and only the latest is kept.
+# - For direct pushes: fall back to deduplicating by commit SHA so identical
+#   commits don't trigger multiple concurrent workflows.
+# - Include the `github.workflow` name in the group to avoid cross-workflow collisions.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.sha }}
+  cancel-in-progress: true
 
 # Minimal file-level permissions for checks: read repository contents for linting/tests
 permissions:
@@ -17,6 +29,7 @@ jobs:
     # self-hosted. The job should fail if quota is exhausted.
     permissions: {}
     runs-on: ubuntu-slim
+    timeout-minutes: 1
     steps:
       - name: Quota probe
         id: quota_probe
@@ -36,6 +49,7 @@ jobs:
     needs: detect-quota
     if: ${{ always() }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-slim' || 'self-hosted' }}
+    timeout-minutes: 5
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -58,13 +72,15 @@ jobs:
           yarn install
 
       - run: |
-          yarn run lint
+          yarn lint:check
+          yarn fmt:check
 
   commitlint:
     # Commitlint job inlined from check-shared-steps.yml
     needs: detect-quota
     if: ${{ always() }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
+    timeout-minutes: 2
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -76,6 +92,7 @@ jobs:
     needs: detect-quota
     if: ${{ always() }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
+    timeout-minutes: 5
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
