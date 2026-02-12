@@ -3,3 +3,5 @@
 corepack yarn lint
 corepack yarn fmt
 corepack yarn compile
+
+git add
