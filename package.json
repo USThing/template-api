@@ -14,7 +14,8 @@
     "lint": "eslint --fix .",
     "lint:check": "eslint .",
     "fmt": "prettier --write --list-different .",
-    "fmt:check": "prettier --check .",
+    "fmt:check":
+     "prettier --check .",
     "build": "yarn clean && tsgo",
     "start": "fastify start --log-level=info --options dist/src/app.js",
     "clean": "rimraf dist",
