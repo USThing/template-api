@@ -78,14 +78,16 @@ jobs:
   commitlint:
     # Commitlint job inlined from check-shared-steps.yml
     needs: detect-quota
-    if: ${{ always() && (github.ref == 'refs/heads/main' || github.base_ref == 'main') }}
+    if: ${{ always() }}
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
     timeout-minutes: 2
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
+        if: (github.ref == 'refs/heads/main' || github.base_ref == 'main')
 
       - uses: wagoid/commitlint-github-action@v6
+        if: (github.ref == 'refs/heads/main' || github.base_ref == 'main')
 
   tests:
     # Tests job inlined from check-shared-steps.yml
