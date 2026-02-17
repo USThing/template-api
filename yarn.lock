@@ -2381,7 +2381,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:^5.0.0":
+"fastify@npm:^5.0.0, fastify@npm:^5.7.4":
   version: 5.7.4
   resolution: "fastify@npm:5.7.4"
   dependencies:
@@ -4682,6 +4682,7 @@ __metadata:
     "@typescript/native-preview": "npm:^7.0.0-dev.20260212.1"
     eslint: "npm:^9.39.2"
     eslint-config-prettier: "npm:^10.1.8"
+    fastify: "npm:^5.7.4"
     fastify-cli: "npm:^7.4.1"
     fastify-plugin: "npm:^5.1.0"
     husky: "npm:^9.1.7"
