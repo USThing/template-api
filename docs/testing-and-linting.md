@@ -10,8 +10,8 @@ From the repository root:
 # install dependencies
 yarn install
 
-# compile TypeScript
-yarn run build
+# type-check only (run the TypeScript compiler)
+yarn run compile
 
 # run tests
 yarn run test
@@ -32,16 +32,31 @@ Notes
 Run lint locally:
 
 ```bash
+# fixes are applied by default
 yarn run lint
 ```
 
-To fix common lint issues:
+To check lint without fixing:
 
 ```bash
-yarn run lint:fix
+yarn run lint:check
 ```
 
 Husky may be configured to run checks on commit; run `yarn run prepare` to install hooks locally.
+
+## Formatting
+
+Run Prettier to format files:
+
+```bash
+yarn run fmt
+```
+
+To check formatting without modifying files:
+
+```bash
+yarn run fmt:check
+```
 
 ## Troubleshooting
 

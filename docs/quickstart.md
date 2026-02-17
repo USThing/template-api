@@ -26,7 +26,7 @@ yarn run prepare
 yarn run dev
 ```
 
-The server listens on the port configured in your environment (default Fastify port is typically 3000). Check logs for the bound address.
+The server listens on the port configured in your environment (default Fastify port is typically 3000). `yarn run dev` automatically loads a `.env` file from the repository root if it exists. Check logs for the bound address.
 
 ## Build & production run
 
