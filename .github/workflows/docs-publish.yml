@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -43,16 +43,17 @@ jobs:
         with:
           cache: yarn
 
-      - name: Install dependencies (Corepack + Yarn)
+      - name: Install dependencies
         run: |
-          corepack prepare yarn@stable --activate
-          corepack yarn install --frozen-lockfile
+          yarn install --immutable --immutable-cache
 
       - name: Build project
-        run: corepack yarn build
+        run: |
+          yarn build
 
       - name: Generate TypeDoc
-        run: corepack yarn docs:typedoc
+        run: |
+          yarn docs:typedoc
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
