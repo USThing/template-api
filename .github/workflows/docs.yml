@@ -45,7 +45,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          yarn install --frozen-lockfile
+          yarn install --immutable --immutable-cache
 
       - name: Build project
         run: |
