@@ -1,6 +1,7 @@
 # template-api
 
 <!-- NOTE: If you use this repository as a template, replace `USThing/template-api` with your own GitHub owner/repo in the badge URLs. -->
+
 [![CI](https://github.com/USThing/template-api/actions/workflows/check.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/check.yml) [![Docs](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml) [![Release](https://github.com/USThing/template-api/actions/workflows/release.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/release.yml) [![Docs site](https://img.shields.io/badge/docs-site-blue)](https://usthing.github.io/template-api/index.html)
 
 A concise Fastify + TypeScript starter used by USThing backend services. This repository provides a minimal, well-tested scaffold with recommended scripts, linting, and CI configuration.
@@ -29,7 +30,7 @@ yarn start
 ## Developer workflow
 
 - Start dev mode (watch + Fastify): `yarn dev`
-- Run tests: `yarn test`
+- Run tests (TypeScript tests run via `tsx`): `yarn test`
 - Lint: `yarn lint` (fix: `yarn lint:fix`)
 
 ## Automatic API docs
