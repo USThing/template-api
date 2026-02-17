@@ -1,12 +1,7 @@
 {
   "entryPointStrategy": "expand",
-  "entryPoints": [
-    "src"
-  ],
-  "exclude": [
-    "**/test/**",
-    "**/__tests__/**"
-  ],
+  "entryPoints": ["src"],
+  "exclude": ["**/test/**", "**/__tests__/**"],
   "hideGenerator": true,
   "out": "docs/api",
   "tsconfig": "tsconfig.json"
