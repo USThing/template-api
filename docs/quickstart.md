@@ -65,6 +65,6 @@ When Swagger/UI is enabled (see `src/plugins`), an interactive API UI is typical
 
 ## Next steps
 
-- Read `docs/routes.md` (TODO) for a high-level route map and plugin responsibilities.
+- Read `docs/routes.md` for a high-level route map and plugin responsibilities.
 - Add environment values to `.env` based on `.env.example`.
 - Open `CONTRIBUTING.md` before making the first PR.

@@ -1,7 +1,7 @@
 # template-api
 
 <!-- NOTE: If you use this repository as a template, replace `USThing/template-api` with your own GitHub owner/repo in the badge URLs. -->
-[![CI](https://github.com/USThing/template-api/actions/workflows/check.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/check.yml) [![Docs](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml) [![Release](https://github.com/USThing/template-api/actions/workflows/release.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/release.yml) [![Docs site](https://img.shields.io/badge/docs-site-blue)](./docs/api/index.html)
+[![CI](https://github.com/USThing/template-api/actions/workflows/check.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/check.yml) [![Docs](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml) [![Release](https://github.com/USThing/template-api/actions/workflows/release.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/release.yml) [![Docs site](https://img.shields.io/badge/docs-site-blue)](https://usthing.github.io/template-api/index.html)
 
 A concise Fastify + TypeScript starter used by USThing backend services. This repository provides a minimal, well-tested scaffold with recommended scripts, linting, and CI configuration.
 
@@ -46,7 +46,7 @@ Generated docs are placed under `docs/api` (CI publishes these artifacts — do 
 
 - `src/` — application code (routes, plugins, utils)
 - `src/app.ts` — Fastify app and plugin registration
-- `routes/` — route modules
+- `src/routes/` — route modules
 - `test/` — tests and helpers
 - `docs/` — human-authored guides and docs
 - `.env.example` — example environment variables
