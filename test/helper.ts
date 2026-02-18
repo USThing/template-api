@@ -11,6 +11,7 @@ export type TestContext = {
 // needed for testing the application
 async function config(): Promise<AppOptions> {
   return {
+    pluginTimeout: options.pluginTimeout,
     // mongoUri: "mongodb://localhost:27017",
     authDiscoveryURL: "",
     authClientID: "",
@@ -19,10 +20,11 @@ async function config(): Promise<AppOptions> {
 }
 
 // Automatically build and tear down our instance
-async function build(t: TestContext) {
-  const fastify = Fastify({ pluginTimeout: options.pluginTimeout });
-  const appConfig = await config();
-  await fastify.register(app, appConfig);
+async function build(t: TestContext, options?: Partial<AppOptions>) {
+  const appOptions = { ...(await config()), ...options };
+
+  const fastify = Fastify(appOptions);
+  await fastify.register(app, appOptions);
   await fastify.ready();
 
   // Tear down our app after we are done

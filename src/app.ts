@@ -10,7 +10,11 @@ import {
   RawReplyDefaultExpression,
   RawRequestDefaultExpression,
   RawServerDefault,
+  FastifyReply,
+  FastifyRequest,
+  RouteOptions,
 } from "fastify";
+import fastifyMetrics from "fastify-metrics";
 import * as path from "path";
 import { fileURLToPath } from "url";
 
@@ -21,6 +25,8 @@ export type AppOptions = {
   // Place your custom options for app below here.
   // MongoDB URI (Optional)
   // mongoUri: string;
+  lokiHost?: string;
+  prometheusKey?: string;
 } & FastifyServerOptions &
   Partial<AutoloadPluginOptions> &
   AuthPluginOptions;
@@ -66,8 +72,48 @@ const options: AppOptions = {
   // mongoUri: getOption("MONGO_URI")!,
   authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
   authClientID: getOption("AUTH_CLIENT_ID")!,
+  lokiHost: getOption("LOKI_HOST", false),
+  prometheusKey: getOption("PROMETHEUS_KEY", false),
   authSkip: getBooleanOption("AUTH_SKIP", false),
 };
+
+if (options.lokiHost) {
+  const lokiTransport = {
+    target: "pino-loki",
+    options: {
+      batching: true,
+      interval: 5, // Logs are sent every 5 seconds, default.
+      host: options.lokiHost,
+      labels: { application: packageJson.name },
+    },
+  };
+
+  const existingLogger = options.logger;
+
+  if (existingLogger && typeof existingLogger === "object") {
+    const loggerOptions = existingLogger as { transport?: unknown };
+    const existingTransport = loggerOptions.transport;
+
+    let mergedTransport: unknown;
+    if (Array.isArray(existingTransport)) {
+      mergedTransport = [...existingTransport, lokiTransport];
+    } else if (existingTransport) {
+      mergedTransport = [existingTransport, lokiTransport];
+    } else {
+      mergedTransport = lokiTransport;
+    }
+
+    options.logger = {
+      ...(existingLogger as object),
+      transport: mergedTransport,
+    } as Exclude<FastifyServerOptions["logger"], boolean | undefined>;
+  } else {
+    options.logger = {
+      level: "info",
+      transport: lokiTransport,
+    };
+  }
+}
 
 // Support Typebox
 export type FastifyTypebox = FastifyInstance<
@@ -91,6 +137,29 @@ const app: FastifyPluginAsync<AppOptions> = async (
   // Register CORS
   await fastify.register(import("@fastify/cors"), {
     origin: "*",
+  });
+
+  // Register Metrics
+  const metricsEndpoint: RouteOptions | string | null = opts.prometheusKey
+    ? {
+        url: "/metrics",
+        method: "GET",
+        handler: async () => {}, // Overridden by fastify-metrics
+        onRequest: async (request: FastifyRequest, reply: FastifyReply) => {
+          if (
+            request.headers.authorization !== `Bearer ${opts.prometheusKey}`
+          ) {
+            reply.code(401).send({ status: "error", message: "Unauthorized" });
+            return;
+          }
+        },
+      }
+    : "/metrics";
+
+  await fastify.register(fastifyMetrics.default, {
+    endpoint: metricsEndpoint,
+    defaultMetrics: { enabled: true },
+    clearRegisterOnInit: true,
   });
 
   // Register Swagger & Swagger UI & Scalar

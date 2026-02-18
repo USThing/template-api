@@ -1,0 +1,56 @@
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: 'codelab-monitor'
+
+# Scrape configurations used for local development:
+# - `prometheus`: Prometheus' own internal metrics endpoint.
+# - `template-api`: this project's API (expects metrics at `http://localhost:3000/metrics`).
+scrape_configs:
+  # Prometheus server metrics (job=prometheus)
+  - job_name: 'prometheus'
+
+    # Short interval for local testing.
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # The template API exposes application metrics at `/metrics`.
+  # Make sure the API is running locally and exposes Prometheus metrics (e.g. using `prom-client` or middleware).
+  - job_name: 'template-api'
+    # Keep a short interval for fast feedback during development.
+    scrape_interval: 5s
+    # Prometheus will request the `/metrics` path by default, but we show it here explicitly for clarity.
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['localhost:3000']
+
+    # Optional: relabeling examples for common local/dev setups. Uncomment and adapt as needed.
+    # - Add a static label (useful for environment-specific queries)
+    # relabel_configs:
+    #   - target_label: env
+    #     replacement: dev
+    #
+    # - Set `instance` to the hostname (strip port)
+    #   - source_labels: [__address__]
+    #     regex: '([^:]+):.*'
+    #     target_label: instance
+    #     replacement: '$1'
+    #
+    # - Drop a specific target (useful to temporarily disable scraping)
+    #   - source_labels: [__address__]
+    #     regex: '127\\.0\\.0\\.1:3000'
+    #     action: drop
+    #
+    # - Preserve original address in another label before rewriting (advanced example)
+    #   - source_labels: [__address__]
+    #     target_label: __param_target
+    #     replacement: '$1'
+    #
+    # Notes:
+    # - `relabel_configs` run during target discovery and can add/modify/drop labels.
+    # - Keep examples commented so the default local setup continues to work.
