@@ -21,7 +21,7 @@ async function config(mongoUri: string): Promise<AppOptions> {
 
 // Automatically build and tear down our instance
 async function build(t: TestContext, options?: Partial<AppOptions>) {
-  const appOptions = { ...await config(), ...options };
+  const appOptions = { ...(await config()), ...options };
 
   const mongod = await MongoMemoryServer.create();
 
