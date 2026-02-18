@@ -12,6 +12,7 @@ export type TestContext = {
 // needed for testing the application
 async function config(mongoUri: string): Promise<AppOptions> {
   return {
+    pluginTimeout: options.pluginTimeout,
     mongoUri,
     authDiscoveryURL: "",
     authClientID: "",
