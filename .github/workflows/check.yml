@@ -23,32 +23,10 @@ permissions:
   pull-requests: read
 
 jobs:
-  detect-quota:
-    # Probe the hosted runner (same flavor as the original try job) so we
-    # can decide whether to use a hosted runner or fall back to
-    # self-hosted. The job should fail if quota is exhausted.
-    permissions: {}
-    runs-on: ubuntu-slim
-    timeout-minutes: 1
-    steps:
-      - name: Quota probe
-        id: quota_probe
-        run: |
-          echo "probe"
-
-  # NOTE: Do not set `continue-on-error: true` on the `detect-quota` job.
-  # If `continue-on-error` is enabled the job result will always be
-  # 'success', which defeats detection (we rely on `needs.detect-quota.result`).
-  # Unfortunately this means the workflow may be reported as failed if the
-  # hosted runner is unavailable. We cannot work around this until GitHub
-  # provides a job-level "allow-failure"/neutral-conclusion feature
-  # (see: https://github.com/actions/runner/issues/2347 for discussion).
+  # `vars.ACTIONS_RUNNER_TYPE` is set on private repositories only.
 
   lint-fmt:
-    # ESLint job inlined from check-shared-steps.yml
-    needs: detect-quota
-    if: ${{ always() }}
-    runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-slim' || 'self-hosted' }}
+    runs-on: ${{ vars.ACTIONS_RUNNER_TYPE || 'ubuntu-latest' }}
     timeout-minutes: 5
     continue-on-error: true
     steps:
@@ -76,10 +54,8 @@ jobs:
           yarn fmt:check
 
   commitlint:
-    # Commitlint job inlined from check-shared-steps.yml
-    needs: detect-quota
-    if: ${{ always() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-    runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ${{ vars.ACTIONS_RUNNER_TYPE || 'ubuntu-latest' }}
     timeout-minutes: 2
     continue-on-error: true
     steps:
@@ -88,10 +64,7 @@ jobs:
       - uses: wagoid/commitlint-github-action@v6
 
   tests:
-    # Tests job inlined from check-shared-steps.yml
-    needs: detect-quota
-    if: ${{ always() }}
-    runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-latest' || 'self-hosted' }}
+    runs-on: ${{ vars.ACTIONS_RUNNER_TYPE || 'ubuntu-latest' }}
     timeout-minutes: 5
     continue-on-error: true
     steps:
