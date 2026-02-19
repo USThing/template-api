@@ -1,0 +1,62 @@
+name: docs
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  detect-quota:
+    # Probe the hosted runner so we can decide whether to use a hosted
+    # runner or fall back to self-hosted. The job should fail if quota is exhausted.
+    runs-on: ubuntu-slim
+    steps:
+      - name: Quota probe
+        id: quota_probe
+        run: |
+          echo "probe"
+
+  build:
+    needs: detect-quota
+    # NOTE: Do not set `continue-on-error: true` on the `detect-quota` job.
+    # If `continue-on-error` is enabled the job result will always be
+    # 'success', which defeats detection (we rely on `needs.detect-quota.result`).
+    runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-slim' || 'self-hosted' }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack install
+
+      - name: Enable Node cache
+        uses: actions/setup-node@v6
+        with:
+          cache: yarn
+
+      - name: Install dependencies
+        run: |
+          yarn install --immutable
+
+      - name: Build project
+        run: |
+          yarn build
+
+      - name: Generate TypeDoc
+        run: |
+          yarn docs:typedoc
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-docs
+          path: docs/api
