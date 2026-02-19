@@ -26,10 +26,10 @@ jobs:
     # NOTE: do not set `continue-on-error` on detect-quota (see docs)
     runs-on: ${{ needs.detect-quota.result == 'success' && 'ubuntu-slim' || 'self-hosted' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
 
@@ -39,7 +39,7 @@ jobs:
           corepack install
 
       - name: Enable Node cache
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           cache: yarn
 
