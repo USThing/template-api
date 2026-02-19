@@ -15,7 +15,7 @@ Enable Corepack (recommended) and the Yarn version used by this repo:
 
 ```bash
 corepack enable
-corepack prepare yarn@stable --activate
+# `packageManager` field in `package.json` ensures the correct Yarn version is used
 ```
 
 ## Quickstart (local)
@@ -31,7 +31,7 @@ yarn start
 
 - Start dev mode (watch + Fastify): `yarn dev`
 - Run tests (TypeScript tests run via `tsx`): `yarn test`
-- Lint: `yarn lint` (fix: `yarn lint:fix`)
+- Lint and format (auto-fixes): `yarn lint` and `yarn fmt`
 
 ## Automatic API docs
 
