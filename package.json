@@ -2,7 +2,7 @@
   "type": "module",
   "name": "template-api",
   "description": "The template for USThing backend services.",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "fastify start --import=tsx --watch --log-level=debug --pretty-logs --options src/app.ts",
