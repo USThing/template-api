@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename);
 export type AppOptions = {
   // Place your custom options for app below here.
   // MongoDB URI (Optional)
-  // mongoUri: string;
+  mongoUri?: string;
 } & FastifyServerOptions &
   Partial<AutoloadPluginOptions> &
   AuthPluginOptions;
@@ -63,7 +63,7 @@ const options: AppOptions = {
   // This increases the timeout for plugins to 5 minutes.
   pluginTimeout: 5 * 60 * 1000,
 
-  // mongoUri: getOption("MONGO_URI")!,
+  mongoUri: getOption("MONGO_URI", false),
   authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
   authClientID: getOption("AUTH_CLIENT_ID")!,
   authSkip: getBooleanOption("AUTH_SKIP", false),
@@ -139,10 +139,12 @@ const app: FastifyPluginAsync<AppOptions> = async (
   await fastify.register(import("@scalar/fastify-api-reference"));
 
   // Register MongoDB (Optional)
-  // await fastify.register(import("@fastify/mongodb"), {
-  //   url: opts.mongoUri,
-  //   forceClose: true,
-  // });
+  if (opts.mongoUri !== undefined) {
+    await fastify.register(import("@fastify/mongodb"), {
+      url: opts.mongoUri,
+      forceClose: true,
+    });
+  }
 
   // Do not touch the following lines
 

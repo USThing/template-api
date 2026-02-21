@@ -74,14 +74,6 @@ jobs:
         with:
           node-version: 24
 
-      - name: Remove existing MongoDB container
-        run: docker rm -f mongodb-actions || true
-
-      - uses: supercharge/mongodb-github-action@1.12.1
-        with:
-          mongodb-version: 7
-          mongodb-container-name: mongodb-actions
-
       - run: |
           corepack enable
           corepack install
