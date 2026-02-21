@@ -138,12 +138,6 @@ const app: FastifyPluginAsync<AppOptions> = async (
   await fastify.register(import("@fastify/swagger-ui"));
   await fastify.register(import("@scalar/fastify-api-reference"));
 
-  // Register MongoDB
-  await fastify.register(import("@fastify/mongodb"), {
-    url: opts.mongoUri,
-    forceClose: true,
-  });
-
   // Do not touch the following lines
 
   // This loads all plugins defined in plugins

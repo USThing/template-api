@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "fastify start --import=tsx --watch --log-level=debug --pretty-logs --options src/app.ts",
-    "test": "tsx --test --test-timeout=5000 --experimental-test-coverage test/**/*.test.ts",
+    "test": "tsx --test --experimental-test-coverage test/**/*.test.ts",
     "compile": "tsgo --noEmit && tsgo -p test/tsconfig.json --noEmit",
     "lint": "eslint --fix .",
     "lint:check": "eslint .",

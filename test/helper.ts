@@ -21,19 +21,24 @@ async function config(mongoUri: string): Promise<AppOptions> {
 
 // Automatically build and tear down our instance
 async function build(t: TestContext) {
-  const fastify = Fastify({ pluginTimeout: options.pluginTimeout });
   const mongod = await MongoMemoryServer.create();
-  const appConfig = await config(mongod.getUri());
-  await fastify.register(app, appConfig);
-  await fastify.ready();
+  const fastify = Fastify({ pluginTimeout: options.pluginTimeout });
 
-  // Tear down our app after we are done
-  t.after(async () => {
+  const cleanup = async () => {
     await fastify.close();
     await mongod.stop();
-  });
+  };
+  t.after(cleanup);
 
-  return fastify;
+  try {
+    const appConfig = await config(mongod.getUri("example-test"));
+    await fastify.register(app, appConfig);
+    await fastify.ready();
+    return fastify;
+  } catch (error) {
+    await cleanup();
+    throw error;
+  }
 }
 
 export { config, build };
