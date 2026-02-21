@@ -63,7 +63,7 @@ const options: AppOptions = {
   // This increases the timeout for plugins to 5 minutes.
   pluginTimeout: 5 * 60 * 1000,
 
-  mongoUri: getOption("MONGO_URI", false),
+  mongoUri: getOption("MONGO_URI", false) || undefined,
   authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
   authClientID: getOption("AUTH_CLIENT_ID")!,
   authSkip: getBooleanOption("AUTH_SKIP", false),
