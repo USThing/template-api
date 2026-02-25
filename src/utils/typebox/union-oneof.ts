@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------
 
-@sinclair/typebox/prototypes
+typebox/prototypes
 
 The MIT License (MIT)
 
@@ -50,5 +50,10 @@ export function UnionOneOf<T extends TSchema[]>(
   oneOf: [...T],
   options: TSchemaOptions = {},
 ) {
-  return { ...options, "~kind": "UnionOneOf", oneOf } as TUnionOneOf<T>;
+  const schema = { ...options, oneOf };
+  Object.defineProperty(schema, "~kind", {
+    value: "UnionOneOf",
+    enumerable: false,
+  });
+  return schema as TUnionOneOf<T>;
 }
