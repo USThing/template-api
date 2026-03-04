@@ -76,3 +76,7 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Prometheus
+# Ignore the local data directory used by Prometheus
+data/

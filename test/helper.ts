@@ -12,6 +12,7 @@ export type TestContext = {
 // needed for testing the application
 async function config(mongoUri: string): Promise<AppOptions> {
   return {
+    pluginTimeout: options.pluginTimeout,
     mongoUri,
     authDiscoveryURL: "",
     authClientID: "",
@@ -20,19 +21,32 @@ async function config(mongoUri: string): Promise<AppOptions> {
 }
 
 // Automatically build and tear down our instance
-async function build(t: TestContext) {
-  const mongod = await MongoMemoryServer.create();
-  const fastify = Fastify({ pluginTimeout: options.pluginTimeout });
-
+async function build(t: TestContext, options?: Partial<AppOptions>) {
+  const cleanups: (() => Promise<unknown>)[] = [];
   const cleanup = async () => {
-    await fastify.close();
-    await mongod.stop();
+    // Cleanup in reverse order of setup
+    for (const fn of cleanups.reverse()) {
+      try {
+        await fn();
+      } catch (error) {
+        console.error("Error during cleanup:", error);
+      }
+    }
   };
   t.after(cleanup);
 
   try {
-    const appConfig = await config(mongod.getUri("example-test"));
-    await fastify.register(app, appConfig);
+    const mongod = await MongoMemoryServer.create();
+    cleanups.push(async () => await mongod.stop());
+
+    const appOptions = {
+      ...(await config(mongod.getUri("example-test"))),
+      ...options,
+    };
+    const fastify = Fastify(appOptions);
+    cleanups.push(async () => await fastify.close());
+
+    await fastify.register(app, appOptions);
     await fastify.ready();
     return fastify;
   } catch (error) {
