@@ -13,7 +13,6 @@ import {
   RawServerDefault,
   FastifyReply,
   FastifyRequest,
-  RouteOptions,
 } from "fastify";
 import fastifyMetrics from "fastify-metrics";
 import * as path from "path";
@@ -88,11 +87,13 @@ if (options.lokiHost) {
     },
   };
 
-  const existingLogger = options.logger;
+  let existingLogger = options.logger;
+  if (typeof existingLogger === "boolean") {
+    existingLogger = existingLogger ? { level: "info" } : undefined;
+  }
 
-  if (existingLogger && typeof existingLogger === "object") {
-    const loggerOptions = existingLogger as { transport?: unknown };
-    const existingTransport = loggerOptions.transport;
+  if (existingLogger) {
+    const existingTransport = existingLogger.transport;
 
     let mergedTransport: unknown;
     if (Array.isArray(existingTransport)) {
@@ -104,14 +105,9 @@ if (options.lokiHost) {
     }
 
     options.logger = {
-      ...(existingLogger as object),
+      ...existingLogger,
       transport: mergedTransport,
     } as Exclude<FastifyServerOptions["logger"], boolean | undefined>;
-  } else {
-    options.logger = {
-      level: "info",
-      transport: lokiTransport,
-    };
   }
 }
 
@@ -140,7 +136,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
   });
 
   // Register Metrics
-  const metricsEndpoint: RouteOptions | string | null = opts.prometheusKey
+  const metricsEndpoint = opts.prometheusKey
     ? {
         url: "/metrics",
         method: "GET",
