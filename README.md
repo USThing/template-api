@@ -1,59 +1,70 @@
-# USThing Template API
+# template-api
 
-The template repository for USThing backend services, powered by Fastify.
+<!-- NOTE: If you use this repository as a template, replace `USThing/template-api` with your own GitHub owner/repo in the badge URLs. -->
 
-## Available Scripts
+[![CI](https://github.com/USThing/template-api/actions/workflows/check.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/check.yml) [![Docs](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/docs-publish.yml) [![Release](https://github.com/USThing/template-api/actions/workflows/release.yml/badge.svg)](https://github.com/USThing/template-api/actions/workflows/release.yml) [![Docs site](https://img.shields.io/badge/docs-site-blue)](https://usthing.github.io/template-api/index.html)
 
-In the project directory, you can run:
+A concise Fastify + TypeScript starter used by USThing backend services. This repository provides a minimal, well-tested scaffold with recommended scripts, linting, and CI configuration.
 
-### `yarn run dev`
+## Prerequisites
 
-Run the app in development mode; watch the source for changes.
+- Node.js (see `engines` in `package.json`)
+- Yarn via Corepack
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Enable Corepack (recommended) and the Yarn version used by this repo:
 
-### `yarn run compile`
+```bash
+corepack enable
+# `packageManager` field in `package.json` ensures the correct Yarn version is used
+```
 
-Run the TypeScript compiler to check for type errors.
+## Quickstart (local)
 
-### `yarn run build`, `yarn run start`
+```bash
+corepack enable
+yarn install
+yarn build
+yarn start
+```
 
-- Build the app for production to the `dist` folder.
-- Start the built app in production mode.
+## Developer workflow
 
-### `yarn run test`
+- Start dev mode (watch + Fastify): `yarn dev`
+- Run tests (TypeScript tests run via `tsx`): `yarn test`
+- Lint and format (auto-fixes): `yarn lint` and `yarn fmt`
 
-Run the tests.
+## Automatic API docs
 
-### `yarn run lint`
+API docs are generated from source by TypeDoc and published by CI. To generate locally:
 
-Run the linter and fix any issues.
+```bash
+yarn docs:typedoc
+```
 
-`lint:check` does not fix the issues.
+Generated docs are placed under `docs/api` (CI publishes these artifacts — do not commit generated files).
 
-### `yarn run fmt`
+## Project layout
 
-Run the formatter and fix any issues.
+- `src/` — application code (routes, plugins, utils)
+- `src/app.ts` — Fastify app and plugin registration
+- `src/routes/` — route modules
+- `test/` — tests and helpers
+- `docs/` — human-authored guides and docs
+- `.env.example` — example environment variables
 
-`fmt:check` does not fix the issues.
+## Environment
 
-## Environment Variables
+Tests and some dev helpers reference `TEST_AUTH_TOKEN` / `TEST_AUTH_USER`. See `docs/env-vars.md` for recommended env variables and CI secret usage. Keep secrets out of the repo and use your CI's secret manager.
 
-For Fastify-level environment variables, please refer to the [fastify-cli documentation](https://github.com/fastify/fastify-cli).
+## Contributing
 
-For the application-level environment variables, please refer to the
-`.env.example` file. `yarn run dev` automatically loads a `.env` file if it exists.
+Follow `CONTRIBUTING.md` (commitlint, lint, tests). The project uses Conventional Commits for releases.
 
-## CI / CD
+## Support
 
-This template supports GitHub Actions for CI / CD. The available workflows are:
+Open an issue on GitHub using the provided templates for bugs or feature requests.
 
-- Checks / eslint: Run ES Lint to check problems and the format of the code.
-- Checks / commitlint: Run Commitlint to check the format of the commit messages.
-- Checks / tests: Run unit tests of the project.
-- Docker CI / docker: Build the Docker image and push it to the GitHub Container Registry.
-- Release Please / release-please: Automatic releasing. See also [release-please](https://github.com/googleapis/release-please).
+## Learn more
 
-## Learn More
-
-To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs/latest/).
+- Fastify: <https://www.fastify.dev/>
+- Docs folder: `docs/` (detailed guides and examples)

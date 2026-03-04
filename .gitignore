@@ -80,3 +80,7 @@ dist
 # Prometheus
 # Ignore the local data directory used by Prometheus
 data/
+
+# Generated TypeDoc output (do not commit generated API docs)
+docs/api/
+docs/api/**
