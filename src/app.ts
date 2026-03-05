@@ -16,7 +16,6 @@ import {
 } from "fastify";
 import fastifyMetrics from "fastify-metrics";
 import * as path from "path";
-import { Settings } from "typebox/system";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -120,7 +119,6 @@ export type FastifyTypebox = FastifyInstance<
   FastifyBaseLogger,
   TypeBoxTypeProvider
 >;
-Settings.Set({ correctiveParse: true });
 
 const app: FastifyPluginAsync<AppOptions> = async (
   fastify,
