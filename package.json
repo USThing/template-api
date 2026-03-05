@@ -50,7 +50,7 @@
     "jwks-rsa": "^3.2.2",
     "openid-client": "^6.8.2",
     "pino-loki": "^3.0.0",
-    "typebox": "^1.0.81"
+    "typebox": "~1.1.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.2",
