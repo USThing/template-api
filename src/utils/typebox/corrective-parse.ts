@@ -13,6 +13,6 @@ const CorrectiveParsePipeline = Pipeline([
 export default function CorrectiveParse<T extends Type.TSchema>(
   type: T,
   value: unknown,
-): Type.Static<T> {
+): ReturnType<typeof Value.Parse<T>> {
   return CorrectiveParsePipeline(type, value) as never;
 }
