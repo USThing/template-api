@@ -69,8 +69,6 @@ const options: AppOptions = {
   pluginTimeout: 5 * 60 * 1000,
 
   mongoUri: getOption("MONGO_URI")!,
-  authDiscoveryURL: getOption("AUTH_DISCOVERY_URL")!,
-  authClientID: getOption("AUTH_CLIENT_ID")!,
   lokiHost: getOption("LOKI_HOST", false),
   prometheusKey: getOption("PROMETHEUS_KEY", false),
   authSkip: getBooleanOption("AUTH_SKIP", false),
@@ -210,6 +208,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
   // through your application
   void fastify.register(AutoLoad, {
     dir: path.join(__dirname, "plugins"),
+    ignorePattern: /(^|[\\/])auth\.ts$/,
     options: opts,
     forceESM: true,
   });

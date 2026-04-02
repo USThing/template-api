@@ -14,8 +14,6 @@ async function config(mongoUri: string): Promise<AppOptions> {
   return {
     pluginTimeout: options.pluginTimeout,
     mongoUri,
-    authDiscoveryURL: "",
-    authClientID: "",
     authSkip: true,
   };
 }
