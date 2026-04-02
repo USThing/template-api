@@ -102,8 +102,7 @@ export const AuthResponseSchema: ResponseSchema = {
  * formats, invalid schemes, missing required claims, and verification
  * failures are returned as 400/401 responses as appropriate. On success, the
  * plugin sets `request.auth = { email, user, name, tenant }` (where `email`
- * is derived from the `unique_name` claim) and emits response headers
- * `X-Auth-User`, `X-Auth-Email`, `X-Auth-Name`, and `X-Auth-Tenant`; in skip
+ * is derived from the `unique_name` claim) and emits `X-Auth-Email`; in skip
  * mode it additionally emits `X-Auth-Skip: 1`.
  */
 const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
@@ -144,10 +143,7 @@ const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
           tenant: "ust.hk",
         };
         reply.header("X-Auth-Skip", "1");
-        reply.header("X-Auth-User", request.auth.user);
         reply.header("X-Auth-Email", request.auth.email);
-        reply.header("X-Auth-Name", request.auth.name);
-        reply.header("X-Auth-Tenant", request.auth.tenant);
         return;
       }
 
@@ -158,12 +154,12 @@ const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
       }
 
       // Extract the scheme and token from the authorization header
-      const parts = authorization.split(" ");
+      const parts = authorization.trim().split(/\s+/);
       if (parts.length !== 2) {
         return reply.status(400).send("Invalid Authorization Header");
       }
       const [type, token] = parts;
-      if (type !== "Bearer") {
+      if (type.toLowerCase() !== "bearer") {
         return reply.status(400).send("Invalid Authorization Scheme");
       }
 
@@ -208,10 +204,7 @@ const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
           name: jwt.name,
           tenant,
         };
-        reply.header("X-Auth-User", request.auth.user);
         reply.header("X-Auth-Email", request.auth.email);
-        reply.header("X-Auth-Name", request.auth.name);
-        reply.header("X-Auth-Tenant", request.auth.tenant);
       } catch (e) {
         if (e instanceof Error) {
           return reply.status(401).send(`Invalid Token: ${e.message}`);
