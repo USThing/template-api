@@ -27,6 +27,11 @@ updates:
       prefix-development: "chore"
       include: "scope"
     groups:
-      yarn:
+      weekly-updates:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      security-updates:
+        applies-to: security-updates
         patterns:
           - "*"
