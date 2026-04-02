@@ -95,13 +95,14 @@ export const AuthResponseSchema: ResponseSchema = {
  * registering a plugin-level `preHandler` hook. Because the plugin is
  * encapsulated, it must be applied on the same Fastify scope that defines the
  * protected routes, or on an ancestor of that scope. In normal mode, the hook
- * expects an `Authorization: Bearer <token>` header, requires `tid`, `email`,
- * and `name` claims, maps `tid` to a known tenant, and verifies the token
- * against tenant-specific Microsoft JWKS with the configured audience
- * (`ClientID`). Missing headers, malformed header formats, invalid schemes,
- * missing required claims, and verification failures are returned as 400/401
- * responses as appropriate. On success, the plugin sets
- * `request.auth = { email, user, name, tenant }` and emits response headers
+ * expects an `Authorization: Bearer <token>` header, requires `tid`,
+ * `unique_name` (email/UPN), and `name` claims, maps `tid` to a known tenant,
+ * and verifies the token against tenant-specific Microsoft JWKS with the
+ * configured audience (`ClientID`). Missing headers, malformed header
+ * formats, invalid schemes, missing required claims, and verification
+ * failures are returned as 400/401 responses as appropriate. On success, the
+ * plugin sets `request.auth = { email, user, name, tenant }` (where `email`
+ * is derived from the `unique_name` claim) and emits response headers
  * `X-Auth-User`, `X-Auth-Email`, `X-Auth-Name`, and `X-Auth-Tenant`; in skip
  * mode it additionally emits `X-Auth-Skip: 1`.
  */
