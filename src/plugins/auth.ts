@@ -121,10 +121,10 @@ export const AuthResponseSchema: ResponseSchema = {
  * 401 responses from the plugin with the route's own responses, and by adding
  * the `Auth` security scheme to the route's security requirements.
  *
- * After a sucessful authentication or bypass in skip mode, the plugin populates
- * `request.auth` with an object containing the authenticated user's email,
- * name, tenant, and a derived `user` field which is the ITSC account of the
- * user.
+ * After a successful authentication or bypass in skip mode, the plugin
+ * populates `request.auth` with an object containing the authenticated user's
+ * email, name, tenant, and a derived `user` field which is the ITSC account of
+ * the user.
  */
 const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
   const { authSkip: skip = false } = opts;
@@ -156,7 +156,7 @@ const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
       if (skip) {
         request.auth = {
           email: "test@usthing.xyz",
-          user: "usthing",
+          user: "test",
           name: "USThing Test",
           tenant: "usthing.xyz",
         };
