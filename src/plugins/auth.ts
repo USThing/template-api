@@ -3,59 +3,81 @@ import { UnionOneOf } from "../utils/typebox/union-oneof.js";
 import { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify";
 import fp from "fastify-plugin";
 import * as jose from "jose";
+import { JWTClaimValidationFailed } from "jose/errors";
 import { Type } from "typebox";
 
+/**
+ * This module supports auth with accounts from ust.hk and connect.ust.hk
+ * tenants. In addition, it is planned to support the usthing.xyz tenant for
+ * development and testing purposes.
+ */
+const Tenants = ["ust.hk", "connect.ust.hk", "usthing.xyz"] as const;
+
+/**
+ * The union of all tenant string literals.
+ */
+type Tenant = (typeof Tenants)[number];
+
+/**
+ * The tenant IDs for the supported tenants. The ust.hk and connect.ust.hk
+ * tenant IDs are obtained from the real tokens (they can be also obtained using
+ * tools such as https://www.whatismytenantid.com/), while the usthing.xyz
+ * tenant is currently just a placeholder.
+ */
 const TenantID = {
   "ust.hk": "c917f3e2-9322-4926-9bb3-daca730413ca",
   "connect.ust.hk": "6c1d4152-39d0-44ca-88d9-b8d6ddca0708",
-} as const;
+  "usthing.xyz": "N/A",
+} as const satisfies Record<Tenant, string>;
 
-type Tenant = keyof typeof TenantID;
+/**
+ * The OpenID Connect issuer URLs for the supported tenants. The ust.hk and
+ * connect.ust.hk issuer URLs follow the standard Microsoft identity platform
+ * format, while the usthing.xyz issuer is currently just a placeholder.
+ */
+const Issuers = {
+  "ust.hk": `https://login.microsoftonline.com/${TenantID["ust.hk"]}/v2.0`,
+  "connect.ust.hk": `https://login.microsoftonline.com/${TenantID["connect.ust.hk"]}/v2.0`,
+  "usthing.xyz": "N/A",
+} as const satisfies Record<Tenant, string>;
 
+/**
+ * The JWKS URL for verifying tokens. Since both ust.hk and connect.ust.hk
+ * tenants are from Microsoft Entra ID, they share the same common JWKS.
+ */
+const JWKS = "https://login.microsoftonline.com/common/discovery/v2.0/keys";
+
+/**
+ * The client ID for the USThing app. The audience claim in the token must match
+ * this value.
+ */
 const ClientID = "b4bc4b9a-7162-44c5-bb50-fe935dce1f5a";
 
-const jwks = (tenant: Tenant) =>
-  `https://login.microsoftonline.com/${TenantID[tenant]}/discovery/v2.0/keys`;
-
+/**
+ * Helper function to map tenant IDs to tenant string literals.
+ */
 const Tenant = (tid: string) => {
-  for (const tenant in TenantID) {
-    if (TenantID[tenant as Tenant] === tid) {
-      return tenant as Tenant;
+  for (const tenant of Tenants) {
+    if (TenantID[tenant] === tid) {
+      return tenant;
     }
   }
   throw new Error(`Unknown tenant ID: ${tid}`);
 };
 
-const parseITSC = (email: string): string => {
-  const match = email.match(/^([^@]+)@([^@]+)$/);
-  if (match == null) {
-    throw new Error(`Invalid email format: ${email}`);
-  }
-  const [, local] = match;
-  return local;
-};
-
 export interface AuthPluginOptions {
   /**
-   * Whether to skip token verification entirely. This mode is intended for
-   * local development and tests where an external identity provider may not be
-   * available. When enabled, the plugin does not require an Authorization
-   * header and still populates `request.auth` with a fixed identity of
-   * `user = "usthing"`, `email = "usthing@ust.hk"`, `name = "USThing"`, and
-   * `tenant = "ust.hk"`. The response also includes `X-Auth-Skip: 1` to make
-   * bypass mode explicit.
+   * If true, skip token verification entirely.
+   *
+   * This mode is intended for local development and tests. If true, the plugin
+   * does not require an Authorization header and still populates `request.auth`
+   * with a fixed identity of `user = "test"`, `email = "test@usthing.xyz"`,
+   * `name = "USThing Test"`, and `tenant = "usthing.xyz"`. The response also
+   * includes `X-Auth-Skip: 1` to make bypass mode explicit.
    */
   authSkip?: boolean;
 }
 
-/**
- * Standard authentication error response schema merged into every route by the
- * plugin's `onRoute` hook. The plugin appends OpenAPI security requirements
- * and these 400/401 response variants to route schemas automatically. The
- * 400 responses represent malformed Authorization headers or unsupported
- * schemes, while 401 responses represent missing headers and token
- * verification or claim-validation failures.
- */
 export const AuthResponseSchema: ResponseSchema = {
   400: UnionOneOf(
     [
@@ -88,22 +110,21 @@ export const AuthResponseSchema: ResponseSchema = {
 };
 
 /**
- * Auth plugin for Azure AD token verification and request identity decoration.
- * The plugin decorates `FastifyRequest` with `request.auth`, injects
- * `security: [{ Auth: [] }]` and {@link AuthResponseSchema} into all route
- * schemas through `onRoute`, and enforces authentication globally by
- * registering a plugin-level `preHandler` hook. Because the plugin is
- * encapsulated, it must be applied on the same Fastify scope that defines the
- * protected routes, or on an ancestor of that scope. In normal mode, the hook
- * expects an `Authorization: Bearer <token>` header, requires `tid`,
- * `unique_name` (email/UPN), and `name` claims, maps `tid` to a known tenant,
- * and verifies the token against tenant-specific Microsoft JWKS with the
- * configured audience (`ClientID`). Missing headers, malformed header
- * formats, invalid schemes, missing required claims, and verification
- * failures are returned as 400/401 responses as appropriate. On success, the
- * plugin sets `request.auth = { email, user, name, tenant }` (where `email`
- * is derived from the `unique_name` claim) and emits `X-Auth-Email`; in skip
- * mode it additionally emits `X-Auth-Skip: 1`.
+ * The auth plugin verifies the Bearer token in the Authorization header using
+ * the JWKS from Microsoft Entra ID, additionally verifying that
+ *
+ * 1. the token's audience is indeed USThing app;
+ * 2. the token's issuer is one of ust.hk and connect.ust.hk;
+ * 3. the token's tenant is one of ust.hk and connect.ust.hk.
+ *
+ * It modifies the schema for all routes the plugin affects, by merging 400 and
+ * 401 responses from the plugin with the route's own responses, and by adding
+ * the `Auth` security scheme to the route's security requirements.
+ *
+ * After a sucessful authentication or bypass in skip mode, the plugin populates
+ * `request.auth` with an object containing the authenticated user's email,
+ * name, tenant, and a derived `user` field which is the ITSC account of the
+ * user.
  */
 const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
   const { authSkip: skip = false } = opts;
@@ -114,22 +135,19 @@ const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
 
   fastify.addHook("onRoute", (routeOptions) => {
     routeOptions.schema = routeOptions.schema || {};
-    routeOptions.schema.security = routeOptions.schema.security || [];
-    routeOptions.schema.security = [
-      ...routeOptions.schema.security,
-      { Auth: [] },
-    ];
     routeOptions.schema.response = routeOptions.schema.response || {};
     routeOptions.schema.response = mergeResponse([
       routeOptions.schema.response as never,
       AuthResponseSchema,
     ]);
+    routeOptions.schema.security = routeOptions.schema.security || [];
+    routeOptions.schema.security = [
+      ...routeOptions.schema.security,
+      { Auth: [] },
+    ];
   });
 
-  const JWKS = {
-    "ust.hk": jose.createRemoteJWKSet(new URL(jwks("ust.hk"))),
-    "connect.ust.hk": jose.createRemoteJWKSet(new URL(jwks("connect.ust.hk"))),
-  };
+  const jwks = jose.createRemoteJWKSet(new URL(JWKS));
 
   fastify.decorateRequest("auth");
   fastify.addHook(
@@ -137,13 +155,12 @@ const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
     async function (request: FastifyRequest, reply: FastifyReply) {
       if (skip) {
         request.auth = {
-          email: "usthing@ust.hk",
+          email: "test@usthing.xyz",
           user: "usthing",
-          name: "USThing",
-          tenant: "ust.hk",
+          name: "USThing Test",
+          tenant: "usthing.xyz",
         };
         reply.header("X-Auth-Skip", "1");
-        reply.header("X-Auth-Email", request.auth.email);
         return;
       }
 
@@ -159,52 +176,50 @@ const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
         return reply.status(400).send("Invalid Authorization Header");
       }
       const [type, token] = parts;
-      if (type.toLowerCase() !== "bearer") {
+      if (type !== "Bearer") {
         return reply.status(400).send("Invalid Authorization Scheme");
       }
 
       try {
-        const jwt = jose.decodeJwt(token);
-        if (jwt.tid == undefined || typeof jwt.tid !== "string") {
-          return reply
-            .status(401)
-            .send(`Invalid Token: missing or invalid tid claim ${jwt.tid}`);
-        }
-
-        const tenant = Tenant(jwt.tid);
-
         // The issuer is equivalently verified above by looking at the `tid`
         // claim and using the corresponding JWKS.
-        await jose.jwtVerify(token, JWKS[tenant], {
+        const jwt = await jose.jwtVerify(token, jwks, {
           audience: ClientID,
+          issuer: Object.values(Issuers),
+          requiredClaims: ["aud", "iss", "tid", "unique_name", "name"],
         });
+        const payload = jwt.payload as {
+          aud: string;
+          iss: string;
+          tid: string;
+          unique_name: string;
+          name: string;
+        };
 
-        if (
-          jwt.unique_name == undefined ||
-          typeof jwt.unique_name !== "string"
-        ) {
-          return reply
-            .status(401)
-            .send(
-              `Invalid Token: missing or invalid unique_name claim ${jwt.unique_name}`,
-            );
+        if ((Object.values(Issuers) as string[]).includes(payload.tid)) {
+          throw new JWTClaimValidationFailed(
+            'unexpected "tid" claim value',
+            payload,
+            "tid",
+            "check_failed",
+          );
         }
 
-        if (jwt.name == undefined || typeof jwt.name !== "string") {
-          return reply
-            .status(401)
-            .send(`Invalid Token: missing or invalid name claim ${jwt.name}`);
-        }
-
-        const user = parseITSC(jwt.unique_name);
+        // Derive the ITSC ID from the unique_name claim, which effectively
+        // serves as the email address. We assume the email is well-formed, and
+        // if it isn't, it just returns the entire unique_name, which is still
+        // fine.
+        const user = (() => {
+          const [local] = payload.unique_name.split("@");
+          return local;
+        })();
 
         request.auth = {
-          email: jwt.unique_name,
+          email: payload.unique_name,
           user: user,
-          name: jwt.name,
-          tenant,
+          name: payload.name,
+          tenant: Tenant(payload.tid),
         };
-        reply.header("X-Auth-Email", request.auth.email);
       } catch (e) {
         if (e instanceof Error) {
           return reply.status(401).send(`Invalid Token: ${e.message}`);
@@ -223,18 +238,12 @@ export default fp(auth, {
 declare module "fastify" {
   export interface FastifyRequest {
     /**
-     * The `request.auth` object populated by the Auth plugin's `preHandler`
-     * hook. It contains the authenticated user's email, name, tenant, and a
-     * derived `user` field which is the ITSC (the local part of the email). The
-     * presence of this object indicates successful authentication; if
-     * authentication fails, the request is rejected with a 400/401 response
-     * before reaching any route handlers. In skip mode, this object is still
-     * populated with a fixed identity for testing purposes.
+     * The information of the auth'd user.
      *
-     * For ease of use, the plugin is not marked as optional, which means
+     * For ease of use, the field is not optional (nullable), which means
      * accessing it in routes without the plugin still typechecks. Programmers
-     * should be aware that to only use `request.auth` in routes that are
-     * registered after the plugin.
+     * should be aware to only use `request.auth` in routes that are registered
+     * after the plugin.
      */
     auth: {
       email: string;

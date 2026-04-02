@@ -60,18 +60,6 @@ await suite("auth plugin", async () => {
     assert.equal(response.statusCode, 401);
   });
 
-  await test("authorization scheme is case-insensitive", async () => {
-    const response = await fastify.inject({
-      method: "GET",
-      url: "/secret",
-      headers: {
-        Authorization: "bearer e30.e30.e30",
-      },
-    });
-    // Unauthorized because the token is invalid, not because the scheme casing is wrong.
-    assert.equal(response.statusCode, 401);
-  });
-
   await test("authorization header tolerates repeated spaces", async () => {
     const response = await fastify.inject({
       method: "GET",
