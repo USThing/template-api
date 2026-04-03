@@ -36,10 +36,16 @@ const TenantID = {
  * format, while the usthing.xyz issuer is currently just a placeholder.
  */
 const Issuers = {
-  "ust.hk": `https://login.microsoftonline.com/${TenantID["ust.hk"]}/v2.0`,
-  "connect.ust.hk": `https://login.microsoftonline.com/${TenantID["connect.ust.hk"]}/v2.0`,
-  "usthing.xyz": "N/A",
-} as const satisfies Record<Tenant, string>;
+  "ust.hk": [
+    `https://login.microsoftonline.com/${TenantID["ust.hk"]}/v2.0`,
+    `https://sts.windows.net/${TenantID["ust.hk"]}/`,
+  ],
+  "connect.ust.hk": [
+    `https://login.microsoftonline.com/${TenantID["connect.ust.hk"]}/v2.0`,
+    `https://sts.windows.net/${TenantID["connect.ust.hk"]}/`,
+  ],
+  "usthing.xyz": [],
+} as const satisfies Record<Tenant, string[]>;
 
 /**
  * The JWKS URL for verifying tokens. Since both ust.hk and connect.ust.hk
@@ -185,7 +191,7 @@ const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
         // claim and using the corresponding JWKS.
         const jwt = await jose.jwtVerify(token, jwks, {
           audience: ClientID,
-          issuer: Object.values(Issuers),
+          issuer: Object.values(Issuers).flat(),
           requiredClaims: ["aud", "iss", "tid", "unique_name", "name"],
         });
         const payload = jwt.payload as {
@@ -196,7 +202,7 @@ const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
           name: string;
         };
 
-        if ((Object.values(Issuers) as string[]).includes(payload.tid)) {
+        if (!(Object.values(TenantID) as string[]).includes(payload.tid)) {
           throw new JWTClaimValidationFailed(
             'unexpected "tid" claim value',
             payload,
