@@ -46,7 +46,9 @@ For the application-level environment variables, please refer to the
 
 ## CI / CD
 
-This template supports GitHub Actions for CI / CD. The available workflows are:
+This template supports GitHub Actions for CI / CD. All GitHub Actions are pinned to specific commit SHAs to mitigate supply chain attacks.
+
+The available workflows are:
 
 - Checks / eslint: Run ES Lint to check problems and the format of the code.
 - Checks / commitlint: Run Commitlint to check the format of the commit messages.
