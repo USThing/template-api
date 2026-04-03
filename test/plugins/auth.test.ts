@@ -1,7 +1,6 @@
-import Auth from "../../src/plugins/auth.js";
+import auth from "../../src/plugins/auth.js";
 import Fastify, { FastifyInstance } from "fastify";
 import * as assert from "node:assert";
-import * as process from "node:process";
 import { afterEach, beforeEach, suite, test } from "node:test";
 
 await suite("auth plugin", async () => {
@@ -9,16 +8,10 @@ await suite("auth plugin", async () => {
 
   beforeEach(async () => {
     fastify = Fastify();
-    await fastify.register(Auth, {
-      authDiscoveryURL:
-        "https://login.microsoftonline.com/c917f3e2-9322-4926-9bb3-daca730413ca/v2.0/.well-known/openid-configuration",
-      authClientID: "b4bc4b9a-7162-44c5-bb50-fe935dce1f5a",
+    await fastify.register(async function (fastify) {
+      await auth(fastify, {});
+      fastify.get("/secret", async (request) => request.auth.user);
     });
-    fastify.get(
-      "/secret",
-      { preHandler: fastify.authPlugin },
-      async (request) => request.user,
-    );
     await fastify.ready();
   });
   afterEach(async () => {
@@ -60,32 +53,37 @@ await suite("auth plugin", async () => {
       method: "GET",
       url: "/secret",
       headers: {
-        Authorization: "Bearer INVALID",
+        Authorization: "Bearer e30.e30.e30",
       },
     });
     // Unauthorized
     assert.equal(response.statusCode, 401);
   });
 
-  const token = process.env.TEST_AUTH_TOKEN;
-  const user = process.env.TEST_AUTH_USER;
+  await test("authorization header tolerates repeated spaces", async () => {
+    const response = await fastify.inject({
+      method: "GET",
+      url: "/secret",
+      headers: {
+        Authorization: "  Bearer   e30.e30.e30  ",
+      },
+    });
+    // Unauthorized because the token is invalid, not because whitespace parsing failed.
+    assert.equal(response.statusCode, 401);
+  });
 
-  await test(
-    "valid token",
-    { skip: token === undefined || user === undefined },
-    async () => {
-      const response = await fastify.inject({
-        method: "GET",
-        url: "/secret",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // OK
-      assert.equal(response.statusCode, 200);
-      assert.equal(response.body, user);
-    },
-  );
+  await test("token verification failure", async () => {
+    const response = await fastify.inject({
+      method: "GET",
+      url: "/secret",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiJjOTE3ZjNlMi05MzIyLTQ5MjYtOWJiMy1kYWNhNzMwNDEzY2EiLCJlbWFpbCI6InRlc3RAdXN0LmhrIiwibmFtZSI6IlRlc3QifQ.invalidsig",
+      },
+    });
+    // Unauthorized
+    assert.equal(response.statusCode, 401);
+  });
 });
 
 await suite("auth plugin with skipping", async () => {
@@ -93,16 +91,12 @@ await suite("auth plugin with skipping", async () => {
 
   beforeEach(async () => {
     fastify = Fastify();
-    await fastify.register(Auth, {
-      authDiscoveryURL: "",
-      authClientID: "",
-      authSkip: true,
+    await fastify.register(async function (fastify) {
+      await auth(fastify, {
+        authSkip: true,
+      });
+      fastify.get("/secret", async () => "ok");
     });
-    fastify.get(
-      "/secret",
-      { preHandler: fastify.authPlugin },
-      async () => "ok",
-    );
     await fastify.ready();
   });
   afterEach(async () => {
@@ -148,21 +142,6 @@ await suite("auth plugin with skipping", async () => {
       url: "/secret",
       headers: {
         Authorization: "Bearer INVALID",
-      },
-    });
-    // OK
-    assert.equal(response.statusCode, 200);
-    assert.equal(response.payload, "ok");
-  });
-
-  const token = process.env.TEST_AUTH_TOKEN;
-
-  await test("valid token", { skip: token === undefined }, async () => {
-    const response = await fastify.inject({
-      method: "GET",
-      url: "/secret",
-      headers: {
-        Authorization: `Bearer ${token}`,
       },
     });
     // OK

@@ -1,23 +1,79 @@
-import { ResponseSchema } from "../utils/schema.js";
+import { mergeResponse, ResponseSchema } from "../utils/schema.js";
 import { UnionOneOf } from "../utils/typebox/union-oneof.js";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify";
 import fp from "fastify-plugin";
-import jwt, { JwtHeader, SigningKeyCallback } from "jsonwebtoken";
-import { JwksClient } from "jwks-rsa";
-import * as client from "openid-client";
-import { skipSubjectCheck, WWWAuthenticateChallengeError } from "openid-client";
+import * as jose from "jose";
+import { JWTClaimValidationFailed } from "jose/errors";
 import { Type } from "typebox";
 
+/**
+ * This module supports auth with accounts from ust.hk and connect.ust.hk
+ * tenants. In addition, it is planned to support the usthing.xyz tenant for
+ * development and testing purposes.
+ */
+const Tenants = ["ust.hk", "connect.ust.hk", "usthing.xyz"] as const;
+
+/**
+ * The union of all tenant string literals.
+ */
+type Tenant = (typeof Tenants)[number];
+
+/**
+ * The tenant IDs for the supported tenants. The ust.hk and connect.ust.hk
+ * tenant IDs are obtained from the real tokens (they can be also obtained using
+ * tools such as https://www.whatismytenantid.com/), while the usthing.xyz
+ * tenant is currently just a placeholder.
+ */
+const TenantID = {
+  "ust.hk": "c917f3e2-9322-4926-9bb3-daca730413ca",
+  "connect.ust.hk": "6c1d4152-39d0-44ca-88d9-b8d6ddca0708",
+  "usthing.xyz": "N/A",
+} as const satisfies Record<Tenant, string>;
+
+/**
+ * The OpenID Connect issuer URLs for the supported tenants. The ust.hk and
+ * connect.ust.hk issuer URLs follow the standard Microsoft identity platform
+ * format, while the usthing.xyz issuer is currently just a placeholder.
+ */
+const Issuers = {
+  "ust.hk": `https://login.microsoftonline.com/${TenantID["ust.hk"]}/v2.0`,
+  "connect.ust.hk": `https://login.microsoftonline.com/${TenantID["connect.ust.hk"]}/v2.0`,
+  "usthing.xyz": "N/A",
+} as const satisfies Record<Tenant, string>;
+
+/**
+ * The JWKS URL for verifying tokens. Since both ust.hk and connect.ust.hk
+ * tenants are from Microsoft Entra ID, they share the same common JWKS.
+ */
+const JWKS = "https://login.microsoftonline.com/common/discovery/v2.0/keys";
+
+/**
+ * The client ID for the USThing app. The audience claim in the token must match
+ * this value.
+ */
+const ClientID = "b4bc4b9a-7162-44c5-bb50-fe935dce1f5a";
+
+/**
+ * Helper function to map tenant IDs to tenant string literals.
+ */
+const Tenant = (tid: string) => {
+  for (const tenant of Tenants) {
+    if (TenantID[tenant] === tid) {
+      return tenant;
+    }
+  }
+  throw new Error(`Unknown tenant ID: ${tid}`);
+};
+
 export interface AuthPluginOptions {
-  /** The discovery URL of the OpenID Connect provider. */
-  authDiscoveryURL: string;
-  /** The client ID of the OpenID Connect client. */
-  authClientID: string;
   /**
-   * Whether to skip the authentication process. This is useful for testing.
+   * If true, skip token verification entirely.
    *
-   * If true, the `authDiscoveryURL` and `authClientID` are not required. Users
-   * may pass empty strings to pass type checking.
+   * This mode is intended for local development and tests. If true, the plugin
+   * does not require an Authorization header and still populates `request.auth`
+   * with a fixed identity of `user = "test"`, `email = "test@usthing.xyz"`,
+   * `name = "USThing Test"`, and `tenant = "usthing.xyz"`. The response also
+   * includes `X-Auth-Skip: 1` to make bypass mode explicit.
    */
   authSkip?: boolean;
 }
@@ -43,8 +99,8 @@ export const AuthResponseSchema: ResponseSchema = {
       }),
       Type.Any({
         description:
-          "The error message from the OpenID Connect provider. " +
-          "Usually indicates an invalid token. ",
+          "The error message from token verification or claim validation. " +
+          "Usually indicates an invalid token.",
       }),
     ],
     {
@@ -53,105 +109,60 @@ export const AuthResponseSchema: ResponseSchema = {
   ),
 };
 
-class UnauthorizedError extends Error {
-  cause: Error;
-  constructor(cause: Error) {
-    super();
-    this.cause = cause;
-    this.name = "UnauthorizedError";
-  }
-}
-
 /**
- * The Auth plugin adds authentication ability to the Fastify instance.
+ * The auth plugin verifies the Bearer token in the Authorization header using
+ * the JWKS from Microsoft Entra ID, additionally verifying that
  *
- * For usage, see the /routes/auth-example/index.ts file.
+ * 1. the token's audience is indeed USThing app;
+ * 2. the token's issuer is one of ust.hk and connect.ust.hk;
+ * 3. the token's tenant is one of ust.hk and connect.ust.hk.
  *
- * @see authExample
+ * It modifies the schema for all routes the plugin affects, by merging 400 and
+ * 401 responses from the plugin with the route's own responses, and by adding
+ * the `Auth` security scheme to the route's security requirements.
+ *
+ * After a successful authentication or bypass in skip mode, the plugin
+ * populates `request.auth` with an object containing the authenticated user's
+ * email, name, tenant, and a derived `user` field which is the ITSC account of
+ * the user.
  */
-export default fp<AuthPluginOptions>(async (fastify, opts) => {
-  const skip = opts.authSkip ?? false;
+const auth: FastifyPluginAsync<AuthPluginOptions> = async (fastify, opts) => {
+  const { authSkip: skip = false } = opts;
 
   if (skip) {
-    fastify.log.warn("Skip Auth: ON");
+    fastify.log.warn("[AuthPlugin] SKIP_AUTH is on.");
   }
 
-  const config = await (async () => {
-    if (skip) {
-      return null;
-    } else {
-      return await client.discovery(
-        new URL(opts.authDiscoveryURL),
-        opts.authClientID,
-      );
-    }
-  })();
+  fastify.addHook("onRoute", (routeOptions) => {
+    routeOptions.schema = routeOptions.schema || {};
+    routeOptions.schema.response = routeOptions.schema.response || {};
+    routeOptions.schema.response = mergeResponse([
+      routeOptions.schema.response as never,
+      AuthResponseSchema,
+    ]);
+    routeOptions.schema.security = routeOptions.schema.security || [];
+    routeOptions.schema.security = [
+      ...routeOptions.schema.security,
+      { Auth: [] },
+    ];
+  });
 
-  const key = await (async () => {
-    if (skip) {
-      return null;
-    } else {
-      fastify.log.info(
-        { opts, metadata: config!.serverMetadata() },
-        "Successfully discovered the OpenID Connect provider.",
-      );
+  const jwks = jose.createRemoteJWKSet(new URL(JWKS));
 
-      const jwksClient = new JwksClient({
-        jwksUri: config!.serverMetadata().jwks_uri ?? "",
-      });
-      return async (header: JwtHeader, callback: SigningKeyCallback) => {
-        jwksClient.getSigningKey(header.kid, (err, key) => {
-          const signingKey = key?.getPublicKey();
-          callback(err, signingKey);
-        });
-      };
-    }
-  })();
-
-  async function verify(token: string) {
-    try {
-      const info = await new Promise<jwt.JwtPayload>((resolve, reject) => {
-        jwt.verify(token, key!, (err, info) => {
-          if (err) {
-            return reject(err);
-          }
-          resolve(info as jwt.JwtPayload);
-        });
-      });
-      return info.email && getUsernameFromEmail(info.email);
-    } catch (e) {
-      if (
-        e instanceof jwt.JsonWebTokenError ||
-        e instanceof jwt.TokenExpiredError ||
-        e instanceof jwt.NotBeforeError
-      ) {
-        throw new UnauthorizedError(e);
-      }
-      throw e;
-    }
-  }
-
-  async function verifyLegacy(token: string) {
-    try {
-      const info = await client.fetchUserInfo(config!, token, skipSubjectCheck);
-      return info.email && getUsernameFromEmail(info.email);
-    } catch (e) {
-      if (
-        e instanceof WWWAuthenticateChallengeError &&
-        e.response?.status === 401
-      ) {
-        throw new UnauthorizedError(new Error(await e.response.text()));
-      }
-      throw e;
-    }
-  }
-
-  fastify.decorateRequest("user", undefined);
-  fastify.decorate(
-    "authPlugin",
+  fastify.decorateRequest("auth");
+  fastify.addHook(
+    "preHandler",
     async function (request: FastifyRequest, reply: FastifyReply) {
-      if (skip) return;
-      if (!key) return;
+      if (skip) {
+        request.auth = {
+          email: "test@usthing.xyz",
+          user: "test",
+          name: "USThing Test",
+          tenant: "usthing.xyz",
+        };
+        reply.header("X-Auth-Skip", "1");
+        return;
+      }
 
       // Extract the authorization header from the request
       const { authorization } = request.headers;
@@ -160,7 +171,7 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
       }
 
       // Extract the scheme and token from the authorization header
-      const parts = authorization.split(" ");
+      const parts = authorization.trim().split(/\s+/);
       if (parts.length !== 2) {
         return reply.status(400).send("Invalid Authorization Header");
       }
@@ -170,42 +181,75 @@ export default fp<AuthPluginOptions>(async (fastify, opts) => {
       }
 
       try {
-        // Verify the token and set the user in the request.
-        // If the token cannot be verified by the modern method,
-        // fall back to the legacy method.
-        request.user = await verify(token).catch(async (e) => {
-          if (e instanceof UnauthorizedError) {
-            fastify.log.debug(
-              "Modern verification failed, falling back to legacy method.",
-            );
-            return await verifyLegacy(token).catch(() => {
-              throw e;
-            });
-          }
-          throw e;
+        // The issuer is equivalently verified above by looking at the `tid`
+        // claim and using the corresponding JWKS.
+        const jwt = await jose.jwtVerify(token, jwks, {
+          audience: ClientID,
+          issuer: Object.values(Issuers),
+          requiredClaims: ["aud", "iss", "tid", "unique_name", "name"],
         });
+        const payload = jwt.payload as {
+          aud: string;
+          iss: string;
+          tid: string;
+          unique_name: string;
+          name: string;
+        };
+
+        if ((Object.values(Issuers) as string[]).includes(payload.tid)) {
+          throw new JWTClaimValidationFailed(
+            'unexpected "tid" claim value',
+            payload,
+            "tid",
+            "check_failed",
+          );
+        }
+
+        // Derive the ITSC ID from the unique_name claim, which effectively
+        // serves as the email address. We assume the email is well-formed, and
+        // if it isn't, it just returns the entire unique_name, which is still
+        // fine.
+        const user = (() => {
+          const [local] = payload.unique_name.split("@");
+          return local;
+        })();
+
+        request.auth = {
+          email: payload.unique_name,
+          user: user,
+          name: payload.name,
+          tenant: Tenant(payload.tid),
+        };
       } catch (e) {
-        if (e instanceof UnauthorizedError) {
-          const cause = e.cause;
-          return reply.status(401).send(`${cause.name}: ${cause.message}`);
+        if (e instanceof Error) {
+          return reply.status(401).send(`Invalid Token: ${e.message}`);
         }
         throw e;
       }
     },
   );
+};
+
+export default fp(auth, {
+  name: "auth",
+  encapsulate: true,
 });
 
-function getUsernameFromEmail(email: string): string {
-  const [username] = email.split("@");
-  return username;
-}
-
 declare module "fastify" {
-  export interface FastifyInstance {
-    authPlugin(request: FastifyRequest, reply: FastifyReply): Promise<void>;
-  }
-
   export interface FastifyRequest {
-    user?: string;
+    /**
+     * The information of the auth'd user.
+     *
+     * For ease of use, the field is not optional (nullable), which means
+     * accessing it in routes without the plugin still typechecks. Programmers
+     * should be aware to only use `request.auth` in routes that are registered
+     * after the plugin.
+     */
+    auth: {
+      email: string;
+      user: string;
+      name: string;
+      tenant: Tenant;
+    };
   }
 }
