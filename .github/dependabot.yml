@@ -16,6 +16,8 @@ updates:
       github-actions:
         patterns:
           - "*"
+    cooldown:
+      default-days: 5
 
   # Yarn (package.json, yarn.lock, etc.)
   - package-ecosystem: "npm"
@@ -35,3 +37,5 @@ updates:
         applies-to: security-updates
         patterns:
           - "*"
+    cooldown:
+      default-days: 5
