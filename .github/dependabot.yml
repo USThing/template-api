@@ -16,6 +16,10 @@ updates:
       github-actions:
         patterns:
           - "*"
+      github-actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
     cooldown:
       default-days: 5
 
@@ -29,11 +33,11 @@ updates:
       prefix-development: "chore"
       include: "scope"
     groups:
-      weekly-updates:
+      npm:
         applies-to: version-updates
         patterns:
           - "*"
-      security-updates:
+      npm-security:
         applies-to: security-updates
         patterns:
           - "*"
