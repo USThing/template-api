@@ -1282,66 +1282,66 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260430.1":
-  version: 7.0.0-dev.20260430.1
-  resolution: "@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260430.1"
+"@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260507.1":
+  version: 7.0.0-dev.20260507.1
+  resolution: "@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260507.1"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260430.1":
-  version: 7.0.0-dev.20260430.1
-  resolution: "@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260430.1"
+"@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260507.1":
+  version: 7.0.0-dev.20260507.1
+  resolution: "@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260507.1"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260430.1":
-  version: 7.0.0-dev.20260430.1
-  resolution: "@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260430.1"
+"@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260507.1":
+  version: 7.0.0-dev.20260507.1
+  resolution: "@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260507.1"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260430.1":
-  version: 7.0.0-dev.20260430.1
-  resolution: "@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260430.1"
+"@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260507.1":
+  version: 7.0.0-dev.20260507.1
+  resolution: "@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260507.1"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260430.1":
-  version: 7.0.0-dev.20260430.1
-  resolution: "@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260430.1"
+"@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260507.1":
+  version: 7.0.0-dev.20260507.1
+  resolution: "@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260507.1"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260430.1":
-  version: 7.0.0-dev.20260430.1
-  resolution: "@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260430.1"
+"@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260507.1":
+  version: 7.0.0-dev.20260507.1
+  resolution: "@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260507.1"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260430.1":
-  version: 7.0.0-dev.20260430.1
-  resolution: "@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260430.1"
+"@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260507.1":
+  version: 7.0.0-dev.20260507.1
+  resolution: "@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260507.1"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@typescript/native-preview@npm:^7.0.0-dev.20260425.1":
-  version: 7.0.0-dev.20260430.1
-  resolution: "@typescript/native-preview@npm:7.0.0-dev.20260430.1"
+"@typescript/native-preview@npm:^7.0.0-dev.20260502.1":
+  version: 7.0.0-dev.20260507.1
+  resolution: "@typescript/native-preview@npm:7.0.0-dev.20260507.1"
   dependencies:
-    "@typescript/native-preview-darwin-arm64": "npm:7.0.0-dev.20260430.1"
-    "@typescript/native-preview-darwin-x64": "npm:7.0.0-dev.20260430.1"
-    "@typescript/native-preview-linux-arm": "npm:7.0.0-dev.20260430.1"
-    "@typescript/native-preview-linux-arm64": "npm:7.0.0-dev.20260430.1"
-    "@typescript/native-preview-linux-x64": "npm:7.0.0-dev.20260430.1"
-    "@typescript/native-preview-win32-arm64": "npm:7.0.0-dev.20260430.1"
-    "@typescript/native-preview-win32-x64": "npm:7.0.0-dev.20260430.1"
+    "@typescript/native-preview-darwin-arm64": "npm:7.0.0-dev.20260507.1"
+    "@typescript/native-preview-darwin-x64": "npm:7.0.0-dev.20260507.1"
+    "@typescript/native-preview-linux-arm": "npm:7.0.0-dev.20260507.1"
+    "@typescript/native-preview-linux-arm64": "npm:7.0.0-dev.20260507.1"
+    "@typescript/native-preview-linux-x64": "npm:7.0.0-dev.20260507.1"
+    "@typescript/native-preview-win32-arm64": "npm:7.0.0-dev.20260507.1"
+    "@typescript/native-preview-win32-x64": "npm:7.0.0-dev.20260507.1"
   dependenciesMeta:
     "@typescript/native-preview-darwin-arm64":
       optional: true
@@ -1359,7 +1359,7 @@ __metadata:
       optional: true
   bin:
     tsgo: bin/tsgo.js
-  checksum: 10c0/4a934651e931dee0d7728d8a1314311895cb9cca578120225a2b57b487d4c0d8e3b6dceb70c561f4cd4adc96b2b56328b3aab28fa1c3daa473921bea4520ebb9
+  checksum: 10c0/539f4da0df37110f33f51be77d8c72d0c206127dbc9f1f86e12ccad39a31e26905edb243c0b54997bd0b679e128a646b7c77b7e38ae1320db7637134cfda033b
   languageName: node
   linkType: hard
 
@@ -1557,7 +1557,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bare-events@npm:^2.7.0":
+"bare-events@npm:^2.5.4, bare-events@npm:^2.7.0":
   version: 2.8.2
   resolution: "bare-events@npm:2.8.2"
   peerDependencies:
@@ -1566,6 +1566,70 @@ __metadata:
     bare-abort-controller:
       optional: true
   checksum: 10c0/53fef240cf2cdcca62f78b6eead90ddb5a59b0929f414b13a63764c2b4f9de98ea8a578d033b04d64bb7b86dfbc402e937984e69950855cc3754c7b63da7db21
+  languageName: node
+  linkType: hard
+
+"bare-fs@npm:^4.5.5":
+  version: 4.7.1
+  resolution: "bare-fs@npm:4.7.1"
+  dependencies:
+    bare-events: "npm:^2.5.4"
+    bare-path: "npm:^3.0.0"
+    bare-stream: "npm:^2.6.4"
+    bare-url: "npm:^2.2.2"
+    fast-fifo: "npm:^1.3.2"
+  peerDependencies:
+    bare-buffer: "*"
+  peerDependenciesMeta:
+    bare-buffer:
+      optional: true
+  checksum: 10c0/4dc67f6dd0264b817941c2b8cbfc42b6abc3980984cdfd129c4d1f22517cb29f6b99a69fc1e3e87f3a9c997e8c94114604bb67fff10574b2adf0966510cf0222
+  languageName: node
+  linkType: hard
+
+"bare-os@npm:^3.0.1":
+  version: 3.9.1
+  resolution: "bare-os@npm:3.9.1"
+  checksum: 10c0/65219ea4ae8b843395bc91be8c65d4ab6d7479d4b38a247efdde80341523c17fc242d5b0b8f09f89d6e54ef7ebec9700b3d9d4334559ffd4c1398b15cf93fa03
+  languageName: node
+  linkType: hard
+
+"bare-path@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "bare-path@npm:3.0.0"
+  dependencies:
+    bare-os: "npm:^3.0.1"
+  checksum: 10c0/56a3ca82a9f808f4976cb1188640ac206546ce0ddff582afafc7bd2a6a5b31c3bd16422653aec656eeada2830cfbaa433c6cbf6d6b4d9eba033d5e06d60d9a68
+  languageName: node
+  linkType: hard
+
+"bare-stream@npm:^2.6.4":
+  version: 2.13.1
+  resolution: "bare-stream@npm:2.13.1"
+  dependencies:
+    streamx: "npm:^2.25.0"
+    teex: "npm:^1.0.1"
+  peerDependencies:
+    bare-abort-controller: "*"
+    bare-buffer: "*"
+    bare-events: "*"
+  peerDependenciesMeta:
+    bare-abort-controller:
+      optional: true
+    bare-buffer:
+      optional: true
+    bare-events:
+      optional: true
+  checksum: 10c0/2c35e0b4e56667265e9023e9f51b77652ce043fd6611497575871ce62e833760dd3e5919ccc0cebe1af40959c4350035162b47541a1277d6488709f61f199754
+  languageName: node
+  linkType: hard
+
+"bare-url@npm:^2.2.2":
+  version: 2.4.3
+  resolution: "bare-url@npm:2.4.3"
+  dependencies:
+    bare-path: "npm:^3.0.0"
+  checksum: 10c0/c3286d1d4aa0c7a174995b1bd651083889303183537528c8847d3289f7d1689a8d3d35e803e664dc8996aefcb90ec66251e59c944850d53d775b50b1e18cc029
   languageName: node
   linkType: hard
 
@@ -1611,7 +1675,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bson@npm:^7.1.1":
+"bson@npm:^7.1.1, bson@npm:^7.2.0":
   version: 7.2.0
   resolution: "bson@npm:7.2.0"
   checksum: 10c0/f6d074d910a23e9fe2d6b6c2d1095ceab11f99e2b2e351062b396d5ea5c31ae276544582374e3c0c25e579d62c9187797c75460e48e8813306dc1d23ca1b0107
@@ -2622,13 +2686,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.11":
-  version: 1.15.11
-  resolution: "follow-redirects@npm:1.15.11"
+"follow-redirects@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "follow-redirects@npm:1.16.0"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 10c0/d301f430542520a54058d4aeeb453233c564aaccac835d29d15e050beb33f339ad67d9bddbce01739c5dc46a6716dbe3d9d0d5134b1ca203effa11a7ef092343
+  checksum: 10c0/a1e2900163e6f1b4d1ed5c221b607f41decbab65534c63fe7e287e40a5d552a6496e7d9d7d976fa4ba77b4c51c11e5e9f683f10b43011ea11e442ff128d0e181
   languageName: node
   linkType: hard
 
@@ -3014,10 +3078,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^6.2.2":
-  version: 6.2.2
-  resolution: "jose@npm:6.2.2"
-  checksum: 10c0/201f4776d77eccd339de99fb3ba940fdf03db15e64be7a99b511e53c232e3f3818e3f21b95223d62f99315a2ab76b4251cedd94e067de56893e45273a8d2151b
+"jose@npm:^6.2.3":
+  version: 6.2.3
+  resolution: "jose@npm:6.2.3"
+  checksum: 10c0/aa91bccba22cc84d86308f833749bcb0b00441e35c24e0ac79abeac5f76dc62d47bdef9c1da6a0c609f5da6478595f52b252085888b89dbdb163861e40ea4188
   languageName: node
   linkType: hard
 
@@ -3751,33 +3815,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb-memory-server-core@npm:11.0.1":
-  version: 11.0.1
-  resolution: "mongodb-memory-server-core@npm:11.0.1"
+"mongodb-memory-server-core@npm:11.1.0":
+  version: 11.1.0
+  resolution: "mongodb-memory-server-core@npm:11.1.0"
   dependencies:
     async-mutex: "npm:^0.5.0"
     camelcase: "npm:^6.3.0"
     debug: "npm:^4.4.3"
     find-cache-dir: "npm:^3.3.2"
-    follow-redirects: "npm:^1.15.11"
+    follow-redirects: "npm:^1.16.0"
     https-proxy-agent: "npm:^7.0.6"
-    mongodb: "npm:^7.0.0"
+    mongodb: "npm:^7.2.0"
     new-find-package-json: "npm:^2.0.0"
     semver: "npm:^7.7.3"
-    tar-stream: "npm:^3.1.7"
+    tar-stream: "npm:^3.1.8"
     tslib: "npm:^2.8.1"
-    yauzl: "npm:^3.2.0"
-  checksum: 10c0/9680c11df4b6e1d8439adc7c19fd9abad6f728f4b2840bcb06bf5276ef9333f73b6377e034b7886bbb7dc8eed9537c59cea8cc9b9068beb810b8a51b8b873398
+    yauzl: "npm:^3.3.0"
+  checksum: 10c0/bb69e993cdb019b6ecfd97e22cabd5b4c45fdb92d9e4336121ba83ce5e98a2c1db21ec2bb1c7456fecdde6a14b0f4d929c59003237b06695029468459ecc9804
   languageName: node
   linkType: hard
 
-"mongodb-memory-server@npm:11.0.1":
-  version: 11.0.1
-  resolution: "mongodb-memory-server@npm:11.0.1"
+"mongodb-memory-server@npm:11.1.0":
+  version: 11.1.0
+  resolution: "mongodb-memory-server@npm:11.1.0"
   dependencies:
-    mongodb-memory-server-core: "npm:11.0.1"
+    mongodb-memory-server-core: "npm:11.1.0"
     tslib: "npm:^2.8.1"
-  checksum: 10c0/0f2967b4285552829481344b6d36dab6b1164cea1f877640439d11a066d4d3ebe3ea9e4470db3bf5d07b1f3a8cd979e4f46cfaecd55fd79434019c9db6179e32
+  checksum: 10c0/cf4373d39106e3086c08451dd07e8ecb76d5af1f5755be83f5b9cf9b50e27a82af916b6f9476549ace3634e1d9eb57166708b774b5010febc71216af24f27aa2
   languageName: node
   linkType: hard
 
@@ -3812,6 +3876,40 @@ __metadata:
     socks:
       optional: true
   checksum: 10c0/8f566dc3d5e079966b4ff11061811713f2fc6397798295772a45a0ef2d38d701be3f16394496a870736a7ff968f6b9aeef26ab2733e9cfd3d2a6a2e4cd04e10e
+  languageName: node
+  linkType: hard
+
+"mongodb@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "mongodb@npm:7.2.0"
+  dependencies:
+    "@mongodb-js/saslprep": "npm:^1.3.0"
+    bson: "npm:^7.2.0"
+    mongodb-connection-string-url: "npm:^7.0.0"
+  peerDependencies:
+    "@aws-sdk/credential-providers": ^3.806.0
+    "@mongodb-js/zstd": ^7.0.0
+    gcp-metadata: ^7.0.1
+    kerberos: ^7.0.0
+    mongodb-client-encryption: ">=7.0.0 <7.1.0"
+    snappy: ^7.3.2
+    socks: ^2.8.6
+  peerDependenciesMeta:
+    "@aws-sdk/credential-providers":
+      optional: true
+    "@mongodb-js/zstd":
+      optional: true
+    gcp-metadata:
+      optional: true
+    kerberos:
+      optional: true
+    mongodb-client-encryption:
+      optional: true
+    snappy:
+      optional: true
+    socks:
+      optional: true
+  checksum: 10c0/f5644558fe97f73c4826d7b5bdf92c53903810cff03e9565535605c8b5c8a940d60aef6b52c4a5f001b2693da8eecf1a1ef36b12fbd886dc0faf9eb02e820b7a
   languageName: node
   linkType: hard
 
@@ -4640,6 +4738,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"streamx@npm:^2.12.5, streamx@npm:^2.25.0":
+  version: 2.25.0
+  resolution: "streamx@npm:2.25.0"
+  dependencies:
+    events-universal: "npm:^1.0.0"
+    fast-fifo: "npm:^1.3.2"
+    text-decoder: "npm:^1.1.0"
+  checksum: 10c0/1ecc4b722050e9088b99cde59d035e846ac97cedc3ef14a00b196d9c0b6f47d9fd18df454a19f56f0f586ab4f23fb7229069b9e8eaf22072a21bd9c909d4e0ea
+  languageName: node
+  linkType: hard
+
 "streamx@npm:^2.15.0":
   version: 2.23.0
   resolution: "streamx@npm:2.23.0"
@@ -4740,14 +4849,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar-stream@npm:^3.1.7":
-  version: 3.1.7
-  resolution: "tar-stream@npm:3.1.7"
+"tar-stream@npm:^3.1.8":
+  version: 3.2.0
+  resolution: "tar-stream@npm:3.2.0"
   dependencies:
     b4a: "npm:^1.6.4"
+    bare-fs: "npm:^4.5.5"
     fast-fifo: "npm:^1.2.0"
     streamx: "npm:^2.15.0"
-  checksum: 10c0/a09199d21f8714bd729993ac49b6c8efcb808b544b89f23378ad6ffff6d1cb540878614ba9d4cfec11a64ef39e1a6f009a5398371491eb1fda606ffc7f70f718
+  checksum: 10c0/8a06c915f93c9b0906e79867e36a9cfe197da4d41b72e89ec0de99577ae755505d14815c1346b70c2410aa09d3145c3e3af2ff5802b6af84990cdd6c60dbb997
   languageName: node
   linkType: hard
 
@@ -4773,6 +4883,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"teex@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "teex@npm:1.0.1"
+  dependencies:
+    streamx: "npm:^2.12.5"
+  checksum: 10c0/8df9166c037ba694b49d32a49858e314c60e513d55ac5e084dbf1ddbb827c5fa43cc389a81e87684419c21283308e9d68bb068798189c767ec4c252f890b8a77
+  languageName: node
+  linkType: hard
+
 "template-api@workspace:.":
   version: 0.0.0-use.local
   resolution: "template-api@workspace:."
@@ -4790,7 +4909,7 @@ __metadata:
     "@scalar/fastify-api-reference": "npm:^1.52.6"
     "@trivago/prettier-plugin-sort-imports": "npm:^6.0.2"
     "@types/node": "npm:^25.6.0"
-    "@typescript/native-preview": "npm:^7.0.0-dev.20260425.1"
+    "@typescript/native-preview": "npm:^7.0.0-dev.20260502.1"
     eslint: "npm:^9.39.4"
     eslint-config-prettier: "npm:^10.1.8"
     fastify: "npm:^5.8.5"
@@ -4798,15 +4917,15 @@ __metadata:
     fastify-metrics: "npm:^13.2.0"
     fastify-plugin: "npm:^5.1.0"
     husky: "npm:^9.1.7"
-    jose: "npm:^6.2.2"
+    jose: "npm:^6.2.3"
     lint-staged: "npm:^16.4.0"
-    mongodb-memory-server: "npm:11.0.1"
+    mongodb-memory-server: "npm:11.1.0"
     pino-loki: "npm:^3.0.0"
     prettier: "npm:^3.8.3"
     prettier-plugin-jsdoc: "npm:^1.8.0"
     rimraf: "npm:^6.1.3"
     tsx: "npm:^4.21.0"
-    typebox: "npm:~1.1.33"
+    typebox: "npm:~1.1.37"
     typescript: "npm:^6.0.3"
     typescript-eslint: "npm:^8.59.0"
   languageName: unknown
@@ -4954,10 +5073,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typebox@npm:~1.1.33":
-  version: 1.1.36
-  resolution: "typebox@npm:1.1.36"
-  checksum: 10c0/5f38ac54f03ab92da9046ea854dd4cebbeb4471d40579176685825f8c93f2713f0b343c0d029cee69f3152571ae24960932ed86db8c472b7f9346e291987bd10
+"typebox@npm:~1.1.37":
+  version: 1.1.38
+  resolution: "typebox@npm:1.1.38"
+  checksum: 10c0/b4a5996a25b9265e88335a75697630be82822fae5e7b1993d5eb52ac6b71e80fec924ffa1976269a05524a0954b3f9e6e52f380348ea6836f76920e556fa3ca1
   languageName: node
   linkType: hard
 
@@ -5196,13 +5315,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yauzl@npm:^3.2.0":
-  version: 3.2.1
-  resolution: "yauzl@npm:3.2.1"
+"yauzl@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "yauzl@npm:3.3.0"
   dependencies:
     buffer-crc32: "npm:~0.2.3"
     pend: "npm:~1.2.0"
-  checksum: 10c0/fe1997a8ee53c42556789ca61a28278e9ea2ca8f68cae1ae9904edaf3b5fbbc5d5537a3fb8623ac82c2bd0bd9d67233ce593f1acaadfb8718489d9f06d1bb3d0
+  checksum: 10c0/935e32054171104bdf8a4091180f61b5698d8b90ee64552bb643c2176f815d4215d0764e3f41e0d9a1e4525b37602bf145ec5fd39dd014f0be7290851ce3acce
   languageName: node
   linkType: hard
 

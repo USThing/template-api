@@ -46,9 +46,9 @@
     "fastify-cli": "^8.0.0",
     "fastify-metrics": "^13.2.0",
     "fastify-plugin": "^5.1.0",
-    "jose": "^6.2.2",
+    "jose": "^6.2.3",
     "pino-loki": "^3.0.0",
-    "typebox": "~1.1.33"
+    "typebox": "~1.1.37"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.2",
@@ -56,12 +56,12 @@
     "@eslint/js": "^10.0.1",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/node": "^25.6.0",
-    "@typescript/native-preview": "^7.0.0-dev.20260425.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260502.1",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "mongodb-memory-server": "11.0.1",
+    "mongodb-memory-server": "11.1.0",
     "prettier": "^3.8.3",
     "prettier-plugin-jsdoc": "^1.8.0",
     "rimraf": "^6.1.3",
