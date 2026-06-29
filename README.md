@@ -1,3 +1,5 @@
+Archived in favor of https://github.com/usthing/api
+
 # USThing Template API
 
 The template repository for USThing backend services, powered by Fastify.
