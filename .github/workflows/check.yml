@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 5
     continue-on-error: true
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
         with:
           fetch-depth: 0
 
@@ -59,7 +59,7 @@ jobs:
     timeout-minutes: 2
     continue-on-error: true
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
 
       - uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed
 
@@ -68,7 +68,7 @@ jobs:
     timeout-minutes: 5
     continue-on-error: true
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
 
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
         with:
